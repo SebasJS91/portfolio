@@ -94,7 +94,11 @@ function initDock(signal: AbortSignal) {
     let dockState: 'hero' | 'bar' | 'top' = 'bar';
     let zone = body.dataset.zone ?? '';
 
-    if (footer && footer.getBoundingClientRect().top < vh * 0.6) {
+    // El dock solo se contrae al botón de volver arriba cuando la página toca fondo
+    // (margen de 8px para trackpads y redondeos); si se sube un poco, vuelve a la barra.
+    const atBottom = window.scrollY + vh >= root.scrollHeight - 8;
+
+    if (footer && atBottom) {
       dockState = 'top';
       zone = 'footer';
     } else if (hero && hero.getBoundingClientRect().bottom > vh * 0.85) {
@@ -102,14 +106,18 @@ function initDock(signal: AbortSignal) {
       dockState = 'hero';
       zone = 'hero';
     } else {
-      const current =
-        sections.find((el) => {
-          const r = el.getBoundingClientRect();
-          return r.top <= vh / 2 && r.bottom >= vh / 2;
-        }) ?? sections[0];
+      const current = sections.find((el) => {
+        const r = el.getBoundingClientRect();
+        return r.top <= vh / 2 && r.bottom >= vh / 2;
+      });
       if (current) {
         zone = current.dataset.zone ?? zone;
         if (current.dataset.label) setLabel(current.dataset.label);
+      } else if (footer && footer.getBoundingClientRect().top < vh / 2) {
+        // Entrando al footer: la barra sigue completa con la última sección
+        zone = 'footer';
+      } else if (sections[0]?.dataset.label) {
+        setLabel(sections[0].dataset.label);
       }
     }
 

@@ -85,7 +85,8 @@ const year = new Date().getFullYear();
     opacity: 1;
     transform: none;
     clip-path: inset(0 0 0 0 round var(--radius));
-    transition-delay: 120ms;
+    /* Espera a que la barra termine de contraerse para crecer desde el botón */
+    transition-delay: 280ms;
   }
 
   .footer__legal {
