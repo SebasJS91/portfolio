@@ -11,7 +11,7 @@ const studies = (await getCollection('caseStudies', ({ data }) => import.meta.en
 
 <BaseLayout header={false}>
   <Hero />
-  <div id="work" class="work" data-zone="work">
+  <div id="work" class="work" data-zone="work" data-label="Work">
     {studies.map((study) => <CaseStudySection study={study} />)}
   </div>
 </BaseLayout>

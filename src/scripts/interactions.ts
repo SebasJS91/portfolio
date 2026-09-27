@@ -39,7 +39,7 @@ function initCopyButtons() {
   });
 }
 
-function initReadingProgress() {
+function initReadingProgress(signal: AbortSignal) {
   const bar = document.querySelector<HTMLElement>('[data-reading-progress]');
   if (!bar) return;
   const update = () => {
@@ -47,38 +47,139 @@ function initReadingProgress() {
     bar.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
   };
   update();
-  window.addEventListener('scroll', update, { passive: true });
-  document.addEventListener('astro:before-swap', () => window.removeEventListener('scroll', update), {
-    once: true,
-  });
+  window.addEventListener('scroll', update, { passive: true, signal });
 }
 
-// Marca en <body data-zone="..."> la sección que ocupa el centro de la pantalla
-// (hero / work / footer). El botón de menú y otros elementos reaccionan a esto.
-let zoneObserver: IntersectionObserver | undefined;
+/* --------------------------------------------------------------------------
+   Dock (elemento flotante + menú)
+   body[data-dock]  → hero | bar | top
+   body[data-zone]  → sección actual (hero, work, footer, …)
+   body[data-menu]  → open | closed
+   -------------------------------------------------------------------------- */
 
-function initZones() {
-  zoneObserver?.disconnect();
-  const zones = document.querySelectorAll<HTMLElement>('[data-zone]');
-  if (!zones.length) return;
-  document.body.dataset.zone = zones[0].dataset.zone;
-  zoneObserver = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          document.body.dataset.zone = (entry.target as HTMLElement).dataset.zone;
-        }
+function initDock(signal: AbortSignal) {
+  const body = document.body;
+  const root = document.documentElement;
+  const dock = document.querySelector<HTMLElement>('[data-dock]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.querySelector<HTMLElement>('[data-dock-menu]');
+  const label = document.querySelector<HTMLElement>('[data-dock-label]');
+  if (!dock || !toggle || !menu || !label) return;
+
+  const hero = document.querySelector<HTMLElement>('[data-zone="hero"]');
+  const footer = document.querySelector<HTMLElement>('[data-zone="footer"]');
+  const sections = [...document.querySelectorAll<HTMLElement>('[data-zone]')].filter(
+    (el) => el !== hero && el !== footer,
+  );
+
+  // focusFirst: al abrir con teclado, el foco pasa a la primera opción
+  const setMenu = (open: boolean, focusFirst = false) => {
+    body.dataset.menu = open ? 'open' : 'closed';
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    menu.inert = !open;
+    if (open && focusFirst) menu.querySelector<HTMLElement>('a, button')?.focus({ preventScroll: true });
+  };
+
+  const setLabel = (text: string) => {
+    if (label.textContent === text) return;
+    label.textContent = text;
+    label.classList.remove('is-rolling');
+    void label.offsetWidth; // reinicia la animación
+    label.classList.add('is-rolling');
+  };
+
+  const update = () => {
+    const vh = window.innerHeight;
+    let dockState: 'hero' | 'bar' | 'top' = 'bar';
+    let zone = body.dataset.zone ?? '';
+
+    if (footer && footer.getBoundingClientRect().top < vh * 0.6) {
+      dockState = 'top';
+      zone = 'footer';
+    } else if (hero && hero.getBoundingClientRect().bottom > vh * 0.85) {
+      // Apenas empieza el scroll fuera del hero, el dock se compacta
+      dockState = 'hero';
+      zone = 'hero';
+    } else {
+      const current =
+        sections.find((el) => {
+          const r = el.getBoundingClientRect();
+          return r.top <= vh / 2 && r.bottom >= vh / 2;
+        }) ?? sections[0];
+      if (current) {
+        zone = current.dataset.zone ?? zone;
+        if (current.dataset.label) setLabel(current.dataset.label);
+      }
+    }
+
+    // Al cambiar de estado se cierra el menú (p. ej. llegar al footer)
+    if (body.dataset.dock && body.dataset.dock !== dockState && body.dataset.menu === 'open') setMenu(false);
+    body.dataset.dock = dockState;
+    body.dataset.zone = zone;
+  };
+
+  let frame = 0;
+  const onScroll = () => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(update);
+  };
+
+  const setViewport = () => root.style.setProperty('--vw', `${root.clientWidth}px`);
+
+  setViewport();
+  setMenu(false);
+  update();
+
+  window.addEventListener('scroll', onScroll, { passive: true, signal });
+  window.addEventListener(
+    'resize',
+    () => {
+      setViewport();
+      onScroll();
+    },
+    { signal },
+  );
+
+  // event.detail === 0 → el click vino del teclado (Enter / Espacio)
+  toggle.addEventListener(
+    'click',
+    (event) => setMenu(body.dataset.menu !== 'open', event.detail === 0),
+    { signal },
+  );
+
+  document.querySelectorAll('[data-menu-close]').forEach((el) =>
+    el.addEventListener('click', () => setMenu(false), { signal }),
+  );
+
+  // Elegir una opción del menú lo cierra
+  menu.addEventListener(
+    'click',
+    (event) => {
+      if ((event.target as HTMLElement).closest('a')) setMenu(false);
+    },
+    { signal },
+  );
+
+  document.addEventListener(
+    'keydown',
+    (event) => {
+      if (event.key === 'Escape' && body.dataset.menu === 'open') {
+        setMenu(false);
+        toggle.focus();
       }
     },
-    // Una línea horizontal en el centro del viewport
-    { rootMargin: '-50% 0px -50% 0px' },
+    { signal },
   );
-  zones.forEach((zone) => zoneObserver?.observe(zone));
 }
 
+let controller: AbortController | undefined;
+
 document.addEventListener('astro:page-load', () => {
-  initZones();
+  controller?.abort();
+  controller = new AbortController();
+  initDock(controller.signal);
   initReveal();
   initCopyButtons();
-  initReadingProgress();
+  initReadingProgress(controller.signal);
 });

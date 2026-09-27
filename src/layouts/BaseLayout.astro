@@ -2,7 +2,7 @@
 import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import MenuButton from '../components/MenuButton.astro';
+import Dock from '../components/Dock.astro';
 import { site } from '../data/site';
 import '../styles/global.css';
 
@@ -11,9 +11,11 @@ interface Props {
   description?: string;
   /** El home no usa la barra superior porque el Hero ya la incluye */
   header?: boolean;
+  /** Nombre de la sección que muestra el Dock en esta página */
+  section?: string;
 }
 
-const { title, description = site.description, header = true } = Astro.props;
+const { title, description = site.description, header = true, section = 'Home' } = Astro.props;
 const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.role}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -33,14 +35,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="generator" content={Astro.generator} />
     <ClientRouter />
   </head>
-  <body id="top">
+  <body id="top" data-dock={header ? 'bar' : 'hero'} data-menu="closed">
     <a class="skip-link" href="#main">Skip to content</a>
     {header && <Header />}
     <main id="main">
       <slot />
     </main>
     <Footer />
-    <MenuButton />
+    <Dock label={section} />
     <script>
       import '../scripts/interactions';
     </script>

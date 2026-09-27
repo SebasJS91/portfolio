@@ -1,7 +1,6 @@
 ---
 import MenuPanel from './MenuPanel.astro';
 import logoFooter from '../assets/logo-footer.svg';
-import arrowUp from '../assets/icons/arrow-up.svg';
 import { site } from '../data/site';
 
 const year = new Date().getFullYear();
@@ -18,11 +17,9 @@ const year = new Date().getFullYear();
       aria-hidden="true"
     />
 
-    <div class="footer__menu" data-reveal>
-      <MenuPanel />
-      <a href="#top" class="footer__top" aria-label="Back to top">
-        <img src={arrowUp.src} width={arrowUp.width} height={arrowUp.height} alt="" />
-      </a>
+    <!-- El botón de volver arriba es el Dock contraído (src/components/Dock.astro) -->
+    <div class="footer__menu">
+      <MenuPanel id="footer-menu-title" />
     </div>
 
     <div class="footer__legal">
@@ -64,39 +61,31 @@ const year = new Date().getFullYear();
     user-select: none;
   }
 
+  /* 117px sobre el borde del panel: deja 18px sobre el botón de volver arriba */
   .footer__menu {
     position: absolute;
     left: 50%;
-    bottom: 51px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
+    bottom: 117px;
     translate: -50% 0;
-  }
-
-  .footer__top {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
     border-radius: var(--radius);
-    background: var(--color-overlay);
     backdrop-filter: blur(16px);
-    transition: transform var(--duration-fast) var(--ease-out);
+    -webkit-backdrop-filter: blur(16px);
+    transform-origin: bottom center;
+    opacity: 0;
+    transform: translateY(24px) scale(0.9);
+    clip-path: inset(92% 38% 0 38% round var(--radius));
+    transition:
+      opacity 250ms var(--ease-out),
+      transform 600ms var(--ease-out),
+      clip-path 600ms var(--ease-out);
   }
 
-  .footer__top:hover {
-    transform: translateY(-3px);
-  }
-
-  .footer__top img {
-    transition: transform var(--duration-fast) var(--ease-out);
-  }
-
-  .footer__top:hover img {
-    transform: translateY(-2px);
+  /* Aparece cuando el Dock se contrae al botón de volver arriba */
+  :global(body[data-dock="top"]) .footer__menu {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0 round var(--radius));
+    transition-delay: 120ms;
   }
 
   .footer__legal {
@@ -117,10 +106,6 @@ const year = new Date().getFullYear();
   }
 
   @media (max-width: 700px) {
-    .footer__menu {
-      bottom: 72px;
-    }
-
     .footer__legal {
       left: 50%;
       translate: -50% 0;

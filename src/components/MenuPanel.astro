@@ -1,9 +1,16 @@
 ---
 import { site } from '../data/site';
+
+interface Props {
+  /** id del título, único por página */
+  id?: string;
+}
+
+const { id = 'menu-title' } = Astro.props;
 ---
 
-<nav class="menu-panel" aria-labelledby="menu-title">
-  <p id="menu-title" class="menu-panel__title">Menu</p>
+<nav class="menu-panel" aria-labelledby={id}>
+  <p id={id} class="menu-panel__title">Menu</p>
   <ul class="menu-panel__list">
     {
       site.menu.map((item, i) => (

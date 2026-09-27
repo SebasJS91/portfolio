@@ -1,0 +1,445 @@
+---
+// Elemento flotante de navegación. Un solo componente que cambia de forma según
+// el estado en <body data-dock="...">, que actualiza src/scripts/interactions.ts:
+//
+//  - hero: el logo queda abajo al centro y el botón de menú abajo a la derecha,
+//          sin fondo, como en el Hero.
+//  - bar:  se compacta en la barra oscura (logo · nombre de sección · menú).
+//  - top:  en el footer se contrae al botón de volver arriba.
+//
+// Con <body data-menu="open"> el botón se convierte en una X y aparece el menú:
+// centrado sobre la barra, o alineado a la derecha si estamos en el hero.
+import MenuPanel from './MenuPanel.astro';
+import logoDark from '../assets/logo.svg';
+import logoWhite from '../assets/logo-white.svg';
+import menuDark from '../assets/icons/menu.svg';
+import menuWhite from '../assets/icons/menu-white.svg';
+import closeIcon from '../assets/icons/close.svg';
+import arrowUp from '../assets/icons/arrow-up.svg';
+import { site } from '../data/site';
+
+interface Props {
+  /** Nombre de sección inicial (se actualiza al hacer scroll) */
+  label?: string;
+}
+
+const { label = 'Home' } = Astro.props;
+---
+
+<div class="dock-backdrop" data-menu-close aria-hidden="true"></div>
+
+<div class="dock-menu" id="dock-menu" data-dock-menu inert>
+  <MenuPanel id="dock-menu-title" />
+</div>
+
+<div class="dock" data-dock>
+  <div class="dock__inner">
+    <span class="dock__bg" aria-hidden="true"></span>
+
+    <a href="/" class="dock__logo" aria-label={`${site.name}, home`}>
+      <img class="dock__logo-dark" src={logoDark.src} width={logoDark.width} height={logoDark.height} alt="" />
+      <img class="dock__logo-white" src={logoWhite.src} width={logoWhite.width} height={logoWhite.height} alt="" />
+    </a>
+
+    <span class="dock__label" aria-live="polite"><span data-dock-label>{label}</span></span>
+
+    <button
+      type="button"
+      class="dock__menu"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="dock-menu"
+      data-menu-toggle
+    >
+      <span class="dock__menu-bg" aria-hidden="true"></span>
+      <img class="dock__icon-dark" src={menuDark.src} width={menuDark.width} height={menuDark.height} alt="" />
+      <img class="dock__icon-white" src={menuWhite.src} width={menuWhite.width} height={menuWhite.height} alt="" />
+      <img class="dock__icon-close" src={closeIcon.src} width={closeIcon.width} height={closeIcon.height} alt="" />
+    </button>
+
+    <a href="#top" class="dock__top" aria-label="Back to top" tabindex="-1">
+      <img src={arrowUp.src} width={arrowUp.width} height={arrowUp.height} alt="" />
+    </a>
+  </div>
+</div>
+
+<style>
+  /* ------------------------------------------------------------------
+     Geometría (Figma): barra de 276×48, a 45px del borde inferior.
+     Slots: logo x8–56 · label x88–188 · menú x220–268.
+     Centro de la barra = 138 → logo a -106px y menú a +106px del centro.
+     ------------------------------------------------------------------ */
+  .dock {
+    --w: 276px;
+    --h: 48px;
+    --slot-offset: 106px;
+    /* Hero: centro del botón de menú a 70px del borde derecho */
+    --hero-menu-x: calc(var(--vw, 100vw) / 2 - 70px - var(--slot-offset));
+    --morph: 600ms var(--ease-out);
+
+    position: fixed;
+    left: 50%;
+    bottom: 45px;
+    z-index: 50;
+    width: var(--w);
+    height: var(--h);
+    margin-left: calc(var(--w) / -2);
+    pointer-events: none;
+    transition: transform var(--morph);
+  }
+
+  .dock__inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    animation: dock-in 700ms var(--ease-out) 390ms both;
+  }
+
+  @keyframes dock-in {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+  }
+
+  .dock__bg {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    background: var(--color-overlay);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition:
+      clip-path var(--morph),
+      opacity var(--morph);
+    clip-path: inset(0 0 0 0 round var(--radius));
+  }
+
+  .dock__logo,
+  .dock__menu,
+  .dock__top {
+    position: absolute;
+    top: 0;
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    pointer-events: auto;
+    transition:
+      transform var(--morph),
+      opacity var(--morph);
+  }
+
+  .dock__logo {
+    left: 8px;
+  }
+
+  .dock__menu {
+    left: 220px;
+    border-radius: var(--radius);
+  }
+
+  .dock__top {
+    left: calc(50% - 24px);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Los íconos se apilan en el mismo punto y se cruzan con opacity + scale */
+  .dock__logo img,
+  .dock__menu img {
+    grid-area: 1 / 1;
+    transition:
+      opacity 350ms var(--ease-out),
+      transform var(--morph);
+  }
+
+  .dock__label {
+    position: absolute;
+    left: 88px;
+    top: 0;
+    width: 100px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    color: var(--color-on-overlay);
+    white-space: nowrap;
+    transition:
+      opacity 350ms var(--ease-out),
+      transform var(--morph);
+  }
+
+  /* Cambio de sección: el texto rueda hacia arriba */
+  .dock__label :global(.is-rolling) {
+    animation: label-roll 450ms var(--ease-out);
+  }
+
+  @keyframes label-roll {
+    from {
+      opacity: 0;
+      transform: translateY(70%);
+    }
+  }
+
+  .dock__menu-bg {
+    grid-area: 1 / 1;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    background: var(--color-overlay);
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      opacity 300ms var(--ease-out),
+      transform var(--morph);
+  }
+
+  .dock__icon-close {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.6);
+  }
+
+  /* Hover */
+  .dock__logo:hover .dock__logo-white,
+  .dock__logo:hover .dock__logo-dark {
+    rotate: -8deg;
+  }
+
+  .dock__menu:hover img {
+    scale: 1.1;
+  }
+
+  .dock__menu:active img {
+    scale: 0.9;
+  }
+
+  .dock__top:hover img {
+    translate: 0 -2px;
+  }
+
+  .dock__logo img,
+  .dock__menu img,
+  .dock__top img {
+    transition:
+      opacity 350ms var(--ease-out),
+      transform var(--morph),
+      rotate 300ms var(--ease-out),
+      scale 200ms var(--ease-out),
+      translate 200ms var(--ease-out);
+  }
+
+  /* ---------------- Estado BAR (por defecto) ---------------- */
+  .dock__logo-dark,
+  .dock__icon-dark {
+    opacity: 0;
+  }
+
+  .dock__logo-dark {
+    transform: scale(0.53);
+  }
+
+  .dock__icon-dark {
+    transform: scale(0.8);
+  }
+
+  /* ---------------- Estado HERO ---------------- */
+  :global(body[data-dock='hero']) .dock__bg {
+    opacity: 0;
+    clip-path: inset(0 calc(50% - 24px) 0 calc(50% - 24px) round var(--radius));
+  }
+
+  :global(body[data-dock='hero']) .dock__label {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  /* Logo del hero: 60px de caja, 4px más arriba que el centro de la barra */
+  :global(body[data-dock='hero']) .dock__logo {
+    transform: translate(var(--slot-offset), -4px);
+  }
+
+  :global(body[data-dock='hero']) .dock__logo-dark {
+    opacity: 1;
+    transform: none;
+  }
+
+  :global(body[data-dock='hero']) .dock__logo-white {
+    opacity: 0;
+    transform: scale(1.87);
+  }
+
+  /* Botón de menú del hero: 30px oscuro, abajo a la derecha */
+  :global(body[data-dock='hero']) .dock__menu {
+    transform: translate(var(--hero-menu-x), 1px);
+  }
+
+  :global(body[data-dock='hero']) .dock__icon-dark {
+    opacity: 1;
+    transform: none;
+  }
+
+  :global(body[data-dock='hero']) .dock__icon-white {
+    opacity: 0;
+    transform: scale(1.25);
+  }
+
+  :global(body[data-dock='hero']) .dock__menu:hover .dock__menu-bg {
+    opacity: 0.08;
+    transform: scale(1);
+  }
+
+  /* ---------------- Estado TOP (footer) ---------------- */
+  :global(body[data-dock='top']) .dock {
+    /* El botón de volver arriba está 14px más arriba que la barra */
+    transform: translateY(-14px);
+  }
+
+  :global(body[data-dock='top']) .dock__bg {
+    clip-path: inset(0 calc(50% - 24px) 0 calc(50% - 24px) round var(--radius));
+  }
+
+  :global(body[data-dock='top']) .dock__logo {
+    opacity: 0;
+    transform: translateX(var(--slot-offset)) scale(0.5);
+    pointer-events: none;
+  }
+
+  :global(body[data-dock='top']) .dock__label {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+
+  :global(body[data-dock='top']) .dock__menu {
+    opacity: 0;
+    transform: translateX(calc(var(--slot-offset) * -1)) scale(0.5);
+    pointer-events: none;
+  }
+
+  :global(body[data-dock='top']) .dock__top {
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: 150ms;
+  }
+
+  /* ---------------- Menú abierto ---------------- */
+  /* Barra: se contrae a un cuadrado con la X en el centro */
+  :global(body[data-menu='open'][data-dock='bar']) .dock__bg {
+    clip-path: inset(0 calc(50% - 24px) 0 calc(50% - 24px) round var(--radius));
+  }
+
+  :global(body[data-menu='open'][data-dock='bar']) .dock__logo {
+    opacity: 0;
+    transform: translateX(var(--slot-offset)) scale(0.5);
+    pointer-events: none;
+  }
+
+  :global(body[data-menu='open'][data-dock='bar']) .dock__label {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+
+  :global(body[data-menu='open'][data-dock='bar']) .dock__menu {
+    transform: translateX(calc(var(--slot-offset) * -1));
+  }
+
+  /* Hero: el botón gana su propio fondo oscuro para la X */
+  :global(body[data-menu='open'][data-dock='hero']) .dock__menu-bg,
+  :global(body[data-menu='open'][data-dock='hero']) .dock__menu:hover .dock__menu-bg {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  :global(body[data-menu='open']) .dock__icon-dark,
+  :global(body[data-menu='open']) .dock__icon-white {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.6);
+  }
+
+  :global(body[data-menu='open']) .dock__icon-close {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ---------------- Panel del menú ---------------- */
+  .dock-menu {
+    position: fixed;
+    z-index: 49;
+    /* 45 (borde) + 48 (botón) + 18 (separación en Figma) */
+    bottom: 111px;
+    left: 50%;
+    border-radius: var(--radius);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    translate: -50% 0;
+    transform-origin: bottom center;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(24px) scale(0.9);
+    clip-path: inset(92% 38% 0 38% round var(--radius));
+    transition:
+      opacity 250ms var(--ease-out),
+      transform 550ms var(--ease-out),
+      clip-path 550ms var(--ease-out);
+  }
+
+  /* En el hero se alinea a la derecha, sobre el botón de menú */
+  :global(body[data-dock='hero']) .dock-menu {
+    left: auto;
+    right: 46px;
+    translate: none;
+    transform-origin: bottom right;
+    clip-path: inset(92% 0 0 76% round var(--radius));
+  }
+
+  :global(body[data-menu='open']) .dock-menu {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0 round var(--radius));
+    pointer-events: auto;
+  }
+
+  /* Las opciones entran escalonadas */
+  .dock-menu :global(li),
+  .dock-menu :global(.menu-panel__title),
+  .dock-menu :global(.menu-panel__contact) {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 300ms var(--ease-out),
+      transform 400ms var(--ease-out);
+  }
+
+  :global(body[data-menu='open']) .dock-menu :global(li),
+  :global(body[data-menu='open']) .dock-menu :global(.menu-panel__title),
+  :global(body[data-menu='open']) .dock-menu :global(.menu-panel__contact) {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--i, 0) * 40ms + 120ms);
+  }
+
+  :global(body[data-menu='open']) .dock-menu :global(.menu-panel__contact) {
+    --i: 6;
+  }
+
+  .dock-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 48;
+    background: rgba(0, 0, 0, 0.18);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 400ms var(--ease-out);
+  }
+
+  :global(body[data-menu='open']) .dock-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+</style>
