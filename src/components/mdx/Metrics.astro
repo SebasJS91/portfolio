@@ -1,0 +1,52 @@
+---
+// Bloque de métricas de impacto.
+// Uso en MDX:
+//   <Metrics items={[{ value: '+32%', label: 'conversión' }]} />
+interface Props {
+  items: { value: string; label: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<dl class="metrics">
+  {
+    items.map((item, i) => (
+      <div class="metric" data-reveal style={`--reveal-delay: ${i * 100}ms`}>
+        <dt>{item.label}</dt>
+        <dd>{item.value}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: var(--space-sm);
+    margin: var(--space-lg) 0;
+  }
+
+  .metric {
+    display: flex;
+    flex-direction: column-reverse;
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+  }
+
+  dd {
+    margin: 0;
+    font-size: var(--text-xl);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--case-accent, var(--color-accent));
+  }
+
+  dt {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+</style>

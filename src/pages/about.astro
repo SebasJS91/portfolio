@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CopyEmail from '../components/CopyEmail.astro';
+import { site } from '../data/site';
+
+// TODO: replace with your real experience
+const experience = [
+  { company: 'Current company', role: 'Product Designer', period: '2024 — now' },
+  { company: 'Previous company', role: 'UX/UI Designer', period: '2021 — 2024' },
+];
+---
+
+<BaseLayout title="About">
+  <section class="container about">
+    <p class="eyebrow" data-reveal>About</p>
+    <h1 data-reveal style="--reveal-delay: 80ms">Hi, I’m {site.name}.</h1>
+    <div class="about__bio" data-reveal style="--reveal-delay: 160ms">
+      <p>
+        Write your bio here: who you are, what kind of problems you like to solve, how you work with product
+        and engineering teams and what drives you.
+      </p>
+      <p>A second, more personal paragraph works great.</p>
+    </div>
+
+    <h2 class="eyebrow" data-reveal>Experience</h2>
+    <ul class="experience">
+      {
+        experience.map((item, i) => (
+          <li data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+            <span class="experience__company">{item.company}</span>
+            <span class="muted">{item.role}</span>
+            <span class="muted experience__period">{item.period}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="about__actions" data-reveal>
+      <CopyEmail />
+      <a href={site.cv} class="button button--ghost" target="_blank">
+        Download CV <span class="arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about {
+    max-width: var(--container-text);
+    padding-top: var(--space-xl);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    margin-block: var(--space-sm) var(--space-md);
+  }
+
+  .about__bio {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-lg);
+  }
+
+  .experience {
+    list-style: none;
+    margin: var(--space-sm) 0 var(--space-lg);
+    padding: 0;
+  }
+
+  .experience li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0 var(--space-sm);
+    padding-block: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .experience__company {
+    font-weight: 500;
+  }
+
+  .experience__period {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: var(--text-sm);
+  }
+
+  .about__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+</style>

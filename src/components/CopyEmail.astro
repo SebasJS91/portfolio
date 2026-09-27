@@ -1,0 +1,24 @@
+---
+import { site } from '../data/site';
+---
+
+<button type="button" class="button copy" data-copy={site.email} aria-live="polite">
+  <span data-copy-label>{site.email}</span>
+  <span class="copy__icon" aria-hidden="true">⧉</span>
+</button>
+
+<style>
+  .copy__icon {
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .copy:hover .copy__icon {
+    transform: rotate(-8deg) scale(1.1);
+  }
+
+  .copy:global(.is-copied) {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+  }
+</style>

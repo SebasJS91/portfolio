@@ -1,0 +1,96 @@
+---
+import logo from '../assets/logo.svg';
+import { site } from '../data/site';
+---
+
+<section class="hero" data-zone="hero">
+  <div class="panel hero__panel">
+    <a href="/about" class="pill hero__about">About</a>
+
+    <div class="hero__title">
+      <h1 class="hero__line" style="--i: 0">{site.name.toUpperCase()}</h1>
+      <p class="hero__line hero__role" style="--i: 1">{site.role.toUpperCase()}</p>
+    </div>
+
+    <a href="/" class="hero__logo hero__line" style="--i: 2" aria-label={`${site.name}, inicio`}>
+      <img src={logo.src} width={logo.width} height={logo.height} alt="" />
+    </a>
+  </div>
+</section>
+
+<style>
+  .hero {
+    height: 100vh;
+    height: 100svh;
+    padding: var(--frame);
+  }
+
+  .hero__panel {
+    position: relative;
+    height: 100%;
+    overflow: clip;
+    display: grid;
+    place-items: center;
+  }
+
+  .hero__about {
+    position: absolute;
+    top: 29px;
+    right: 17px;
+  }
+
+  .hero__title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding-inline: var(--space-sm);
+    line-height: normal;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    color: var(--color-text);
+  }
+
+  .hero__role {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+  }
+
+  /* Logo: caja de 60px como en Figma, el SVG conserva su tamaño original */
+  .hero__logo {
+    position: absolute;
+    left: 50%;
+    bottom: 35px;
+    width: 60px;
+    height: 60px;
+    margin-left: -30px;
+    display: grid;
+    place-items: center;
+  }
+
+  .hero__logo img {
+    transition: transform var(--duration) var(--ease-out);
+  }
+
+  .hero__logo:hover img {
+    transform: rotate(-8deg) scale(1.08);
+  }
+
+  /* Entrada escalonada al cargar */
+  .hero__line {
+    animation: rise 700ms var(--ease-out) both;
+    animation-delay: calc(var(--i) * 120ms + 150ms);
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+  }
+</style>

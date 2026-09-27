@@ -1,0 +1,129 @@
+---
+import MenuPanel from './MenuPanel.astro';
+import logoFooter from '../assets/logo-footer.svg';
+import arrowUp from '../assets/icons/arrow-up.svg';
+import { site } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer id="menu" class="footer" data-zone="footer">
+  <div class="panel footer__panel">
+    <img
+      class="footer__logo"
+      src={logoFooter.src}
+      width={logoFooter.width}
+      height={logoFooter.height}
+      alt=""
+      aria-hidden="true"
+    />
+
+    <div class="footer__menu" data-reveal>
+      <MenuPanel />
+      <a href="#top" class="footer__top" aria-label="Back to top">
+        <img src={arrowUp.src} width={arrowUp.width} height={arrowUp.height} alt="" />
+      </a>
+    </div>
+
+    <div class="footer__legal">
+      <p>ⓒ{year} {site.name}</p>
+      {
+        site.links.map((link) => (
+          <a href={link.href} class="link-underline" target="_blank" rel="noopener noreferrer">
+            {link.label}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    height: 100vh;
+    height: 100svh;
+    min-height: 640px;
+    padding: var(--frame);
+  }
+
+  .footer__panel {
+    position: relative;
+    height: 100%;
+    overflow: clip;
+  }
+
+  /* Logo gigante de fondo: ocupa el ancho del panel y se corta arriba y abajo */
+  .footer__logo {
+    position: absolute;
+    left: 50%;
+    top: calc((100vw - 2 * var(--frame)) * -0.1086);
+    width: 99.67%;
+    height: auto;
+    transform: translateX(-50%);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .footer__menu {
+    position: absolute;
+    left: 50%;
+    bottom: 51px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    translate: -50% 0;
+  }
+
+  .footer__top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    background: var(--color-overlay);
+    backdrop-filter: blur(16px);
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .footer__top:hover {
+    transform: translateY(-3px);
+  }
+
+  .footer__top img {
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .footer__top:hover img {
+    transform: translateY(-2px);
+  }
+
+  .footer__legal {
+    position: absolute;
+    left: 27px;
+    bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: var(--text-sm);
+    line-height: normal;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  .footer__legal p {
+    margin: 0;
+  }
+
+  @media (max-width: 700px) {
+    .footer__menu {
+      bottom: 72px;
+    }
+
+    .footer__legal {
+      left: 50%;
+      translate: -50% 0;
+    }
+  }
+</style>

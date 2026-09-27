@@ -1,0 +1,96 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  study: CollectionEntry<'caseStudies'>;
+}
+
+const { study } = Astro.props;
+const { gallery, galleryAlt, galleryLayout } = study.data;
+
+// Tamaño de salida aproximado de cada imagen según el layout (para srcset)
+const widths = {
+  devices: [200, 300, 400, 600],
+  centered: [480, 720, 1000, 1400],
+  bleed: [720, 1000, 1400, 2000],
+}[galleryLayout];
+---
+
+<div class:list={['gallery', `gallery--${galleryLayout}`]}>
+  {
+    gallery.map((src, i) => (
+      <Image
+        src={src}
+        alt={i === 0 ? galleryAlt : ''}
+        widths={widths}
+        sizes={galleryLayout === 'devices' ? '20vw' : '65vw'}
+        data-reveal
+        style={`--reveal-delay: ${i * 90}ms`}
+      />
+    ))
+  }
+</div>
+
+<style>
+  .gallery {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .gallery :global(img) {
+    transition:
+      opacity var(--duration) var(--ease-out),
+      transform 800ms var(--ease-out);
+  }
+
+  /* Varias pantallas en fila (499px de alto sobre 600 en Figma) */
+  .gallery--devices {
+    justify-content: center;
+  }
+
+  .gallery--devices :global(img) {
+    height: 83.5%;
+    width: auto;
+  }
+
+  :global(.case__panel:hover) .gallery--devices :global(img.is-visible) {
+    transform: translateY(-8px);
+  }
+
+  :global(.case__panel:hover) .gallery--devices :global(img.is-visible:nth-child(2)) {
+    transform: translateY(-14px);
+    transition-delay: 40ms;
+  }
+
+  /* Una imagen centrada (696px de ancho sobre 894 en Figma) */
+  .gallery--centered {
+    justify-content: center;
+  }
+
+  .gallery--centered :global(img) {
+    width: 77.85%;
+  }
+
+  /* Imagen alineada a la izquierda que se sale por la derecha */
+  .gallery--bleed {
+    justify-content: flex-start;
+  }
+
+  .gallery--bleed :global(img) {
+    height: 99.8%;
+    width: auto;
+    max-width: none;
+  }
+
+  :global(.case__panel:hover) .gallery--centered :global(img.is-visible),
+  :global(.case__panel:hover) .gallery--bleed :global(img.is-visible) {
+    transform: scale(1.025);
+  }
+
+  .gallery--bleed :global(img) {
+    transform-origin: left center;
+  }
+</style>

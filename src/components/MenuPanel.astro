@@ -1,0 +1,100 @@
+---
+import { site } from '../data/site';
+---
+
+<nav class="menu-panel" aria-labelledby="menu-title">
+  <p id="menu-title" class="menu-panel__title">Menu</p>
+  <ul class="menu-panel__list">
+    {
+      site.menu.map((item, i) => (
+        <li style={`--i: ${i}`}>
+          {'href' in item ? (
+            <a href={item.href} class="menu-panel__item">
+              {item.label}
+            </a>
+          ) : (
+            <button type="button" class="menu-panel__item" data-menu-action={item.action}>
+              {item.label}
+            </button>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+  <div class="menu-panel__contact">
+    <a href={`mailto:${site.email}`} class="link-underline">{site.email}</a>
+  </div>
+</nav>
+
+<style>
+  .menu-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    width: 260px;
+    padding: 24px;
+    border-radius: var(--radius);
+    background: var(--color-overlay);
+    backdrop-filter: blur(16px);
+    color: var(--color-on-overlay);
+  }
+
+  .menu-panel__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+  }
+
+  .menu-panel__list {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .menu-panel__item {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    border: 0;
+    background: none;
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    line-height: normal;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      opacity var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  /* Al pasar sobre la lista, las demás opciones se atenúan */
+  .menu-panel__list:hover .menu-panel__item {
+    opacity: 0.45;
+  }
+
+  .menu-panel__list .menu-panel__item:hover,
+  .menu-panel__list .menu-panel__item:focus-visible {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+
+  .menu-panel__contact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-tight);
+    line-height: normal;
+  }
+
+  .menu-panel__contact a {
+    text-decoration: none;
+  }
+</style>

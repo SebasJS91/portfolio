@@ -1,0 +1,65 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MenuButton from '../components/MenuButton.astro';
+import { site } from '../data/site';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** El home no usa la barra superior porque el Hero ya la incluye */
+  header?: boolean;
+}
+
+const { title, description = site.description, header = true } = Astro.props;
+const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.role}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="generator" content={Astro.generator} />
+    <ClientRouter />
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    {header && <Header />}
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <MenuButton />
+    <script>
+      import '../scripts/interactions';
+    </script>
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: absolute;
+    left: var(--gutter);
+    top: -100px;
+    padding: 0.5rem 1rem;
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-radius: 8px;
+    z-index: 100;
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+</style>

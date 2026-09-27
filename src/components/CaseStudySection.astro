@@ -1,0 +1,138 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import CaseGallery from './CaseGallery.astro';
+import arrowIcon from '../assets/icons/arrow-circle.svg';
+
+interface Props {
+  study: CollectionEntry<'caseStudies'>;
+}
+
+const { study } = Astro.props;
+const { title, summary, tags } = study.data;
+const href = `/work/${study.id}`;
+---
+
+<section class="case" aria-labelledby={`case-${study.id}`}>
+  <div class="case__info">
+    <div class="case__content">
+      <div class="case__text">
+        <div class="case__heading" data-reveal>
+          <p class="eyebrow">Case Study</p>
+          <h2 id={`case-${study.id}`}>{title}</h2>
+        </div>
+        <p class="case__summary" data-reveal style="--reveal-delay: 60ms">{summary}</p>
+      </div>
+      {
+        tags.length > 0 && (
+          <ul class="case__tags" data-reveal style="--reveal-delay: 120ms">
+            {tags.map((tag) => (
+              <li>{tag}</li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+    <a href={href} class="pill pill--outline" data-reveal style="--reveal-delay: 180ms">
+      View Case Study
+      <img src={arrowIcon.src} width={arrowIcon.width} height={arrowIcon.height} alt="" />
+    </a>
+  </div>
+
+  <div class="case__media">
+    <a href={href} class="panel case__panel" tabindex="-1" aria-hidden="true">
+      <CaseGallery study={study} />
+    </a>
+  </div>
+</section>
+
+<style>
+  .case {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+  }
+
+  .case__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 80px;
+    padding: var(--space-lg) var(--gutter) var(--space-md);
+  }
+
+  .case__content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+  }
+
+  .case__text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  h2 {
+    font-size: var(--text-xl);
+    color: var(--color-text);
+  }
+
+  .case__summary {
+    margin: 0;
+    font-size: var(--text-base);
+    line-height: normal;
+    color: var(--color-text-body);
+  }
+
+  .case__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .case__tags li {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--color-tag);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-text-body);
+    white-space: nowrap;
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+
+  .case__tags li:hover {
+    background: color-mix(in srgb, var(--color-tag) 70%, var(--color-text-muted));
+  }
+
+  .case__media {
+    padding: var(--frame);
+  }
+
+  .case__panel {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 894 / 600;
+  }
+
+  @media (min-width: 900px) {
+    .case {
+      grid-template-columns: 530px 1fr;
+      min-height: 616px;
+    }
+
+    .case__info {
+      padding: 16px 60px;
+    }
+
+    .case__panel {
+      aspect-ratio: auto;
+      height: 600px;
+    }
+  }
+</style>
