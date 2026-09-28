@@ -1,5 +1,6 @@
 ---
 import { site } from '../data/site';
+import { url } from '../utils/url';
 
 interface Props {
   /** id del título, único por página */
@@ -16,7 +17,7 @@ const { id = 'menu-title' } = Astro.props;
       site.menu.map((item, i) => (
         <li style={`--i: ${i}`}>
           {'href' in item ? (
-            <a href={item.href} class="menu-panel__item">
+            <a href={url(item.href)} class="menu-panel__item">
               {item.label}
             </a>
           ) : (
@@ -29,7 +30,8 @@ const { id = 'menu-title' } = Astro.props;
     }
   </ul>
   <div class="menu-panel__contact">
-    <a href={`mailto:${site.email}`} class="link-underline">{site.email}</a>  </div>
+    <a href={`mailto:${site.email}`} class="link-underline">{site.email}</a>
+  </div>
 </nav>
 
 <style>

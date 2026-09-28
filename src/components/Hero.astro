@@ -1,10 +1,11 @@
 ---
 import { site } from '../data/site';
+import { url } from '../utils/url';
 ---
 
 <section class="hero" data-zone="hero" data-label="Home">
   <div class="panel hero__panel">
-    <a href="/about" class="pill hero__about">About</a>
+    <a href={url('/about')} class="pill hero__about">About</a>
 
     <div class="hero__title">
       <h1 class="hero__line" style="--i: 0">{site.name.toUpperCase()}</h1>

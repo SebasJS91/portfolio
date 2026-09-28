@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import CaseGallery from './CaseGallery.astro';
 import arrowIcon from '../assets/icons/arrow-circle.svg';
+import { url } from '../utils/url';
 
 interface Props {
   study: CollectionEntry<'caseStudies'>;
@@ -9,7 +10,7 @@ interface Props {
 
 const { study } = Astro.props;
 const { title, summary, tags } = study.data;
-const href = `/work/${study.id}`;
+const href = url(`/work/${study.id}`);
 ---
 
 <section class="case" aria-labelledby={`case-${study.id}`}>

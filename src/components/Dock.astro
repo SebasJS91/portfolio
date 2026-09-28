@@ -17,6 +17,7 @@ import menuWhite from '../assets/icons/menu-white.svg';
 import closeIcon from '../assets/icons/close.svg';
 import arrowUp from '../assets/icons/arrow-up.svg';
 import { site } from '../data/site';
+import { url } from '../utils/url';
 
 interface Props {
   /** Nombre de sección inicial (se actualiza al hacer scroll) */
@@ -36,7 +37,7 @@ const { label = 'Home' } = Astro.props;
   <div class="dock__inner">
     <span class="dock__bg" aria-hidden="true"></span>
 
-    <a href="/" class="dock__logo" aria-label={`${site.name}, home`}>
+    <a href={url('/')} class="dock__logo" aria-label={`${site.name}, home`}>
       <img class="dock__logo-dark" src={logoDark.src} width={logoDark.width} height={logoDark.height} alt="" />
       <img class="dock__logo-white" src={logoWhite.src} width={logoWhite.width} height={logoWhite.height} alt="" />
     </a>
