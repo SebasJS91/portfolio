@@ -34,9 +34,36 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta name="generator" content={Astro.generator} />
+    <!-- Tema: se resuelve antes de pintar para evitar un destello en claro.
+         Preferencia guardada: auto | light | dark (auto sigue al sistema). -->
+    <script is:inline>
+      (() => {
+        const media = window.matchMedia('(prefers-color-scheme: dark)');
+        const getPref = () => {
+          try {
+            return localStorage.getItem('display-mode') || 'auto';
+          } catch {
+            return 'auto';
+          }
+        };
+        const apply = () => {
+          const pref = getPref();
+          const theme = pref === 'auto' ? (media.matches ? 'dark' : 'light') : pref;
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.dataset.displayMode = pref;
+        };
+        apply();
+        if (!window.__theme) {
+          window.__theme = { apply, getPref };
+          media.addEventListener('change', apply);
+          // La navegación con View Transitions reemplaza los atributos de <html>
+          document.addEventListener('astro:after-swap', apply);
+        }
+      })();
+    </script>
     <ClientRouter />
   </head>
-  <body id="top" data-dock={header ? 'bar' : 'hero'} data-menu="closed">
+  <body id="top" data-dock={header ? 'bar' : 'hero'} data-menu="closed" data-menu-view="menu">
     <a class="skip-link" href="#main">Skip to content</a>
     {header && <Header />}
     <main id="main">

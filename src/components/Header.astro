@@ -1,13 +1,15 @@
 ---
 // Barra superior de las páginas internas (el home usa el Hero).
 import logo from '../assets/logo.svg';
+import logoLight from '../assets/logo-light.svg';
 import { site } from '../data/site';
 import { url } from '../utils/url';
 ---
 
 <header class="header">
   <a href={url('/')} class="header__logo" aria-label={`${site.name}, inicio`}>
-    <img src={logo.src} width={logo.width} height={logo.height} alt="" />
+    <img class="theme-light-only" src={logo.src} width={logo.width} height={logo.height} alt="" />
+    <img class="theme-dark-only" src={logoLight.src} width={logoLight.width} height={logoLight.height} alt="" />
   </a>
   <a href={url('/about')} class="pill" aria-current={Astro.url.pathname.startsWith(url('/about')) ? 'page' : undefined}>
     About

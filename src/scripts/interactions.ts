@@ -72,13 +72,22 @@ function initDock(signal: AbortSignal) {
     (el) => el !== hero && el !== footer,
   );
 
-  // focusFirst: al abrir con teclado, el foco pasa a la primera opción
-  const setMenu = (open: boolean, focusFirst = false) => {
+  // focusFirst: al abrir con teclado, el foco pasa a la primera opción.
+  // view: qué muestra el panel — el menú o el modal de Display Mode.
+  const setMenu = (open: boolean, focusFirst = false, view: MenuView = 'menu') => {
+    // Al cerrar se conserva la vista para que no cambie durante la animación de salida
+    if (open) body.dataset.menuView = view;
     body.dataset.menu = open ? 'open' : 'closed';
     toggle.setAttribute('aria-expanded', String(open));
     toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     menu.inert = !open;
-    if (open && focusFirst) menu.querySelector<HTMLElement>('a, button')?.focus({ preventScroll: true });
+    if (open && focusFirst) {
+      const target =
+        view === 'display'
+          ? menu.querySelector<HTMLElement>('[data-display-option][aria-checked="true"]')
+          : menu.querySelector<HTMLElement>('.dock-menu__view--menu a, .dock-menu__view--menu button');
+      target?.focus({ preventScroll: true });
+    }
   };
 
   const setLabel = (text: string) => {
@@ -160,6 +169,15 @@ function initDock(signal: AbortSignal) {
     el.addEventListener('click', () => setMenu(false), { signal }),
   );
 
+  // "Display Mode" (en el menú flotante o en el del footer) abre el modal
+  document.querySelectorAll('[data-menu-action="display-mode"]').forEach((el) =>
+    el.addEventListener(
+      'click',
+      (event) => setMenu(true, (event as MouseEvent).detail === 0, 'display'),
+      { signal },
+    ),
+  );
+
   // Elegir una opción del menú lo cierra
   menu.addEventListener(
     'click',
@@ -181,12 +199,79 @@ function initDock(signal: AbortSignal) {
   );
 }
 
+/* --------------------------------------------------------------------------
+   Display Mode: auto | light | dark
+   El script inline del <head> (BaseLayout) resuelve y aplica el tema;
+   aquí solo se guarda la preferencia y se refleja en el modal.
+   -------------------------------------------------------------------------- */
+
+type MenuView = 'menu' | 'display';
+type DisplayMode = 'auto' | 'light' | 'dark';
+
+declare global {
+  interface Window {
+    __theme?: { apply: () => void; getPref: () => DisplayMode };
+  }
+}
+
+function initDisplayMode(signal: AbortSignal) {
+  const options = [...document.querySelectorAll<HTMLButtonElement>('[data-display-option]')];
+  if (!options.length) return;
+
+  const sync = () => {
+    const pref = window.__theme?.getPref() ?? 'auto';
+    options.forEach((option) => {
+      const active = option.dataset.displayOption === pref;
+      option.setAttribute('aria-checked', String(active));
+      option.tabIndex = active ? 0 : -1; // radiogroup: solo la opción activa entra en el tab
+    });
+  };
+
+  const select = (mode: DisplayMode) => {
+    try {
+      localStorage.setItem('display-mode', mode);
+    } catch {
+      /* sin almacenamiento: el cambio vale solo para esta visita */
+    }
+    const apply = () => {
+      window.__theme?.apply();
+      sync();
+    };
+    // Transición suave entre temas cuando el navegador lo permite
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (document.startViewTransition && !reduced) document.startViewTransition(apply);
+    else apply();
+  };
+
+  sync();
+
+  options.forEach((option, index) => {
+    option.addEventListener('click', () => select(option.dataset.displayOption as DisplayMode), { signal });
+    // Flechas arriba/abajo para moverse entre opciones, como un radiogroup nativo
+    option.addEventListener(
+      'keydown',
+      (event) => {
+        if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+        event.preventDefault();
+        const next = options[(index + (event.key === 'ArrowDown' ? 1 : -1) + options.length) % options.length];
+        next.focus();
+        select(next.dataset.displayOption as DisplayMode);
+      },
+      { signal },
+    );
+  });
+
+  // Si la preferencia es Auto y el sistema cambia de tema, el check sigue en Auto
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', sync, { signal });
+}
+
 let controller: AbortController | undefined;
 
 document.addEventListener('astro:page-load', () => {
   controller?.abort();
   controller = new AbortController();
   initDock(controller.signal);
+  initDisplayMode(controller.signal);
   initReveal();
   initCopyButtons();
   initReadingProgress(controller.signal);
