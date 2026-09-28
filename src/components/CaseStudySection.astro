@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import CaseGallery from './CaseGallery.astro';
 import arrowIcon from '../assets/icons/arrow-circle.svg';
+import arrowIconDark from '../assets/icons/arrow-circle-dark.svg';
 import { url } from '../utils/url';
 
 interface Props {
@@ -35,7 +36,8 @@ const href = url(`/work/${study.id}`);
     </div>
     <a href={href} class="pill pill--outline" data-reveal style="--reveal-delay: 180ms">
       View Case Study
-      <img src={arrowIcon.src} width={arrowIcon.width} height={arrowIcon.height} alt="" />
+      <img class="theme-light-only" src={arrowIcon.src} width={arrowIcon.width} height={arrowIcon.height} alt="" />
+      <img class="theme-dark-only" src={arrowIconDark.src} width={arrowIconDark.width} height={arrowIconDark.height} alt="" />
     </a>
   </div>
 
@@ -76,7 +78,7 @@ const href = url(`/work/${study.id}`);
 
   h2 {
     font-size: var(--text-xl);
-    color: var(--color-text);
+    color: var(--color-title);
   }
 
   .case__summary {
@@ -101,7 +103,7 @@ const href = url(`/work/${study.id}`);
     background: var(--color-tag);
     font-size: var(--text-xs);
     letter-spacing: var(--tracking-tight);
-    color: var(--color-text-body);
+    color: var(--color-tag-text);
     white-space: nowrap;
     transition: background var(--duration-fast) var(--ease-out);
   }

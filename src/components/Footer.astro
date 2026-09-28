@@ -1,6 +1,7 @@
 ---
 import MenuPanel from './MenuPanel.astro';
 import logoFooter from '../assets/logo-footer.svg';
+import logoFooterDark from '../assets/logo-footer-dark.svg';
 import { site } from '../data/site';
 
 const year = new Date().getFullYear();
@@ -9,10 +10,18 @@ const year = new Date().getFullYear();
 <footer id="menu" class="footer" data-zone="footer">
   <div class="panel footer__panel">
     <img
-      class="footer__logo"
+      class="footer__logo theme-light-only"
       src={logoFooter.src}
       width={logoFooter.width}
       height={logoFooter.height}
+      alt=""
+      aria-hidden="true"
+    />
+    <img
+      class="footer__logo theme-dark-only"
+      src={logoFooterDark.src}
+      width={logoFooterDark.width}
+      height={logoFooterDark.height}
       alt=""
       aria-hidden="true"
     />
@@ -64,12 +73,14 @@ const year = new Date().getFullYear();
   /* 117px sobre el borde del panel: deja 18px sobre el botón de volver arriba */
   .footer__menu {
     position: absolute;
-    left: 50%;
     bottom: 117px;
-    translate: -50% 0;
+    /* Centrado sin `translate` (el minificador de producción lo descarta) */
+    left: 0;
+    right: 0;
+    width: max-content;
+    margin-inline: auto;
     border-radius: var(--radius);
     backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
     transform-origin: bottom center;
     opacity: 0;
     transform: translateY(24px) scale(0.9);
@@ -89,6 +100,14 @@ const year = new Date().getFullYear();
     transition-delay: 280ms;
   }
 
+  /* Si se abre el modal de Display Mode desde el footer, ocupa este lugar */
+  :global(body[data-dock="top"][data-menu="open"]) .footer__menu {
+    opacity: 0;
+    transform: scale(0.96);
+    pointer-events: none;
+    transition-delay: 0ms;
+  }
+
   .footer__legal {
     position: absolute;
     left: 27px;
@@ -98,7 +117,7 @@ const year = new Date().getFullYear();
     gap: 20px;
     font-size: var(--text-sm);
     line-height: normal;
-    color: var(--color-text-muted);
+    color: var(--color-legal);
     white-space: nowrap;
   }
 
@@ -108,8 +127,9 @@ const year = new Date().getFullYear();
 
   @media (max-width: 700px) {
     .footer__legal {
-      left: 50%;
-      translate: -50% 0;
+      left: 0;
+      right: 0;
+      justify-content: center;
     }
   }
 </style>

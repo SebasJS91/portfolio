@@ -9,10 +9,14 @@
 //
 // Con <body data-menu="open"> el botón se convierte en una X y aparece el menú:
 // centrado sobre la barra, o alineado a la derecha si estamos en el hero.
+// <body data-menu-view="display"> cambia el menú por el modal de Display Mode.
 import MenuPanel from './MenuPanel.astro';
+import DisplayModePanel from './DisplayModePanel.astro';
 import logoDark from '../assets/logo.svg';
+import logoLight from '../assets/logo-light.svg';
 import logoWhite from '../assets/logo-white.svg';
 import menuDark from '../assets/icons/menu.svg';
+import menuLight from '../assets/icons/menu-light.svg';
 import menuWhite from '../assets/icons/menu-white.svg';
 import closeIcon from '../assets/icons/close.svg';
 import arrowUp from '../assets/icons/arrow-up.svg';
@@ -30,7 +34,12 @@ const { label = 'Home' } = Astro.props;
 <div class="dock-backdrop" data-menu-close aria-hidden="true"></div>
 
 <div class="dock-menu" id="dock-menu" data-dock-menu inert>
-  <MenuPanel id="dock-menu-title" />
+  <div class="dock-menu__view dock-menu__view--menu">
+    <MenuPanel id="dock-menu-title" />
+  </div>
+  <div class="dock-menu__view dock-menu__view--display">
+    <DisplayModePanel />
+  </div>
 </div>
 
 <div class="dock" data-dock>
@@ -38,7 +47,8 @@ const { label = 'Home' } = Astro.props;
     <span class="dock__bg" aria-hidden="true"></span>
 
     <a href={url('/')} class="dock__logo" aria-label={`${site.name}, home`}>
-      <img class="dock__logo-dark" src={logoDark.src} width={logoDark.width} height={logoDark.height} alt="" />
+      <img class="dock__logo-dark theme-light-only" src={logoDark.src} width={logoDark.width} height={logoDark.height} alt="" />
+      <img class="dock__logo-dark theme-dark-only" src={logoLight.src} width={logoLight.width} height={logoLight.height} alt="" />
       <img class="dock__logo-white" src={logoWhite.src} width={logoWhite.width} height={logoWhite.height} alt="" />
     </a>
 
@@ -53,7 +63,8 @@ const { label = 'Home' } = Astro.props;
       data-menu-toggle
     >
       <span class="dock__menu-bg" aria-hidden="true"></span>
-      <img class="dock__icon-dark" src={menuDark.src} width={menuDark.width} height={menuDark.height} alt="" />
+      <img class="dock__icon-dark theme-light-only" src={menuDark.src} width={menuDark.width} height={menuDark.height} alt="" />
+      <img class="dock__icon-dark theme-dark-only" src={menuLight.src} width={menuLight.width} height={menuLight.height} alt="" />
       <img class="dock__icon-white" src={menuWhite.src} width={menuWhite.width} height={menuWhite.height} alt="" />
       <img class="dock__icon-close" src={closeIcon.src} width={closeIcon.width} height={closeIcon.height} alt="" />
     </button>
@@ -109,7 +120,6 @@ const { label = 'Home' } = Astro.props;
     border-radius: var(--radius);
     background: var(--color-overlay);
     backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
     transition:
       clip-path var(--morph),
       opacity var(--morph);
@@ -234,6 +244,14 @@ const { label = 'Home' } = Astro.props;
       rotate 300ms var(--ease-out),
       scale 200ms var(--ease-out),
       translate 200ms var(--ease-out);
+  }
+
+  /* Íconos blancos sobre el overlay: en modo oscuro el overlay es blanco y se invierten */
+  .dock__logo-white,
+  .dock__icon-white,
+  .dock__icon-close,
+  .dock__top img {
+    filter: var(--overlay-icon-filter);
   }
 
   /* ---------------- Estado BAR (por defecto) ---------------- */
@@ -374,11 +392,14 @@ const { label = 'Home' } = Astro.props;
     z-index: 49;
     /* 45 (borde) + 48 (botón) + 18 (separación en Figma) */
     bottom: 111px;
-    left: 50%;
+    /* Centrado con márgenes automáticos: el minificador de producción descarta
+       la propiedad `translate` cuando convive con `transform` */
+    left: 0;
+    right: 0;
+    width: max-content;
+    margin-inline: auto;
     border-radius: var(--radius);
     backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    translate: -50% 0;
     transform-origin: bottom center;
     pointer-events: none;
     opacity: 0;
@@ -394,7 +415,9 @@ const { label = 'Home' } = Astro.props;
   :global(body[data-dock='hero']) .dock-menu {
     left: auto;
     right: 46px;
-    translate: none;
+    margin-inline: 0;
+    /* 46px a la derecha + 16px de aire a la izquierda */
+    --menu-max: calc(100vw - 62px);
     transform-origin: bottom right;
     clip-path: inset(92% 0 0 76% round var(--radius));
   }
@@ -429,11 +452,38 @@ const { label = 'Home' } = Astro.props;
     --i: 6;
   }
 
+  /* En el footer el botón está más arriba (59 + 48 + 18) y el modal toma el
+     lugar del menú del footer */
+  :global(body[data-dock='top']) .dock-menu {
+    bottom: 125px;
+  }
+
+  /* Vistas: menú ↔ modal de Display Mode */
+  .dock-menu__view--display {
+    display: none;
+  }
+
+  :global(body[data-menu-view='display']) .dock-menu__view--menu {
+    display: none;
+  }
+
+  :global(body[data-menu-view='display']) .dock-menu__view--display {
+    display: block;
+    animation: view-in 450ms var(--ease-out);
+  }
+
+  @keyframes view-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.97);
+    }
+  }
+
   .dock-backdrop {
     position: fixed;
     inset: 0;
     z-index: 48;
-    background: rgba(0, 0, 0, 0.18);
+    background: var(--color-dim);
     opacity: 0;
     pointer-events: none;
     transition: opacity 400ms var(--ease-out);

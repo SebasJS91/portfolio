@@ -5,17 +5,29 @@
    Design tokens — tomados del archivo de Figma
    ========================================================================== */
 :root {
-  /* Color */
+  /* Color — modo claro (Figma 8:187) */
   --color-bg: #ffffff;
   --color-panel: #f2f3f4;
-  --color-text: #000000;
+  --color-text: #000000; /* nombre del hero */
+  --color-title: #000000; /* títulos de casos */
   --color-text-body: #565656;
-  --color-text-muted: #5b5b5b;
+  --color-text-muted: #5b5b5b; /* About */
+  --color-legal: #5b5b5b; /* copyright del footer */
+  --color-button: #5b5b5b; /* borde y texto de View Case Study */
+  --color-button-bg: #ffffff;
   --color-accent: #e56c01;
   --color-tag: #e9e9e9;
+  --color-tag-text: #565656;
   --color-border: #e9e9e9;
-  --color-overlay: rgba(0, 0, 0, 0.7);
+  --color-overlay: rgba(0, 0, 0, 0.7); /* menú, barra flotante, modal */
   --color-on-overlay: #ffffff;
+  --color-done-bg: #ffffff;
+  --color-done-text: #5b5b5b;
+  --color-dim: rgba(0, 0, 0, 0.18); /* fondo detrás del menú abierto */
+  /* Los íconos sobre el overlay son blancos; en oscuro se invierten a negro */
+  --overlay-icon-filter: none;
+
+  color-scheme: light;
 
   /* Tipografía */
   --font-display: 'Cal Sans', ui-sans-serif, system-ui, sans-serif;
@@ -44,6 +56,38 @@
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-fast: 180ms;
   --duration: 450ms;
+}
+
+/* Modo oscuro (Figma 9:960). data-theme lo pone el script del <head> en
+   BaseLayout según la preferencia Auto / Light / Dark. */
+:root[data-theme='dark'] {
+  --color-bg: #000000;
+  --color-panel: #1b1b1b;
+  --color-text: #ffffff;
+  --color-title: #dfdfdf;
+  --color-text-body: #969696;
+  --color-text-muted: #969696;
+  --color-legal: #5b5b5b;
+  --color-button: #707070;
+  --color-button-bg: #000000;
+  --color-accent: #ff963b;
+  --color-tag: #242424;
+  --color-tag-text: #797979;
+  --color-border: #242424;
+  --color-overlay: rgba(255, 255, 255, 0.7);
+  --color-on-overlay: #000000;
+  --color-done-bg: #000000;
+  --color-done-text: #dfdfdf;
+  --color-dim: rgba(0, 0, 0, 0.45);
+  --overlay-icon-filter: invert(1);
+
+  color-scheme: dark;
+}
+
+/* Muestra un elemento solo en un tema (para assets con versión clara y oscura) */
+:root[data-theme='dark'] .theme-light-only,
+:root:not([data-theme='dark']) .theme-dark-only {
+  display: none !important;
 }
 
 /* ==========================================================================
@@ -194,17 +238,23 @@ button {
 
 .pill--outline {
   padding-right: 10px;
-  background: white;
-  border-color: var(--color-text-muted);
+  background: var(--color-button-bg);
+  border-color: var(--color-button);
+  color: var(--color-button);
 }
 
 .pill--outline:hover {
-  background: var(--color-text-muted);
-  color: white;
+  background: var(--color-button);
+  color: var(--color-button-bg);
 }
 
+/* Al rellenarse, el ícono toma el color del fondo original */
 .pill--outline:hover img {
   filter: brightness(0) invert(1);
+}
+
+:root[data-theme='dark'] .pill--outline:hover img {
+  filter: brightness(0);
 }
 
 .pill img {
