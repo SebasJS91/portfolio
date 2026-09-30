@@ -1,23 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/Hero.astro';
-import CaseStudySection from '../components/CaseStudySection.astro';
-
-const studies = (await getCollection('caseStudies', ({ data }) => import.meta.env.DEV || !data.draft)).sort(
-  (a, b) => a.data.order - b.data.order,
-);
+import HomeView from '../views/HomeView.astro';
 ---
 
-<BaseLayout header={false}>
-  <Hero />
-  <div id="work" class="work" data-zone="work" data-label="Work">
-    {studies.map((study) => <CaseStudySection study={study} />)}
-  </div>
-</BaseLayout>
-
-<style>
-  .work {
-    scroll-margin-top: 0;
-  }
-</style>
+<HomeView />

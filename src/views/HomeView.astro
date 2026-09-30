@@ -1,0 +1,25 @@
+---
+// Home (inglés y español). Las páginas en src/pages solo eligen el idioma.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import CaseStudySection from '../components/CaseStudySection.astro';
+import { getCaseStudies } from '../i18n/content';
+import { getLang, useTranslations } from '../i18n/ui';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const studies = await getCaseStudies(lang);
+---
+
+<BaseLayout header={false}>
+  <Hero />
+  <div id="work" class="work" data-zone="work" data-label={t('section.work')}>
+    {studies.map((study) => <CaseStudySection study={study} />)}
+  </div>
+</BaseLayout>
+
+<style>
+  .work {
+    scroll-margin-top: 0;
+  }
+</style>

@@ -84,6 +84,62 @@
   color-scheme: dark;
 }
 
+/* ==========================================================================
+   Panel About (Figma 37:377): entra desde la derecha y empuja la página.
+   En 1440px el panel mide 1123px y deja 317px de la página visibles.
+   ========================================================================== */
+:root {
+  --about-w: min(1123px, calc(100vw - 317px));
+  --about-duration: 850ms;
+  --about-ease: cubic-bezier(0.65, 0, 0.15, 1);
+}
+
+@media (max-width: 900px) {
+  :root {
+    --about-w: calc(100vw - 64px);
+  }
+}
+
+/* La página y la capa fija (barra flotante, menú) se desplazan juntas */
+.page,
+.page-layer {
+  transition: transform var(--about-duration) var(--about-ease);
+}
+
+.page-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+}
+
+body[data-about='open'] .page,
+body[data-about='open'] .page-layer {
+  transform: translateX(calc(var(--about-w) * -1));
+}
+
+/* Franja de la página que queda visible: se oscurece y al tocarla se cierra */
+.page-dim {
+  position: absolute;
+  inset: 0;
+  z-index: 55;
+  background: var(--color-dim);
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+  transition: opacity var(--about-duration) var(--about-ease);
+}
+
+body[data-about='open'] .page-dim {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Con el panel abierto, la página no hace scroll (el panel sí) */
+:root:has(body[data-about='open']) {
+  overflow: hidden;
+}
+
 /* Muestra un elemento solo en un tema (para assets con versión clara y oscura) */
 :root[data-theme='dark'] .theme-light-only,
 :root:not([data-theme='dark']) .theme-dark-only {

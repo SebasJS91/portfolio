@@ -1,0 +1,248 @@
+---
+// Página de un caso de estudio (inglés y español)
+import { render } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import arrowIcon from '../assets/icons/arrow-circle.svg';
+import arrowIconDark from '../assets/icons/arrow-circle-dark.svg';
+import type { CaseStudy } from '../i18n/content';
+import { getLang, localizedUrl, useTranslations } from '../i18n/ui';
+
+interface Props {
+  study: CaseStudy;
+  next?: CaseStudy;
+}
+
+const { study, next } = Astro.props;
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const { title, summary, tags, cover, galleryAlt, company, role, year, duration, team } = study.data;
+const { Content } = await render(study.entry);
+
+const meta = [
+  { label: t('case.company'), value: company },
+  { label: t('case.role'), value: role },
+  { label: t('case.year'), value: year?.toString() },
+  { label: t('case.duration'), value: duration },
+  { label: t('case.team'), value: team },
+].filter((item) => item.value);
+---
+
+<BaseLayout title={title} description={summary} section={t('section.case')}>
+  <div class="progress" data-reading-progress></div>
+
+  <article class="case" data-zone="case" data-label={t('section.case')}>
+    <header class="container case__header">
+      <p class="eyebrow">{t('case.eyebrow')}</p>
+      <h1>{title}</h1>
+      <p class="case__summary">{summary}</p>
+      {
+        tags.length > 0 && (
+          <ul class="case__tags">
+            {tags.map((tag) => (
+              <li>{tag}</li>
+            ))}
+          </ul>
+        )
+      }
+      {
+        meta.length > 0 && (
+          <dl class="case__meta">
+            {meta.map((item) => (
+              <div>
+                <dt>{item.label}</dt>
+                <dd>{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )
+      }
+    </header>
+
+    <div class="case__cover">
+      <div class="panel case__cover-panel">
+        <Image
+          src={cover}
+          alt={galleryAlt}
+          widths={[600, 1000, 1600]}
+          sizes="(min-width: 900px) 60vw, 90vw"
+          loading="eager"
+        />
+      </div>
+    </div>
+
+    <div class="container prose" lang={study.isFallback ? 'en' : undefined}>
+      <Content />
+    </div>
+  </article>
+
+  {
+    next && next.slug !== study.slug && (
+      <nav class="container next" aria-label={t('case.next')}>
+        <a href={localizedUrl(lang, `/work/${next.slug}`)} class="next__link">
+          <span class="eyebrow">{t('case.next')}</span>
+          <span class="next__title">
+            {next.data.title}
+            <img class="theme-light-only" src={arrowIcon.src} width={arrowIcon.width} height={arrowIcon.height} alt="" />
+            <img class="theme-dark-only" src={arrowIconDark.src} width={arrowIconDark.width} height={arrowIconDark.height} alt="" />
+          </span>
+        </a>
+      </nav>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    z-index: 60;
+  }
+
+  .case__header {
+    max-width: var(--container-text);
+    padding-block: var(--space-xl) var(--space-lg);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    margin-top: 4px;
+    color: var(--color-title);
+  }
+
+  .case__summary {
+    margin: var(--space-sm) 0 0;
+    font-size: var(--text-lg);
+    line-height: 1.4;
+    color: var(--color-text-body);
+  }
+
+  .case__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: var(--space-md) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .case__tags li {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--color-tag);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-tag-text);
+  }
+
+  .case__meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+    gap: var(--space-sm);
+    margin: var(--space-lg) 0 0;
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .case__meta dt {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .case__meta dd {
+    margin: 0;
+    font-family: var(--font-display);
+  }
+
+  .case__cover {
+    padding: var(--frame);
+  }
+
+  .case__cover-panel {
+    display: grid;
+    place-items: center;
+    padding: var(--space-lg) var(--space-md);
+    min-height: 60vh;
+  }
+
+  .case__cover-panel :global(img) {
+    max-height: 70vh;
+    width: auto;
+  }
+
+  /* Tipografía del contenido MDX */
+  .prose {
+    max-width: var(--container-text);
+    padding-top: var(--space-lg);
+    line-height: 1.6;
+  }
+
+  .prose :global(h2) {
+    font-size: var(--text-xl);
+    margin: var(--space-lg) 0 var(--space-sm);
+  }
+
+  .prose :global(h3) {
+    font-size: var(--text-lg);
+    margin: var(--space-md) 0 var(--space-xs);
+  }
+
+  .prose :global(p),
+  .prose :global(li) {
+    color: var(--color-text-body);
+  }
+
+  .prose :global(blockquote) {
+    margin: var(--space-lg) 0;
+    padding-left: var(--space-md);
+    border-left: 3px solid var(--color-accent);
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+  }
+
+  .prose :global(a) {
+    color: var(--color-accent);
+  }
+
+  .next {
+    max-width: var(--container-text);
+    margin-block: var(--space-xl);
+  }
+
+  .next__link {
+    display: block;
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    text-decoration: none;
+  }
+
+  .next__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .next__title img {
+    width: 20px;
+    height: 20px;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .next__link:hover .next__title {
+    color: var(--color-accent);
+  }
+
+  .next__link:hover img {
+    transform: translateX(6px);
+  }
+</style>

@@ -3,8 +3,10 @@ import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Dock from '../components/Dock.astro';
+import AboutPanel from '../components/AboutPanel.astro';
 import { site } from '../data/site';
 import { url } from '../utils/url';
+import { getLang, languages, switchLanguageUrl, useTranslations, type Lang } from '../i18n/ui';
 import '../styles/global.css';
 
 interface Props {
@@ -16,12 +18,19 @@ interface Props {
   section?: string;
 }
 
-const { title, description = site.description, header = true, section = 'Home' } = Astro.props;
-const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.role}`;
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const { title, description = t('site.description'), header = true, section = t('section.home') } = Astro.props;
+const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${t('site.role')}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+// La misma página en cada idioma (para hreflang y para el selector de idioma)
+const alternates = (Object.keys(languages) as Lang[]).map((code) => ({
+  code,
+  href: switchLanguageUrl(Astro.url.pathname, code),
+}));
 ---
 
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -33,6 +42,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_US'} />
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.code} href={new URL(alt.href, Astro.site)} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(alternates[0].href, Astro.site)} />
     <meta name="generator" content={Astro.generator} />
     <!-- Tema: se resuelve antes de pintar para evitar un destello en claro.
          Preferencia guardada: auto | light | dark (auto sigue al sistema). -->
@@ -63,14 +75,21 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </script>
     <ClientRouter />
   </head>
-  <body id="top" data-dock={header ? 'bar' : 'hero'} data-menu="closed" data-menu-view="menu">
-    <a class="skip-link" href="#main">Skip to content</a>
-    {header && <Header />}
-    <main id="main">
-      <slot />
-    </main>
-    <Footer />
-    <Dock label={section} />
+  <body id="top" data-dock={header ? 'bar' : 'hero'} data-menu="closed" data-menu-view="menu" data-about="closed">
+    <a class="skip-link" href="#main">{t('a11y.skip')}</a>
+    <!-- La página y la capa fija se desplazan juntas cuando se abre el panel About -->
+    <div class="page" data-page>
+      {header && <Header />}
+      <main id="main">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+    <div class="page-layer">
+      <Dock label={section} alternates={alternates} />
+      <div class="page-dim" data-about-close aria-hidden="true"></div>
+    </div>
+    <AboutPanel />
     <script>
       import '../scripts/interactions';
     </script>

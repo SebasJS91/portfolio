@@ -9,9 +9,11 @@
 //
 // Con <body data-menu="open"> el botón se convierte en una X y aparece el menú:
 // centrado sobre la barra, o alineado a la derecha si estamos en el hero.
-// <body data-menu-view="display"> cambia el menú por el modal de Display Mode.
+// <body data-menu-view="display|language"> cambia el menú por el modal de
+// Display Mode o de Language.
 import MenuPanel from './MenuPanel.astro';
 import DisplayModePanel from './DisplayModePanel.astro';
+import LanguagePanel from './LanguagePanel.astro';
 import logoDark from '../assets/logo.svg';
 import logoLight from '../assets/logo-light.svg';
 import logoWhite from '../assets/logo-white.svg';
@@ -21,14 +23,18 @@ import menuWhite from '../assets/icons/menu-white.svg';
 import closeIcon from '../assets/icons/close.svg';
 import arrowUp from '../assets/icons/arrow-up.svg';
 import { site } from '../data/site';
-import { url } from '../utils/url';
+import { getLang, localizedUrl, useTranslations, type Lang } from '../i18n/ui';
 
 interface Props {
   /** Nombre de sección inicial (se actualiza al hacer scroll) */
   label?: string;
+  /** URL de la página actual en cada idioma (para el modal de Language) */
+  alternates: { code: Lang; href: string }[];
 }
 
-const { label = 'Home' } = Astro.props;
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const { label = t('section.home'), alternates } = Astro.props;
 ---
 
 <div class="dock-backdrop" data-menu-close aria-hidden="true"></div>
@@ -40,13 +46,16 @@ const { label = 'Home' } = Astro.props;
   <div class="dock-menu__view dock-menu__view--display">
     <DisplayModePanel />
   </div>
+  <div class="dock-menu__view dock-menu__view--language">
+    <LanguagePanel alternates={alternates} />
+  </div>
 </div>
 
 <div class="dock" data-dock>
   <div class="dock__inner">
     <span class="dock__bg" aria-hidden="true"></span>
 
-    <a href={url('/')} class="dock__logo" aria-label={`${site.name}, home`}>
+    <a href={localizedUrl(lang, '/')} class="dock__logo" aria-label={`${site.name}, ${t('a11y.home')}`}>
       <img class="dock__logo-dark theme-light-only" src={logoDark.src} width={logoDark.width} height={logoDark.height} alt="" />
       <img class="dock__logo-dark theme-dark-only" src={logoLight.src} width={logoLight.width} height={logoLight.height} alt="" />
       <img class="dock__logo-white" src={logoWhite.src} width={logoWhite.width} height={logoWhite.height} alt="" />
@@ -57,7 +66,9 @@ const { label = 'Home' } = Astro.props;
     <button
       type="button"
       class="dock__menu"
-      aria-label="Open menu"
+      aria-label={t('a11y.openMenu')}
+      data-label-open={t('a11y.openMenu')}
+      data-label-close={t('a11y.closeMenu')}
       aria-expanded="false"
       aria-controls="dock-menu"
       data-menu-toggle
@@ -69,7 +80,7 @@ const { label = 'Home' } = Astro.props;
       <img class="dock__icon-close" src={closeIcon.src} width={closeIcon.width} height={closeIcon.height} alt="" />
     </button>
 
-    <a href="#top" class="dock__top" aria-label="Back to top" tabindex="-1">
+    <a href="#top" class="dock__top" aria-label={t('a11y.backToTop')} tabindex="-1">
       <img src={arrowUp.src} width={arrowUp.width} height={arrowUp.height} alt="" />
     </a>
   </div>
@@ -458,16 +469,18 @@ const { label = 'Home' } = Astro.props;
     bottom: 125px;
   }
 
-  /* Vistas: menú ↔ modal de Display Mode */
-  .dock-menu__view--display {
+  /* Vistas: menú ↔ modales de Display Mode y Language */
+  .dock-menu__view--display,
+  .dock-menu__view--language {
     display: none;
   }
 
-  :global(body[data-menu-view='display']) .dock-menu__view--menu {
+  :global(body:not([data-menu-view='menu'])) .dock-menu__view--menu {
     display: none;
   }
 
-  :global(body[data-menu-view='display']) .dock-menu__view--display {
+  :global(body[data-menu-view='display']) .dock-menu__view--display,
+  :global(body[data-menu-view='language']) .dock-menu__view--language {
     display: block;
     animation: view-in 450ms var(--ease-out);
   }

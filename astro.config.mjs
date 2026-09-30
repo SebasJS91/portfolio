@@ -10,5 +10,16 @@ export default defineConfig({
   site: 'https://sebasjs91.github.io',
   // Repo SebasJS91/portfolio → la página vive en /portfolio. Si cambias a un dominio propio, quita esta línea.
   base: '/portfolio',
-  integrations: [mdx(), sitemap()],
+  // Inglés en la raíz (/portfolio/...) y español en /portfolio/es/...
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'es'],
+    routing: { prefixDefaultLocale: false },
+  },
+  integrations: [
+    mdx(),
+    sitemap({
+      i18n: { defaultLocale: 'en', locales: { en: 'en', es: 'es' } },
+    }),
+  ],
 });
