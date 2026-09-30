@@ -1,9 +1,9 @@
 ---
-import CaseStudyView from '../../views/CaseStudyView.astro';
-import { getCaseStudies } from '../../i18n/content';
+import CaseStudyView from '../../../views/CaseStudyView.astro';
+import { getCaseStudies } from '../../../i18n/content';
 
 export async function getStaticPaths() {
-  const studies = await getCaseStudies('en');
+  const studies = await getCaseStudies('es');
   return studies.map((study, i) => ({
     params: { slug: study.slug },
     props: { study, next: studies[(i + 1) % studies.length] },

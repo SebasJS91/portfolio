@@ -3,17 +3,18 @@
 import logo from '../assets/logo.svg';
 import logoLight from '../assets/logo-light.svg';
 import { site } from '../data/site';
-import { url } from '../utils/url';
+import { getLang, localizedUrl, useTranslations } from '../i18n/ui';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
 ---
 
 <header class="header">
-  <a href={url('/')} class="header__logo" aria-label={`${site.name}, inicio`}>
+  <a href={localizedUrl(lang, '/')} class="header__logo" aria-label={`${site.name}, ${t('a11y.home')}`}>
     <img class="theme-light-only" src={logo.src} width={logo.width} height={logo.height} alt="" />
     <img class="theme-dark-only" src={logoLight.src} width={logoLight.width} height={logoLight.height} alt="" />
   </a>
-  <a href={url('/about')} class="pill" aria-current={Astro.url.pathname.startsWith(url('/about')) ? 'page' : undefined}>
-    About
-  </a>
+  <a href="#about" class="pill" data-about-open>{t('menu.about')}</a>
 </header>
 
 <style>

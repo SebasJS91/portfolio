@@ -15,20 +15,27 @@ Sitio construido con [Astro](https://astro.build). Estático, rápido y fácil d
 
 | Qué                                  | Archivo                                   |
 | ------------------------------------ | ----------------------------------------- |
-| Nombre, tagline, email, links, menú  | `src/data/site.ts`                        |
+| Nombre, email, links, menú           | `src/data/site.ts`                        |
+| Textos de la interfaz (EN / ES)      | `src/i18n/ui.ts`                          |
 | Colores, tipografía, espaciado       | `src/styles/global.css` (bloque `:root`)  |
-| Home                                 | `src/pages/index.astro`                   |
-| Sobre mí y experiencia               | `src/pages/about.astro`                   |
+| Home                                 | `src/views/HomeView.astro`                |
+| Sobre mí y experiencia               | `src/views/AboutView.astro`               |
 | CV                                   | `public/cv/cv.pdf`                        |
 | Dominio                              | `astro.config.mjs` → `site`               |
+
+## Idiomas
+
+El sitio está en inglés (`/portfolio/`) y español (`/portfolio/es/`). Las páginas
+de `src/pages` solo eligen el idioma; el contenido vive en `src/views`.
 
 ## Agregar un caso de estudio
 
 1. Duplica una carpeta en `src/content/case-studies/` y renómbrala. El nombre de la carpeta será la URL (`/work/nombre-carpeta`).
 2. Pon tus imágenes dentro de la misma carpeta (PNG, JPG o WebP; Astro las optimiza solo).
-3. Edita `index.mdx`: los datos de arriba (entre `---`) alimentan la card del home y el encabezado del caso.
-4. `draft: true` oculta el caso en producción (sigue visible en local).
-5. `order` define el orden en el home.
+3. Edita `index.mdx` (inglés): los datos de arriba (entre `---`) alimentan la sección del home y el encabezado del caso.
+4. Para la versión en español crea `index.es.mdx` en la misma carpeta. Solo necesita los campos que cambian (`title`, `summary`, `tags`, `galleryAlt`, `role`…); imágenes, orden y layout se heredan del inglés. Si no existe, la página en español muestra el caso en inglés.
+5. `draft: true` oculta el caso en producción (sigue visible en local).
+6. `order` define el orden en el home.
 
 Componentes disponibles dentro del MDX:
 

@@ -1,0 +1,36 @@
+---
+// Modal "Language" (Figma 34:2): English / Español.
+// Elegir una opción mueve el check; Done lleva a la misma página en ese idioma.
+import OptionsPanel, { type Option } from './OptionsPanel.astro';
+import enSolid from '../assets/icons/language/en-solid.svg';
+import enOutline from '../assets/icons/language/en-outline.svg';
+import esSolid from '../assets/icons/language/es-solid.svg';
+import esOutline from '../assets/icons/language/es-outline.svg';
+import { getLang, languages, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  /** URL de la página actual en cada idioma */
+  alternates: { code: Lang; href: string }[];
+}
+
+const { alternates } = Astro.props;
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+
+const icons: Record<Lang, Pick<Option, 'solid' | 'outline'>> = {
+  en: { solid: enSolid, outline: enOutline },
+  es: { solid: esSolid, outline: esOutline },
+};
+
+const options: Option[] = alternates.map(({ code, href }) => ({
+  value: code,
+  // Cada idioma se nombra en su propio idioma, como en Figma
+  label: languages[code],
+  lang: code,
+  href,
+  checked: code === lang,
+  ...icons[code],
+}));
+---
+
+<OptionsPanel group="language" title={t('language.title')} options={options} />

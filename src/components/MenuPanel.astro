@@ -1,6 +1,6 @@
 ---
 import { site } from '../data/site';
-import { url } from '../utils/url';
+import { getLang, localizedUrl, useTranslations } from '../i18n/ui';
 
 interface Props {
   /** id del título, único por página */
@@ -8,21 +8,23 @@ interface Props {
 }
 
 const { id = 'menu-title' } = Astro.props;
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
 ---
 
 <nav class="menu-panel" aria-labelledby={id}>
-  <p id={id} class="menu-panel__title">Menu</p>
+  <p id={id} class="menu-panel__title">{t('menu.title')}</p>
   <ul class="menu-panel__list">
     {
       site.menu.map((item, i) => (
         <li style={`--i: ${i}`}>
           {'href' in item ? (
-            <a href={url(item.href)} class="menu-panel__item">
-              {item.label}
+            <a href={localizedUrl(lang, item.href)} class="menu-panel__item">
+              {t(item.label)}
             </a>
           ) : (
             <button type="button" class="menu-panel__item" data-menu-action={item.action}>
-              {item.label}
+              {t(item.label)}
             </button>
           )}
         </li>

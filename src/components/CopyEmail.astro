@@ -1,8 +1,11 @@
 ---
 import { site } from '../data/site';
+import { getLang, useTranslations } from '../i18n/ui';
+
+const t = useTranslations(getLang(Astro.currentLocale));
 ---
 
-<button type="button" class="button copy" data-copy={site.email} aria-live="polite">
+<button type="button" class="button copy" data-copy={site.email} data-copied={t('copy.done')} aria-live="polite">
   <span data-copy-label>{site.email}</span>
   <span class="copy__icon" aria-hidden="true">⧉</span>
 </button>

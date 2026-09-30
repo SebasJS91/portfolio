@@ -1,5 +1,6 @@
 // Micro-interacciones globales. Se re-inicializan en cada navegación
 // porque usamos View Transitions (ClientRouter).
+import { navigate } from 'astro:transitions/client';
 
 let revealObserver: IntersectionObserver | undefined;
 
@@ -26,7 +27,7 @@ function initCopyButtons() {
     button.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(button.dataset.copy ?? '');
-        if (label) label.textContent = 'Copied!';
+        if (label) label.textContent = button.dataset.copied ?? 'Copied!';
         button.classList.add('is-copied');
         setTimeout(() => {
           if (label) label.textContent = original;
@@ -60,7 +61,8 @@ function initReadingProgress(signal: AbortSignal) {
 function initDock(signal: AbortSignal) {
   const body = document.body;
   const root = document.documentElement;
-  const dock = document.querySelector<HTMLElement>('[data-dock]');
+  // div: el <body> también lleva data-dock (el estado de la barra)
+  const dock = document.querySelector<HTMLElement>('div[data-dock]');
   const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
   const menu = document.querySelector<HTMLElement>('[data-dock-menu]');
   const label = document.querySelector<HTMLElement>('[data-dock-label]');
@@ -72,20 +74,30 @@ function initDock(signal: AbortSignal) {
     (el) => el !== hero && el !== footer,
   );
 
+  // Scroll (en px) que tolera cada gesto antes de reaccionar: absorbe redondeos
+  // y el rebote de los trackpads, pero se siente inmediato.
+  const SCROLL_SLOP = 4;
+  // Posición del scroll al abrir el menú: si el usuario se mueve, se cierra
+  let menuOpenedAt = 0;
+
   // focusFirst: al abrir con teclado, el foco pasa a la primera opción.
-  // view: qué muestra el panel — el menú o el modal de Display Mode.
+  // view: qué muestra el panel — el menú o uno de los modales.
   const setMenu = (open: boolean, focusFirst = false, view: MenuView = 'menu') => {
     // Al cerrar se conserva la vista para que no cambie durante la animación de salida
-    if (open) body.dataset.menuView = view;
+    if (open) {
+      body.dataset.menuView = view;
+      menuOpenedAt = window.scrollY;
+    }
     body.dataset.menu = open ? 'open' : 'closed';
     toggle.setAttribute('aria-expanded', String(open));
-    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    toggle.setAttribute('aria-label', (open ? toggle.dataset.labelClose : toggle.dataset.labelOpen) ?? '');
     menu.inert = !open;
+    document.dispatchEvent(new CustomEvent<MenuChange>('menu:change', { detail: { open, view } }));
     if (open && focusFirst) {
       const target =
-        view === 'display'
-          ? menu.querySelector<HTMLElement>('[data-display-option][aria-checked="true"]')
-          : menu.querySelector<HTMLElement>('.dock-menu__view--menu a, .dock-menu__view--menu button');
+        view === 'menu'
+          ? menu.querySelector<HTMLElement>('.dock-menu__view--menu a, .dock-menu__view--menu button')
+          : menu.querySelector<HTMLElement>(`.dock-menu__view--${view} [aria-checked="true"]`);
       target?.focus({ preventScroll: true });
     }
   };
@@ -110,8 +122,9 @@ function initDock(signal: AbortSignal) {
     if (footer && atBottom) {
       dockState = 'top';
       zone = 'footer';
-    } else if (hero && hero.getBoundingClientRect().bottom > vh * 0.85) {
-      // Apenas empieza el scroll fuera del hero, el dock se compacta
+    } else if (hero && window.scrollY <= SCROLL_SLOP) {
+      // Solo arriba del todo el logo y el menú están en su posición del hero;
+      // con el primer movimiento de scroll se agrupan en la barra flotante
       dockState = 'hero';
       zone = 'hero';
     } else {
@@ -138,6 +151,8 @@ function initDock(signal: AbortSignal) {
 
   let frame = 0;
   const onScroll = () => {
+    // Hacer scroll con el menú abierto lo cierra (misma animación que la X)
+    if (body.dataset.menu === 'open' && Math.abs(window.scrollY - menuOpenedAt) > SCROLL_SLOP) setMenu(false);
     cancelAnimationFrame(frame);
     frame = requestAnimationFrame(update);
   };
@@ -169,14 +184,18 @@ function initDock(signal: AbortSignal) {
     el.addEventListener('click', () => setMenu(false), { signal }),
   );
 
-  // "Display Mode" (en el menú flotante o en el del footer) abre el modal
-  document.querySelectorAll('[data-menu-action="display-mode"]').forEach((el) =>
+  // "Display Mode" y "Language" (en el menú flotante o en el del footer) abren su modal
+  const views: Record<string, MenuView> = { 'display-mode': 'display', language: 'language' };
+  document.querySelectorAll<HTMLElement>('[data-menu-action]:not([data-menu-action="about"]):not([data-menu-action="contact"])').forEach((el) =>
     el.addEventListener(
       'click',
-      (event) => setMenu(true, (event as MouseEvent).detail === 0, 'display'),
+      (event) => setMenu(true, (event as MouseEvent).detail === 0, views[el.dataset.menuAction ?? ''] ?? 'menu'),
       { signal },
     ),
   );
+
+  // Los modales piden cerrarse con este evento (p. ej. al presionar Done)
+  document.addEventListener('menu:close', () => setMenu(false), { signal });
 
   // Elegir una opción del menú lo cierra
   menu.addEventListener(
@@ -200,12 +219,11 @@ function initDock(signal: AbortSignal) {
 }
 
 /* --------------------------------------------------------------------------
-   Display Mode: auto | light | dark
-   El script inline del <head> (BaseLayout) resuelve y aplica el tema;
-   aquí solo se guarda la preferencia y se refleja en el modal.
+   Modales de opciones (Display Mode y Language)
    -------------------------------------------------------------------------- */
 
-type MenuView = 'menu' | 'display';
+type MenuView = 'menu' | 'display' | 'language';
+type MenuChange = { open: boolean; view: MenuView };
 type DisplayMode = 'auto' | 'light' | 'dark';
 
 declare global {
@@ -214,20 +232,52 @@ declare global {
   }
 }
 
+const closeMenu = () => document.dispatchEvent(new CustomEvent('menu:close'));
+
+/**
+ * Comportamiento de radiogroup: clic o flechas arriba/abajo eligen una opción.
+ * Devuelve las opciones y una función para mover el check.
+ */
+function initOptionGroup(group: string, onSelect: (value: string) => void, signal: AbortSignal) {
+  const options = [
+    ...document.querySelectorAll<HTMLButtonElement>(`[data-option-group="${group}"] [data-option]`),
+  ];
+
+  const check = (value: string) =>
+    options.forEach((option) => {
+      const active = option.dataset.option === value;
+      option.setAttribute('aria-checked', String(active));
+      option.tabIndex = active ? 0 : -1; // solo la opción activa entra en el orden de tab
+    });
+
+  options.forEach((option, index) => {
+    option.addEventListener('click', () => onSelect(option.dataset.option ?? ''), { signal });
+    option.addEventListener(
+      'keydown',
+      (event) => {
+        if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+        event.preventDefault();
+        const next = options[(index + (event.key === 'ArrowDown' ? 1 : -1) + options.length) % options.length];
+        next.focus();
+        onSelect(next.dataset.option ?? '');
+      },
+      { signal },
+    );
+  });
+
+  return { options, check };
+}
+
+/* Display Mode: auto | light | dark.
+   El script inline del <head> (BaseLayout) resuelve y aplica el tema; aquí se
+   guarda la preferencia, se aplica al instante y se refleja en el modal. */
 function initDisplayMode(signal: AbortSignal) {
-  const options = [...document.querySelectorAll<HTMLButtonElement>('[data-display-option]')];
+  const { options, check } = initOptionGroup('display', (value) => select(value as DisplayMode), signal);
   if (!options.length) return;
 
-  const sync = () => {
-    const pref = window.__theme?.getPref() ?? 'auto';
-    options.forEach((option) => {
-      const active = option.dataset.displayOption === pref;
-      option.setAttribute('aria-checked', String(active));
-      option.tabIndex = active ? 0 : -1; // radiogroup: solo la opción activa entra en el tab
-    });
-  };
+  const sync = () => check(window.__theme?.getPref() ?? 'auto');
 
-  const select = (mode: DisplayMode) => {
+  function select(mode: DisplayMode) {
     try {
       localStorage.setItem('display-mode', mode);
     } catch {
@@ -241,28 +291,139 @@ function initDisplayMode(signal: AbortSignal) {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (document.startViewTransition && !reduced) document.startViewTransition(apply);
     else apply();
-  };
+  }
 
   sync();
 
-  options.forEach((option, index) => {
-    option.addEventListener('click', () => select(option.dataset.displayOption as DisplayMode), { signal });
-    // Flechas arriba/abajo para moverse entre opciones, como un radiogroup nativo
-    option.addEventListener(
-      'keydown',
-      (event) => {
-        if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
-        event.preventDefault();
-        const next = options[(index + (event.key === 'ArrowDown' ? 1 : -1) + options.length) % options.length];
-        next.focus();
-        select(next.dataset.displayOption as DisplayMode);
-      },
-      { signal },
-    );
-  });
+  document
+    .querySelector('[data-option-group="display"] [data-options-done]')
+    ?.addEventListener('click', closeMenu, { signal });
 
   // Si la preferencia es Auto y el sistema cambia de tema, el check sigue en Auto
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', sync, { signal });
+}
+
+/* Language: en | es. Elegir una opción solo mueve el check; Done lleva a la
+   misma página en el idioma elegido (cada opción trae su URL en data-href). */
+function initLanguage(signal: AbortSignal) {
+  const current = document.documentElement.lang;
+  let selected = current;
+  const { options, check } = initOptionGroup(
+    'language',
+    (value) => {
+      selected = value;
+      check(value);
+    },
+    signal,
+  );
+  if (!options.length) return;
+
+  // Al abrir el modal, el check vuelve al idioma de la página
+  document.addEventListener(
+    'menu:change',
+    (event) => {
+      const { open, view } = (event as CustomEvent<MenuChange>).detail;
+      if (open && view === 'language') {
+        selected = current;
+        check(current);
+      }
+    },
+    { signal },
+  );
+
+  document.querySelector('[data-option-group="language"] [data-options-done]')?.addEventListener(
+    'click',
+    () => {
+      const href = options.find((option) => option.dataset.option === selected)?.dataset.href;
+      if (selected === current || !href) return closeMenu();
+      try {
+        localStorage.setItem('language', selected);
+      } catch {
+        /* sin almacenamiento */
+      }
+      navigate(href);
+    },
+    { signal },
+  );
+}
+
+/* --------------------------------------------------------------------------
+   Panel About: entra desde la derecha y empuja la página (y la barra flotante)
+   hacia la izquierda. <body data-about="open|closed">.
+   Se abre desde el botón About del hero/header, las opciones About y Contact
+   del menú (Contact baja directo a esa sección) o con #about / #contact en la
+   URL; se cierra con la X, la franja oscurecida o Escape.
+   -------------------------------------------------------------------------- */
+function initAbout(signal: AbortSignal) {
+  const body = document.body;
+  const panel = document.querySelector<HTMLElement>('[data-about-panel]');
+  const page = document.querySelector<HTMLElement>('[data-page]');
+  // div: el <body> también lleva data-dock (el estado de la barra)
+  const dock = document.querySelector<HTMLElement>('div[data-dock]');
+  if (!panel) return;
+
+  let opener: HTMLElement | null = null;
+  const isOpen = () => body.dataset.about === 'open';
+
+  type Section = 'about' | 'contact';
+
+  const setAbout = (open: boolean, section: Section = 'about') => {
+    body.dataset.about = open ? 'open' : 'closed';
+    panel.inert = !open;
+    // Mientras está abierto, la página y la barra quedan fuera del foco y del teclado
+    if (page) page.inert = open;
+    if (dock) dock.inert = open;
+    const url = new URL(window.location.href);
+    url.hash = open ? section : '';
+    history.replaceState(history.state, '', url.hash ? url : url.pathname + url.search);
+  };
+
+  const open = (trigger?: HTMLElement | null, section: Section = 'about') => {
+    if (isOpen()) return;
+    opener = trigger ?? (document.activeElement as HTMLElement | null);
+    // Si se abrió desde el menú, al cerrar el foco vuelve al botón del menú
+    if (opener?.closest('[data-dock-menu]')) opener = document.querySelector<HTMLElement>('[data-menu-toggle]');
+    // Si se abre desde el menú, el menú se cierra primero
+    if (body.dataset.menu === 'open') closeMenu();
+    setAbout(true, section);
+    // Contact: el panel entra ya desplazado hasta esa sección
+    const target = section === 'contact' ? panel.querySelector<HTMLElement>('[data-about-contact]') : null;
+    panel.scrollTop = target ? target.offsetTop : 0;
+    panel.querySelector<HTMLElement>('[data-about-close]')?.focus({ preventScroll: true });
+  };
+
+  const close = () => {
+    if (!isOpen()) return;
+    setAbout(false);
+    opener?.focus({ preventScroll: true });
+  };
+
+  document
+    .querySelectorAll<HTMLElement>('[data-about-open], [data-menu-action="about"], [data-menu-action="contact"]')
+    .forEach((el) =>
+      el.addEventListener(
+        'click',
+        (event) => {
+          event.preventDefault();
+          open(el, el.dataset.menuAction === 'contact' ? 'contact' : 'about');
+        },
+        { signal },
+      ),
+    );
+
+  document.querySelectorAll('[data-about-close]').forEach((el) => el.addEventListener('click', close, { signal }));
+
+  document.addEventListener(
+    'keydown',
+    (event) => {
+      if (event.key === 'Escape' && isOpen()) close();
+    },
+    { signal },
+  );
+
+  // Link directo: /portfolio/#about o /portfolio/#contact abren el panel al cargar
+  if (window.location.hash === '#about') open();
+  if (window.location.hash === '#contact') open(null, 'contact');
 }
 
 let controller: AbortController | undefined;
@@ -272,6 +433,8 @@ document.addEventListener('astro:page-load', () => {
   controller = new AbortController();
   initDock(controller.signal);
   initDisplayMode(controller.signal);
+  initLanguage(controller.signal);
+  initAbout(controller.signal);
   initReveal();
   initCopyButtons();
   initReadingProgress(controller.signal);

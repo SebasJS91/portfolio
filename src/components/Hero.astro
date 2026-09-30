@@ -1,15 +1,18 @@
 ---
 import { site } from '../data/site';
-import { url } from '../utils/url';
+import { getLang, useTranslations } from '../i18n/ui';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
 ---
 
-<section class="hero" data-zone="hero" data-label="Home">
+<section class="hero" data-zone="hero" data-label={t('section.home')}>
   <div class="panel hero__panel">
-    <a href={url('/about')} class="pill hero__about">About</a>
+    <a href="#about" class="pill hero__about" data-about-open>{t('menu.about')}</a>
 
     <div class="hero__title">
       <h1 class="hero__line" style="--i: 0">{site.name.toUpperCase()}</h1>
-      <p class="hero__line hero__role" style="--i: 1">{site.role.toUpperCase()}</p>
+      <p class="hero__line hero__role" style="--i: 1">{t('site.role').toUpperCase()}</p>
     </div>
   </div>
 </section>

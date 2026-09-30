@@ -1,26 +1,28 @@
 ---
-import type { CollectionEntry } from 'astro:content';
 import CaseGallery from './CaseGallery.astro';
 import arrowIcon from '../assets/icons/arrow-circle.svg';
 import arrowIconDark from '../assets/icons/arrow-circle-dark.svg';
-import { url } from '../utils/url';
+import type { CaseStudy } from '../i18n/content';
+import { getLang, localizedUrl, useTranslations } from '../i18n/ui';
 
 interface Props {
-  study: CollectionEntry<'caseStudies'>;
+  study: CaseStudy;
 }
 
 const { study } = Astro.props;
 const { title, summary, tags } = study.data;
-const href = url(`/work/${study.id}`);
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const href = localizedUrl(lang, `/work/${study.slug}`);
 ---
 
-<section class="case" aria-labelledby={`case-${study.id}`}>
+<section class="case" aria-labelledby={`case-${study.slug}`}>
   <div class="case__info">
     <div class="case__content">
       <div class="case__text">
         <div class="case__heading" data-reveal>
-          <p class="eyebrow">Case Study</p>
-          <h2 id={`case-${study.id}`}>{title}</h2>
+          <p class="eyebrow">{t('case.eyebrow')}</p>
+          <h2 id={`case-${study.slug}`}>{title}</h2>
         </div>
         <p class="case__summary" data-reveal style="--reveal-delay: 60ms">{summary}</p>
       </div>
@@ -35,7 +37,7 @@ const href = url(`/work/${study.id}`);
       }
     </div>
     <a href={href} class="pill pill--outline" data-reveal style="--reveal-delay: 180ms">
-      View Case Study
+      {t('case.cta')}
       <img class="theme-light-only" src={arrowIcon.src} width={arrowIcon.width} height={arrowIcon.height} alt="" />
       <img class="theme-dark-only" src={arrowIconDark.src} width={arrowIconDark.width} height={arrowIconDark.height} alt="" />
     </a>

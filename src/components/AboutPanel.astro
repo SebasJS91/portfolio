@@ -1,0 +1,181 @@
+---
+// Panel "About" (Figma 37:377). No es una página aparte: entra desde la derecha
+// y empuja la página actual hacia la izquierda, dejando una franja visible y
+// oscurecida. Se cierra con la X, con Escape o haciendo clic en esa franja.
+// Estado en <body data-about="open|closed">, controlado por src/scripts/interactions.ts.
+import CopyEmail from './CopyEmail.astro';
+import closeIcon from '../assets/icons/close.svg';
+import { site } from '../data/site';
+import { getLang, useTranslations } from '../i18n/ui';
+
+const t = useTranslations(getLang(Astro.currentLocale));
+const paragraphs = [t('about.p1'), t('about.p2'), t('about.p3'), t('about.p4')];
+---
+
+<aside
+  id="about"
+  class="about-panel"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="about-title"
+  data-about-panel
+  inert
+>
+  <div class="about-panel__content">
+    <header class="about-panel__header">
+      <h2 id="about-title" class="about-panel__title">{t('about.title')}</h2>
+      <button type="button" class="about-panel__close" aria-label={t('about.close')} data-about-close>
+        <img src={closeIcon.src} width={closeIcon.width} height={closeIcon.height} alt="" />
+      </button>
+    </header>
+
+    <div class="about-panel__body">
+      {paragraphs.map((text, i) => <p style={`--i: ${i}`}>{text}</p>)}
+    </div>
+
+    <section class="about-panel__contact" aria-labelledby="about-contact-title" data-about-contact>
+      <h2 id="about-contact-title" class="about-panel__title">{t('about.contact')}</h2>
+      <div class="about-panel__links">
+        <CopyEmail />
+        {
+          site.links.map((link) => (
+            <a href={link.href} class="pill pill--outline" target="_blank" rel="noopener noreferrer">
+              {link.label}
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</aside>
+
+<style>
+  .about-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    width: var(--about-w);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--color-panel);
+    color: var(--color-title);
+    transform: translateX(100%);
+    transition: transform var(--about-duration) var(--about-ease);
+  }
+
+  :global(body[data-about='open']) .about-panel {
+    transform: none;
+  }
+
+  /* Bloques de 40px de padding como en Figma */
+  .about-panel__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .about-panel__header,
+  .about-panel__body,
+  .about-panel__contact {
+    padding: 40px;
+  }
+
+  .about-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+  }
+
+  .about-panel__title {
+    margin: 0;
+    font-size: var(--text-2xl);
+    line-height: normal;
+    color: var(--color-title);
+  }
+
+  .about-panel__close {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--color-overlay);
+    cursor: pointer;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .about-panel__close img {
+    filter: var(--overlay-icon-filter);
+    transition: transform 300ms var(--ease-out);
+  }
+
+  .about-panel__close:hover img {
+    transform: rotate(90deg);
+  }
+
+  .about-panel__close:active {
+    transform: scale(0.94);
+  }
+
+  .about-panel__body {
+    max-width: calc(638px + 80px);
+    font-size: var(--text-base);
+    line-height: normal;
+  }
+
+  .about-panel__body p {
+    margin: 0 0 20px;
+  }
+
+  .about-panel__body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .about-panel__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-top: var(--space-md);
+  }
+
+  /* El contenido entra escalonado cuando el panel ya va llegando */
+  .about-panel__header,
+  .about-panel__body p,
+  .about-panel__contact {
+    opacity: 0;
+    transform: translateX(32px);
+    transition:
+      opacity 400ms var(--ease-out),
+      transform 700ms var(--ease-out);
+  }
+
+  :global(body[data-about='open']) .about-panel__header,
+  :global(body[data-about='open']) .about-panel__body p,
+  :global(body[data-about='open']) .about-panel__contact {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--i, 0) * 60ms + 220ms);
+  }
+
+  :global(body[data-about='open']) .about-panel__header {
+    --i: -1;
+  }
+
+  :global(body[data-about='open']) .about-panel__contact {
+    --i: 4;
+  }
+
+  @media (max-width: 700px) {
+    .about-panel__header,
+    .about-panel__body,
+    .about-panel__contact {
+      padding: 24px;
+    }
+  }
+</style>
