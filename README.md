@@ -10,6 +10,8 @@ Sitio construido con [Astro](https://astro.build). Estático, rápido y fácil d
 | `npm run dev`     | Servidor local en `http://localhost:4321`   |
 | `npm run build`   | Genera el sitio final en `dist/`            |
 | `npm run preview` | Previsualiza el build                       |
+| `npm run cf:dev`  | Build + simula Cloudflare en local          |
+| `npm run cf:deploy` | Build + publica en Cloudflare (manual)    |
 
 ## Dónde editar cada cosa
 
@@ -25,8 +27,40 @@ Sitio construido con [Astro](https://astro.build). Estático, rápido y fácil d
 
 ## Idiomas
 
-El sitio está en inglés (`/portfolio/`) y español (`/portfolio/es/`). Las páginas
-de `src/pages` solo eligen el idioma; el contenido vive en `src/views`.
+El sitio está en inglés (`/`) y español (`/es/`). Las páginas de `src/pages`
+solo eligen el idioma; el contenido vive en `src/views`.
+
+En la primera visita al inicio el idioma se elige solo. Prioridad:
+
+1. Lo que el visitante eligió en el modal de Language (se recuerda).
+2. En Cloudflare: el país de la visita (`worker/index.js`). Países
+   hispanohablantes → `/es/`, el resto → inglés.
+3. En cualquier hosting: el idioma principal del navegador.
+
+Los links directos a una página (un caso, `/es/...`) nunca se redirigen.
+
+## Publicación
+
+El sitio se puede servir en dos lugares; la ruta base se define por variables
+de entorno (ver `astro.config.mjs`):
+
+| Dónde          | URL                                   | Variables                                      |
+| -------------- | ------------------------------------- | ---------------------------------------------- |
+| GitHub Pages   | `https://sebasjs91.github.io/portfolio` | `SITE_BASE=/portfolio` (lo pone el workflow)   |
+| Cloudflare     | `https://sebastianjaramillo.me`       | ninguna (es el valor por defecto)              |
+| Local          | `http://localhost:4321`               | ninguna                                        |
+
+### Cloudflare (dominio propio + idioma por país)
+
+1. Crea una cuenta en [dash.cloudflare.com](https://dash.cloudflare.com).
+2. Compra el dominio en **Domain Registration → Register Domains**.
+3. Ve a **Workers & Pages → Create → Import a repository**, conecta GitHub y
+   elige `SebasJS91/portfolio`:
+   - Build command: `npm run build`
+   - Deploy command: `npx wrangler deploy`
+4. En el Worker creado: **Settings → Domains & Routes → Add → Custom domain**
+   y escribe `sebastianjaramillo.me` (y `www.sebastianjaramillo.me` si quieres).
+5. Desde ahí, cada push a `main` se publica solo en Cloudflare.
 
 ## Agregar un caso de estudio
 

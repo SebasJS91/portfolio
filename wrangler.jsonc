@@ -1,0 +1,17 @@
+// Configuración para publicar el sitio en Cloudflare Workers (archivos estáticos
+// + un worker pequeño que decide el idioma por país en "/").
+// Build: npm run build · Deploy: npx wrangler deploy
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "portfolio",
+  "main": "./worker/index.js",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    // Sirve el 404.html de Astro para rutas que no existen
+    "not_found_handling": "404-page",
+    // El worker solo corre en la raíz; el resto se sirve directo (gratis)
+    "run_worker_first": ["/"]
+  }
+}

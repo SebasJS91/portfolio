@@ -18,6 +18,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # El repo SebasJS91/portfolio se publica en /portfolio
+      SITE_URL: https://sebasjs91.github.io
+      SITE_BASE: /portfolio
     steps:
       - uses: actions/checkout@v7
       - uses: withastro/action@v6
