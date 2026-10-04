@@ -6,6 +6,8 @@
   "name": "portfolio",
   "main": "./worker/index.js",
   "compatibility_date": "2026-10-01",
+  // Solo se publica en sebastianjaramillo.me; sin copia en *.workers.dev (contenido duplicado)
+  "workers_dev": false,
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",

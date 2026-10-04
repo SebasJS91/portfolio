@@ -41,26 +41,15 @@ Los links directos a una página (un caso, `/es/...`) nunca se redirigen.
 
 ## Publicación
 
-El sitio se puede servir en dos lugares; la ruta base se define por variables
-de entorno (ver `astro.config.mjs`):
+El sitio vive en **https://sebastianjaramillo.me**, publicado con Cloudflare
+Workers (archivos estáticos + `worker/index.js` para el idioma por país).
+Cada push a `main` se publica solo: Cloudflare corre `npm run build` y luego
+`npx wrangler deploy` (configuración en `wrangler.jsonc`).
 
-| Dónde          | URL                                   | Variables                                      |
-| -------------- | ------------------------------------- | ---------------------------------------------- |
-| GitHub Pages   | `https://sebasjs91.github.io/portfolio` | `SITE_BASE=/portfolio` (lo pone el workflow)   |
-| Cloudflare     | `https://sebastianjaramillo.me`       | ninguna (es el valor por defecto)              |
-| Local          | `http://localhost:4321`               | ninguna                                        |
-
-### Cloudflare (dominio propio + idioma por país)
-
-1. Crea una cuenta en [dash.cloudflare.com](https://dash.cloudflare.com).
-2. Compra el dominio en **Domain Registration → Register Domains**.
-3. Ve a **Workers & Pages → Create → Import a repository**, conecta GitHub y
-   elige `SebasJS91/portfolio`:
-   - Build command: `npm run build`
-   - Deploy command: `npx wrangler deploy`
-4. En el Worker creado: **Settings → Domains & Routes → Add → Custom domain**
-   y escribe `sebastianjaramillo.me` (y `www.sebastianjaramillo.me` si quieres).
-5. Desde ahí, cada push a `main` se publica solo en Cloudflare.
+- `public/_headers`: caché de los archivos estáticos.
+- `public/robots.txt`: permite indexar e indica el sitemap.
+- La URL y la ruta base salen de `SITE_URL` / `SITE_BASE` (ver
+  `astro.config.mjs`); por defecto, la raíz del dominio.
 
 ## Agregar un caso de estudio
 
