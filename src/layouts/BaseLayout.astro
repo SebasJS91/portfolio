@@ -6,7 +6,7 @@ import Dock from '../components/Dock.astro';
 import AboutPanel from '../components/AboutPanel.astro';
 import { site } from '../data/site';
 import { url } from '../utils/url';
-import { getLang, languages, switchLanguageUrl, useTranslations, type Lang } from '../i18n/ui';
+import { defaultLang, getLang, languages, localizedUrl, switchLanguageUrl, useTranslations, type Lang } from '../i18n/ui';
 import '../styles/global.css';
 
 interface Props {
@@ -28,6 +28,9 @@ const alternates = (Object.keys(languages) as Lang[]).map((code) => ({
   code,
   href: switchLanguageUrl(Astro.url.pathname, code),
 }));
+// Solo el inicio en inglés decide el idioma automáticamente (ver script en <head>)
+const isDefaultHome = lang === defaultLang && Astro.url.pathname === localizedUrl(defaultLang, '/');
+const esHome = localizedUrl('es', '/');
 ---
 
 <html lang={lang}>
@@ -73,6 +76,32 @@ const alternates = (Object.keys(languages) as Lang[]).map((code) => ({
         }
       })();
     </script>
+    {
+      isDefaultHome && (
+        <script is:inline define:vars={{ esHome }}>
+          // Idioma automático en la primera visita al inicio. Prioridad:
+          //  1. Lo que el visitante eligió en el modal de Language (localStorage / cookie "lang")
+          //  2. La decisión por país que tomó Cloudflare (cookie "geo-lang", ver worker/index.js)
+          //  3. El idioma principal del navegador
+          // Los links a otras páginas (un caso, /es/...) nunca se redirigen.
+          const cookie = (name) =>
+            document.cookie
+              .split('; ')
+              .find((c) => c.startsWith(name + '='))
+              ?.split('=')[1];
+          let chosen = cookie('lang');
+          try {
+            chosen = localStorage.getItem('language') || chosen;
+          } catch {}
+          if (chosen) {
+            if (chosen === 'es') location.replace(esHome);
+          } else if (!cookie('geo-lang')) {
+            const preferred = (navigator.languages?.[0] || navigator.language || '').toLowerCase();
+            if (preferred.startsWith('es')) location.replace(esHome);
+          }
+        </script>
+      )
+    }
     <ClientRouter />
   </head>
   <body id="top" data-dock={header ? 'bar' : 'hero'} data-menu="closed" data-menu-view="menu" data-about="closed">

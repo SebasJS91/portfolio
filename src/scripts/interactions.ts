@@ -341,6 +341,8 @@ function initLanguage(signal: AbortSignal) {
       } catch {
         /* sin almacenamiento */
       }
+      // La cookie la lee también el worker de Cloudflare, antes de servir la página
+      document.cookie = `lang=${selected}; Path=/; Max-Age=31536000; SameSite=Lax`;
       navigate(href);
     },
     { signal },
