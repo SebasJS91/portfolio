@@ -15,7 +15,11 @@ export type CaseStudy = {
   /** true si la página muestra la versión en inglés por falta de traducción */
   isFallback: boolean;
   data: Required<Pick<Data, 'title' | 'summary' | 'tags' | 'galleryAlt' | 'galleryLayout' | 'order' | 'draft'>> &
-    Omit<Data, 'gallery' | 'cover'> & { gallery: ImageMetadata[]; cover: ImageMetadata };
+    Omit<Data, 'gallery' | 'cover'> & {
+      gallery: ImageMetadata[];
+      /** Portada propia para la página del caso; si no hay, se muestra la galería */
+      cover?: ImageMetadata;
+    };
 };
 
 export async function getCaseStudies(lang: Lang): Promise<CaseStudy[]> {
@@ -44,7 +48,7 @@ export async function getCaseStudies(lang: Lang): Promise<CaseStudy[]> {
           order: merged.order ?? 99,
           draft: merged.draft ?? false,
           gallery: merged.gallery,
-          cover: merged.cover ?? merged.gallery[0],
+          cover: merged.cover,
         },
       } satisfies CaseStudy;
     })

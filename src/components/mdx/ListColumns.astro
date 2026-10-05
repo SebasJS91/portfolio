@@ -1,0 +1,72 @@
+---
+// Listas lado a lado, cada una con su título (ej. funciones de Web y de Mobile).
+// Uso en MDX:
+//   <ListColumns columns={[{ label: 'Web', items: ['Sign up', 'Settings'] }]} />
+interface Props {
+  columns: { label: string; items: string[] }[];
+}
+
+const { columns } = Astro.props;
+---
+
+<div class="list-columns">
+  {
+    columns.map((column, i) => (
+      <div class="list-columns__column" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+        <p class="list-columns__label">
+          {column.label}
+          <span class="list-columns__count">{column.items.length}</span>
+        </p>
+        <ul>
+          {column.items.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .list-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-sm);
+    margin: var(--space-lg) 0;
+  }
+
+  .list-columns__column {
+    padding: var(--space-md);
+    border-radius: var(--radius);
+    background: var(--color-panel);
+  }
+
+  .list-columns__label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin: 0 0 var(--space-xs);
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: var(--color-title);
+  }
+
+  .list-columns__count {
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--color-tag);
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: var(--color-tag-text);
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 1.1em;
+    color: var(--color-text-body);
+  }
+
+  li + li {
+    margin-top: 4px;
+  }
+</style>

@@ -1,0 +1,187 @@
+---
+title: CareNautica
+summary: Turned a set of disconnected health-app features into a focused, research-backed product for patients and caregivers, and designed the engagement layer behind an NIH SBIR application.
+tags: [UX Research, Health, Mobile, Behavioral Design, Gamification]
+role: Lead Product Designer
+year: 2025
+duration: Phase 1 · Nov 2023 – Feb 2024 / Phase 2 · Oct – Dec 2025
+team: 1 external HCI consultant, client team
+# Tres pantallas con fondo transparente, en fila (izquierda, centro, derecha).
+# También se usan en la cabecera de la página del caso.
+gallery:
+  - ./carenautica-cover-left.png
+  - ./carenautica-cover-center.png
+  - ./carenautica-cover-right.png
+galleryLayout: devices
+galleryAlt: "Main screens of the CareNautica app: medication tracker, daily journey and today’s goals"
+order: 1
+---
+
+import FeatureCards from '../../../components/mdx/FeatureCards.astro';
+import BeforeAfter from '../../../components/mdx/BeforeAfter.astro';
+import Findings from '../../../components/mdx/Findings.astro';
+import Metrics from '../../../components/mdx/Metrics.astro';
+import StatusCards from '../../../components/mdx/StatusCards.astro';
+
+## At a glance
+
+- **Role:** Lead product designer. An external HCI consultant set the route; I designed and ran everything on it: personas, surveys, prototypes, usability tests and the gamification system.
+- **Scope:** Two phases, two years apart. Phase 1 turned a vague concept into a validated product. Phase 2 designed its engagement layer for a federal grant.
+- **Decisions that mattered:** cutting five features to three, and choosing intrinsic motivation over financial rewards.
+- **Outcome:** Phase 1 helped the client secure funding. The Phase 2 work went into an NIH SBIR application, which is pending.
+
+## The brief
+
+### A health app with features, but no reasons behind them.
+
+The client saw an underserved gap: people managing chronic conditions, and the caregivers around them, had no single tool for daily health coordination. They arrived with a rough concept and a disconnected Figma prototype, built without research and without a logic connecting its features.
+
+That was the real problem. Even a well-designed health app fails if users don't come back tomorrow, and a funding application can't rest on features nobody asked for. The product needed direction first, then evidence for every decision, for users and for the people evaluating it.
+
+## How it works
+
+### One shared space for patients and the people who care for them.
+
+CareNautica connects patients and caregivers, and health data flows between them only if the patient chooses it.
+
+<FeatureCards
+  items={[
+    {
+      title: 'Wellness Survey',
+      tag: 'Core feature',
+      text: 'A short daily check-in. Caregivers can see how the patient is doing without having to ask every day.',
+    },
+    {
+      title: 'Medication Tracker',
+      tag: 'Daily habit',
+      text: 'Patients log their medications and share the list with the people they choose.',
+    },
+    {
+      title: 'Chats (care circles)',
+      tag: 'Shared care',
+      text: "A close circle of up to six people who can follow the patient's progress and everything they track, as long as the patient allows it.",
+    },
+  ]}
+/>
+
+> Every feature serves the same idea: the patient controls who sees what, and caregivers get visibility without constant questions.
+
+{/* Imagen pendiente: overview.png — Wellness survey, medication tracker and care circles (ancho completo) */}
+
+## Refocusing
+
+### Five features were too many to prove. Three could be defended.
+
+Before touching any screen, we ran a KPT analysis (Keep, Problem, Try) on the existing prototype. The finding was structural: five features across two user types was too broad to validate in a single phase. Testing everything at once would have produced shallow evidence for all of it and strong evidence for none.
+
+> The analysis didn't say the features were bad. It said the scope was a liability, for the product and for the grant that depended on it.
+
+We recommended cutting the care information section and the reward shop, and narrowing Communities. The original idea let users join large, location-based communities. We proposed starting with a small circle of trusted people, learning whether people wanted that, and only then deciding if it should grow into communities.
+
+The client had to let go of parts of their original vision. Wireframes made the case visually, and the KPT rationale made it strategically. They agreed.
+
+<BeforeAfter
+  before={{
+    label: 'Before — 5 features',
+    items: [
+      { text: 'Care information', removed: true },
+      { text: 'Reward shop', removed: true },
+      { text: 'Medication tracker' },
+      { text: 'Wellness survey' },
+      { text: 'Communities (large, location-based)' },
+    ],
+  }}
+  after={{
+    label: 'After — 3 features',
+    items: [{ text: 'Medication tracker' }, { text: 'Wellness survey' }, { text: 'Chats (care circles of up to 6)' }],
+  }}
+/>
+
+{/* Imagen pendiente: wireframes.png — Wireframes of the refocused product (ancho completo) */}
+
+## Research and validation
+
+### Two surveys, a prototype, and two ways of testing it.
+
+I drafted two personas, one for patients and one for caregivers, to define what we needed to learn, then designed two surveys for self-declared patients and caregivers in the US. The responses changed what people expected from the product, and many respondents asked to try the prototype. That was the first signal of real demand.
+
+With that, I built a semi-high-fidelity prototype of the three features: polished enough to get honest feedback, not so polished that it would need to be redone afterward. It was tested through a Maze usability test (20 participants, just over half in the 60–79 target age group) and two focus groups (6 participants).
+
+<Findings
+  items={[
+    {
+      label: 'What Maze showed',
+      text: 'Core flows were easy to navigate, but the permissions flow in Chats had real friction.',
+    },
+    {
+      label: 'What the focus groups added',
+      text: 'Caregivers valued the care circle, but only with granular control over what each person could see. Privacy was the condition for using the app at all.',
+    },
+    {
+      label: 'What we changed',
+      text: 'Permissions became a shared responsibility: both the patient and the caregiver they designate can manage them, so control no longer depended on a single person getting the setup right. Validating this change wasn’t part of either phase, which were about validating the product and its features, and then the gamification system.',
+    },
+  ]}
+/>
+
+Because the main audience was older adults, I also removed everything that wasn't strictly necessary from each screen. Showing less lowers cognitive load, and it helped every user, including younger ones.
+
+{/* Imagen pendiente: prototype.png — Semi-high-fidelity prototype (ancho completo) */}
+
+## Gamification
+
+### A health app only works if people come back tomorrow.
+
+Phase 1 proved CareNautica was usable. Phase 2 tackled a harder problem: usable isn't enough when medication adherence depends on daily return. For the NIH SBIR application, I designed an engagement system where each mechanic targets a specific driver of habit formation, based on four behavioral frameworks (SDT, FBM, SCT and IMB).
+
+| Feature | What it does | Behavioral driver |
+|---|---|---|
+| **Journey Path** | Daily and weekly milestones that turn routine care into visible progress | Habit formation and clear triggers |
+| **Goal Ring Progress** | Shows how close the user is to each day's goal | Competence and self-efficacy |
+| **Mini Wellness Moments** | Short, easy actions that fit into the day | Ability and skill-building |
+| **Encouragement Cards** | Support from the people in the care circle | Relatedness and social support |
+
+### The most important decision was what we chose not to build.
+
+Gift cards, financial incentives and brand rewards are a common shortcut in health apps. They raise short-term engagement, but in a medication context they carry a real risk: users gaming their adherence data for the reward.
+
+We chose intrinsic motivation instead: visible progress, support from the care circle, and charitable donation options. It builds habits that last, it's clinically defensible, and it fit what a federal grant reviewer looks for.
+
+<Metrics
+  items={[
+    { value: '93%', label: 'Goal Ring mission success (57 participants)' },
+    { value: '4.2/5', label: 'ease of use' },
+    { value: '4.5/5', label: 'visual appeal' },
+  ]}
+/>
+
+{/* Imagen pendiente: gamification.png — Journey Path and Goal Ring Progress (ancho completo) */}
+
+> Choosing intrinsic motivation was a product decision, and also the argument that positioned CareNautica as a serious clinical tool, not another engagement-chasing health app.
+
+## Outcomes
+
+### Funding secured in Phase 1. NIH SBIR submitted, decision pending.
+
+Phase 1 produced the research and validated prototype the client needed to move forward. Phase 2 delivered the behavioral framework and usability results that went into the NIH SBIR application, which is awaiting a decision.
+
+<StatusCards
+  items={[
+    {
+      title: 'Phase 1',
+      status: 'confirmed',
+      statusLabel: 'Confirmed',
+      text: 'The client secured funding with the validated product and commissioned Phase 2.',
+    },
+    {
+      title: 'NIH SBIR',
+      status: 'pending',
+      statusLabel: 'Pending',
+      text: 'The gamification system and usability results were submitted as part of the application.',
+    },
+  ]}
+/>
+
+What gives the second submission weight is the gap between phases. After Phase 1 ended in February 2024, the client spent over a year pursuing funding to keep the project alive, and succeeded. When the NIH opportunity came in October 2025, the Phase 1 work was still solid enough to anchor a federal application.
+
+> The research didn't just support the design. It outlasted the timeline it was built for, and that is the most conservative way to say what it was worth.

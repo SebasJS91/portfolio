@@ -1,0 +1,68 @@
+---
+// Tarjetas de funciones: título, etiqueta corta y descripción.
+// Uso en MDX:
+//   <FeatureCards items={[{ title: 'Wellness Survey', tag: 'Core feature', text: '...' }]} />
+interface Props {
+  items: { title: string; tag?: string; text: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="feature-cards">
+  {
+    items.map((item, i) => (
+      <li class="feature-card" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+        {item.tag && <span class="feature-card__tag">{item.tag}</span>}
+        <h4 class="feature-card__title">{item.title}</h4>
+        <p class="feature-card__text">{item.text}</p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .feature-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--space-sm);
+    margin: var(--space-lg) 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .feature-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: var(--space-md);
+    border-radius: var(--radius);
+    background: var(--color-panel);
+  }
+
+  .feature-card__tag {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--color-tag);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-tag-text);
+  }
+
+  .feature-card__title {
+    margin: 6px 0 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--text-lg);
+    line-height: 1.2;
+    color: var(--color-title);
+  }
+
+  .feature-card__text {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--color-text-body);
+  }
+</style>

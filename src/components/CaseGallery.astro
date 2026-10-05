@@ -4,14 +4,16 @@ import type { CaseStudy } from '../i18n/content';
 
 interface Props {
   study: CaseStudy;
+  /** Cargar de inmediato (cuando la galería está arriba en la página) */
+  eager?: boolean;
 }
 
-const { study } = Astro.props;
+const { study, eager = false } = Astro.props;
 const { gallery, galleryAlt, galleryLayout } = study.data;
 
 // Tamaño de salida aproximado de cada imagen según el layout (para srcset)
 const widths = {
-  devices: [200, 300, 400, 600],
+  devices: [200, 300, 400, 600, 800],
   centered: [480, 720, 1000, 1400],
   bleed: [720, 1000, 1400, 2000],
 }[galleryLayout];
@@ -24,7 +26,8 @@ const widths = {
         src={src}
         alt={i === 0 ? galleryAlt : ''}
         widths={widths}
-        sizes={galleryLayout === 'devices' ? '20vw' : '65vw'}
+        sizes={galleryLayout === 'devices' ? '24vw' : '65vw'}
+        loading={eager ? 'eager' : 'lazy'}
         data-reveal
         style={`--reveal-delay: ${i * 90}ms`}
       />

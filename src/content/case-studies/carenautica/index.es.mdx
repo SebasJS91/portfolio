@@ -1,0 +1,178 @@
+---
+title: CareNautica
+summary: Convertí un conjunto de funciones desconectadas en un producto de salud enfocado y respaldado por investigación para pacientes y cuidadores, y diseñé la capa de engagement para una aplicación a un grant del NIH SBIR.
+tags: [UX Research, Salud, Mobile, Diseño conductual, Gamificación]
+role: Lead Product Designer
+duration: Fase 1 · nov 2023 – feb 2024 / Fase 2 · oct – dic 2025
+team: 1 consultor HCI externo, equipo del cliente
+galleryAlt: "Pantallas principales de la app CareNautica: registro de medicamentos, recorrido diario y metas del día"
+---
+
+import FeatureCards from '../../../components/mdx/FeatureCards.astro';
+import BeforeAfter from '../../../components/mdx/BeforeAfter.astro';
+import Findings from '../../../components/mdx/Findings.astro';
+import Metrics from '../../../components/mdx/Metrics.astro';
+import StatusCards from '../../../components/mdx/StatusCards.astro';
+
+## De un vistazo
+
+- **Rol:** Lead product designer. Un consultor HCI externo definía la ruta; yo diseñé y ejecuté todo sobre ella: personas, encuestas, prototipos, pruebas de usabilidad y el sistema de gamificación.
+- **Alcance:** Dos fases, separadas por dos años. La Fase 1 convirtió un concepto difuso en un producto validado. La Fase 2 diseñó su capa de engagement para un grant federal.
+- **Decisiones clave:** reducir cinco funciones a tres, y elegir motivación intrínseca en lugar de recompensas financieras.
+- **Resultado:** La Fase 1 ayudó al cliente a conseguir financiación. El trabajo de la Fase 2 hizo parte de una aplicación al NIH SBIR, que está pendiente.
+
+## El punto de partida
+
+### Una app de salud con funciones, pero sin razones detrás.
+
+El cliente vio un vacío sin atender: las personas que manejan condiciones crónicas, y los cuidadores a su alrededor, no tenían una sola herramienta para coordinar la salud diaria. Llegaron con un concepto inicial y un prototipo de Figma desconectado, hecho sin investigación y sin una lógica que uniera sus funciones.
+
+Ese era el problema real. Una app de salud falla aunque esté bien diseñada si los usuarios no vuelven mañana, y una solicitud de financiación no puede apoyarse en funciones que nadie pidió. Primero había que darle dirección al producto y después sostener cada decisión con evidencia, para los usuarios y para quienes lo evaluaban.
+
+## Cómo funciona
+
+### Un espacio compartido para pacientes y para quienes los cuidan.
+
+CareNautica conecta a pacientes y cuidadores, y los datos de salud fluyen entre ellos solo si el paciente lo decide.
+
+<FeatureCards
+  items={[
+    {
+      title: 'Wellness Survey',
+      tag: 'Función central',
+      text: 'Un chequeo diario corto. Los cuidadores ven cómo está el paciente sin tener que preguntarle cada día.',
+    },
+    {
+      title: 'Medication Tracker',
+      tag: 'Hábito diario',
+      text: 'Los pacientes registran sus medicamentos y comparten la lista con quienes eligen.',
+    },
+    {
+      title: 'Chats (círculos de cuidado)',
+      tag: 'Cuidado compartido',
+      text: 'Un círculo cercano de hasta seis personas que pueden seguir el progreso del paciente y todo lo que registra, siempre que él lo permita.',
+    },
+  ]}
+/>
+
+> Todas las funciones sirven a la misma idea: el paciente controla quién ve qué, y los cuidadores tienen visibilidad sin preguntar todo el tiempo.
+
+{/* Imagen pendiente: overview.png — Encuesta de bienestar, registro de medicamentos y círculos de cuidado (ancho completo) */}
+
+## Reenfoque
+
+### Cinco funciones eran demasiadas para probar. Tres se podían defender.
+
+Antes de tocar una pantalla, hicimos un análisis KPT (Keep, Problem, Try) sobre el prototipo existente. El hallazgo fue estructural: cinco funciones para dos tipos de usuario era un alcance demasiado amplio para validar en una sola fase. Probar todo a la vez habría dado evidencia superficial de todo y sólida de nada.
+
+> El análisis no dijo que las funciones fueran malas. Dijo que el alcance era un riesgo, para el producto y para el grant que dependía de él.
+
+Recomendamos quitar la sección de información de cuidado y la tienda de recompensas, y reducir Communities. La idea original permitía unirse a comunidades grandes por zona. Propusimos empezar con un círculo pequeño de personas de confianza, ver si la gente lo quería y solo después decidir si debía crecer hacia comunidades.
+
+El cliente tuvo que soltar partes de su visión original. Los wireframes hicieron el argumento visual y el KPT lo hizo estratégico. Estuvieron de acuerdo.
+
+<BeforeAfter
+  before={{
+    label: 'Antes — 5 funciones',
+    items: [
+      { text: 'Información de cuidado', removed: true },
+      { text: 'Tienda de recompensas', removed: true },
+      { text: 'Medication tracker' },
+      { text: 'Wellness survey' },
+      { text: 'Communities (grandes, por zona)' },
+    ],
+  }}
+  after={{
+    label: 'Después — 3 funciones',
+    items: [{ text: 'Medication tracker' }, { text: 'Wellness survey' }, { text: 'Chats (círculos de cuidado de hasta 6)' }],
+  }}
+/>
+
+{/* Imagen pendiente: wireframes.png — Wireframes del producto reenfocado (ancho completo) */}
+
+## Investigación y validación
+
+### Dos encuestas, un prototipo y dos formas de probarlo.
+
+Esbocé dos personas, una de paciente y una de cuidador, para definir qué necesitábamos aprender, y diseñé dos encuestas para pacientes y cuidadores autodeclarados en Estados Unidos. Las respuestas cambiaron lo que la gente esperaba del producto, y muchos encuestados pidieron probar el prototipo. Fue la primera señal de demanda real.
+
+Con eso construí un prototipo de fidelidad semi-alta de las tres funciones: lo bastante pulido para recibir feedback honesto, sin tanto detalle que hubiera que rehacerlo después. Lo probamos con un test de usabilidad en Maze (20 participantes, algo más de la mitad en el rango objetivo de 60 a 79 años) y dos focus groups (6 participantes).
+
+<Findings
+  items={[
+    {
+      label: 'Lo que mostró Maze',
+      text: 'Los flujos principales eran fáciles de navegar, pero el flujo de permisos en Chats tenía fricción real.',
+    },
+    {
+      label: 'Lo que añadieron los focus groups',
+      text: 'Los cuidadores valoraron el círculo de cuidado, pero solo con control granular sobre lo que cada persona podía ver. La privacidad era la condición para usar la app.',
+    },
+    {
+      label: 'Lo que cambiamos',
+      text: 'Los permisos pasaron a ser una responsabilidad compartida: tanto el paciente como el cuidador que designa pueden gestionarlos, de modo que el control ya no dependía de que una sola persona configurara todo bien. Validar este cambio no entró en el alcance de ninguna fase, que se centraron en validar el producto y sus funciones, y después el sistema de gamificación.',
+    },
+  ]}
+/>
+
+Como el público principal eran adultos mayores, también quité de cada pantalla todo lo que no fuera estrictamente necesario. Mostrar menos reduce la carga cognitiva, y ayudó a todos los usuarios, incluidos los más jóvenes.
+
+{/* Imagen pendiente: prototype.png — Prototipo de fidelidad semi-alta (ancho completo) */}
+
+## Gamificación
+
+### Una app de salud solo funciona si la gente vuelve mañana.
+
+La Fase 1 demostró que CareNautica era usable. La Fase 2 abordó un problema más difícil: usable no basta cuando la adherencia a los medicamentos depende del regreso diario. Para la aplicación al NIH SBIR, diseñé un sistema de engagement donde cada mecánica apunta a un motor específico de la formación de hábitos, basado en cuatro marcos conductuales (SDT, FBM, SCT e IMB).
+
+| Función | Qué hace | Motor conductual |
+|---|---|---|
+| **Journey Path** | Hitos diarios y semanales que vuelven visible el progreso del cuidado de rutina | Formación de hábitos y disparadores claros |
+| **Goal Ring Progress** | Muestra qué tan cerca está el usuario de la meta de cada día | Competencia y autoeficacia |
+| **Mini Wellness Moments** | Acciones cortas y fáciles que caben en el día | Capacidad y desarrollo de habilidades |
+| **Encouragement Cards** | Apoyo de las personas del círculo de cuidado | Relación y apoyo social |
+
+### La decisión más importante fue lo que elegimos no construir.
+
+Las tarjetas de regalo, los incentivos financieros y las recompensas de marcas son un atajo común en las apps de salud. Suben el engagement a corto plazo, pero en un contexto de medicamentos tienen un riesgo real: que los usuarios manipulen sus datos de adherencia para obtener la recompensa.
+
+Elegimos motivación intrínseca: progreso visible, apoyo del círculo de cuidado y opciones de donación benéfica. Construye hábitos duraderos, es defendible clínicamente y encaja con lo que busca un evaluador de grants federales.
+
+<Metrics
+  items={[
+    { value: '93%', label: 'éxito en la misión del Goal Ring (57 participantes)' },
+    { value: '4.2/5', label: 'facilidad de uso' },
+    { value: '4.5/5', label: 'atractivo visual' },
+  ]}
+/>
+
+{/* Imagen pendiente: gamification.png — Journey Path y Goal Ring Progress (ancho completo) */}
+
+> Elegir motivación intrínseca fue una decisión de producto, y también el argumento que posicionó a CareNautica como una herramienta clínica seria, no otra app de salud que persigue engagement.
+
+## Resultados
+
+### Financiación conseguida en la Fase 1. NIH SBIR enviado, decisión pendiente.
+
+La Fase 1 produjo la investigación y el prototipo validado que el cliente necesitaba para avanzar. La Fase 2 entregó el marco conductual y los resultados de usabilidad que se incluyeron en la aplicación al NIH SBIR, que espera decisión.
+
+<StatusCards
+  items={[
+    {
+      title: 'Fase 1',
+      status: 'confirmed',
+      statusLabel: 'Confirmado',
+      text: 'El cliente consiguió financiación con el producto validado y encargó la Fase 2.',
+    },
+    {
+      title: 'NIH SBIR',
+      status: 'pending',
+      statusLabel: 'Pendiente',
+      text: 'El sistema de gamificación y los resultados de usabilidad se enviaron como parte de la aplicación.',
+    },
+  ]}
+/>
+
+Lo que da peso a la segunda aplicación es el tiempo entre fases. Tras terminar la Fase 1 en febrero de 2024, el cliente pasó más de un año buscando financiación para mantener vivo el proyecto, y lo logró. Cuando llegó la oportunidad del NIH en octubre de 2025, el trabajo de la Fase 1 seguía siendo lo bastante sólido para anclar una aplicación federal.
+
+> La investigación no solo respaldó el diseño. Sobrevivió al calendario para el que fue construida, y esa es la forma más conservadora de decir lo que valió.

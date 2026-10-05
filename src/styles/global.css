@@ -140,6 +140,20 @@ body[data-about='open'] .page-dim {
   overflow: hidden;
 }
 
+/* Imágenes de los casos sobre el panel gris. Muchos exports traen fondo blanco:
+   en claro, multiply funde ese blanco con el gris del panel (lo transparente no
+   cambia); en oscuro se muestran como tarjeta redondeada. Con PNG transparente
+   se ven integradas en ambos temas. */
+:root:not([data-theme='dark']) .case__panel img,
+:root:not([data-theme='dark']) .case__cover-panel img {
+  mix-blend-mode: multiply;
+}
+
+:root[data-theme='dark'] .case__panel img,
+:root[data-theme='dark'] .case__cover-panel img {
+  border-radius: var(--radius);
+}
+
 /* Muestra un elemento solo en un tema (para assets con versión clara y oscura) */
 :root[data-theme='dark'] .theme-light-only,
 :root:not([data-theme='dark']) .theme-dark-only {
