@@ -23,62 +23,59 @@ import Findings from '../../../components/mdx/Findings.astro';
 import Metrics from '../../../components/mdx/Metrics.astro';
 import StatusCards from '../../../components/mdx/StatusCards.astro';
 
-## At a glance
+## What is CareNautica?
 
-- **Role:** Lead product designer. An external HCI consultant set the route; I designed and ran everything on it: personas, surveys, prototypes, usability tests and the gamification system.
-- **Scope:** Two phases, two years apart. Phase 1 turned a vague concept into a validated product. Phase 2 designed its engagement layer for a federal grant.
-- **Decisions that mattered:** cutting five features to three, and choosing intrinsic motivation over financial rewards.
-- **Outcome:** Phase 1 helped the client secure funding. The Phase 2 work went into an NIH SBIR application, which is pending.
+CareNautica is an app for people living with a chronic condition and the people who look after them. The patient does a short check-in every day and logs their medications. Then they decide who gets to see it: a small circle of up to six family members, friends or caregivers. Caregivers stay in the loop without having to call and ask how things are going.
 
-## The brief
-
-### A health app with features, but no reasons behind them.
-
-The client saw an underserved gap: people managing chronic conditions, and the caregivers around them, had no single tool for daily health coordination. They arrived with a rough concept and a disconnected Figma prototype, built without research and without a logic connecting its features.
-
-That was the real problem. Even a well-designed health app fails if users don't come back tomorrow, and a funding application can't rest on features nobody asked for. The product needed direction first, then evidence for every decision, for users and for the people evaluating it.
-
-## How it works
-
-### One shared space for patients and the people who care for them.
-
-CareNautica connects patients and caregivers, and health data flows between them only if the patient chooses it.
+Three features make it work:
 
 <FeatureCards
   items={[
     {
       title: 'Wellness Survey',
-      tag: 'Core feature',
-      text: 'A short daily check-in. Caregivers can see how the patient is doing without having to ask every day.',
+      text: 'The daily check-in.',
     },
     {
       title: 'Medication Tracker',
-      tag: 'Daily habit',
-      text: 'Patients log their medications and share the list with the people they choose.',
+      text: 'A list of what the patient takes, shared with the people they choose.',
     },
     {
       title: 'Chats (care circles)',
-      tag: 'Shared care',
-      text: "A close circle of up to six people who can follow the patient's progress and everything they track, as long as the patient allows it.",
+      text: "The small group that follows the patient's progress, as long as the patient allows it.",
     },
   ]}
 />
 
-> Every feature serves the same idea: the patient controls who sees what, and caregivers get visibility without constant questions.
-
 {/* Imagen pendiente: overview.png — Wellness survey, medication tracker and care circles (ancho completo) */}
+
+## At a glance
+
+- **My role:** Lead product designer. An external HCI consultant set the route, and I did the rest: personas, surveys, prototypes, usability tests and the gamification system.
+- **Scope:** Two phases, two years apart. The first turned a rough concept into a tested product. The second designed how to get people to keep using it.
+- **Two decisions that mattered:** cutting five features down to three, and choosing intrinsic motivation over financial rewards.
+- **Outcome:** Phase 1 helped the client secure funding. The Phase 2 work went into an NIH SBIR application, which is still pending.
+
+## Context
+
+### The client had a big idea. What they didn't have was a reason for each feature.
+
+They came to our studio with a rough concept and a Figma prototype whose screens didn't really connect to each other. There was no research behind it and no logic tying the features together.
+
+That's a hard place to build from, and an even harder one to ask for funding from. A grant reviewer will ask why each feature is there, and "because we thought of it" isn't an answer. So the job had two parts: give the product a direction, and make every decision something we could defend, to users and to the people evaluating it.
+
+There was a second problem waiting behind the first one. A health app can be perfectly designed and still fail if nobody opens it tomorrow. We'd get to that in Phase 2.
 
 ## Refocusing
 
 ### Five features were too many to prove. Three could be defended.
 
-Before touching any screen, we ran a KPT analysis (Keep, Problem, Try) on the existing prototype. The finding was structural: five features across two user types was too broad to validate in a single phase. Testing everything at once would have produced shallow evidence for all of it and strong evidence for none.
+Before touching any screen, we ran a KPT analysis (Keep, Problem, Try) on the existing prototype. It didn't say the features were bad. It said there were too many of them. Five features across two types of users was too much to validate in one phase. If we tested everything at once, we'd end up with thin evidence for all of it and solid evidence for none.
 
-> The analysis didn't say the features were bad. It said the scope was a liability, for the product and for the grant that depended on it.
+> The scope itself was the risk, for the product and for the grant that depended on it.
 
-We recommended cutting the care information section and the reward shop, and narrowing Communities. The original idea let users join large, location-based communities. We proposed starting with a small circle of trusted people, learning whether people wanted that, and only then deciding if it should grow into communities.
+So we recommended cutting. The care information section and the reward shop were out, and Communities got smaller. The original idea let users join large, location-based communities. We proposed starting with a small circle of trusted people, seeing whether anyone wanted it, and only then deciding if it should grow into something bigger.
 
-The client had to let go of parts of their original vision. Wireframes made the case visually, and the KPT rationale made it strategically. They agreed.
+The client didn't love this at first. These were parts of their original vision. What changed their mind was seeing it: I built wireframes of a smaller, connected version, so they could judge it for themselves. The KPT gave them the reasoning, and the wireframes gave them the picture. They came around.
 
 <BeforeAfter
   before={{
@@ -101,38 +98,40 @@ The client had to let go of parts of their original vision. Wireframes made the 
 
 ## Research and validation
 
-### Two surveys, a prototype, and two ways of testing it.
+### Talking to people first, then testing with them.
 
-I drafted two personas, one for patients and one for caregivers, to define what we needed to learn, then designed two surveys for self-declared patients and caregivers in the US. The responses changed what people expected from the product, and many respondents asked to try the prototype. That was the first signal of real demand.
+I started with two personas, one for patients and one for caregivers. Not as a deliverable, but as a way to be clear about what we didn't know. Then I turned those questions into two surveys for patients and caregivers in the US. The answers shifted what people expected from the product, and quite a few respondents asked to try the prototype. That was our first sign that people actually wanted this.
 
-With that, I built a semi-high-fidelity prototype of the three features: polished enough to get honest feedback, not so polished that it would need to be redone afterward. It was tested through a Maze usability test (20 participants, just over half in the 60–79 target age group) and two focus groups (6 participants).
+Next I built a semi-high-fidelity prototype of the three features. I kept it unpolished on purpose. It needed to be good enough for honest feedback, and not so finished that it would need redoing after the feedback. We tested it in two ways: a Maze usability test (20 participants, just over half in the 60–79 target age group) and two focus groups (6 participants).
 
 <Findings
   items={[
     {
       label: 'What Maze showed',
-      text: 'Core flows were easy to navigate, but the permissions flow in Chats had real friction.',
+      text: 'People could get around. The main flows were easy to follow, with one exception: setting permissions in Chats was confusing.',
     },
     {
       label: 'What the focus groups added',
-      text: 'Caregivers valued the care circle, but only with granular control over what each person could see. Privacy was the condition for using the app at all.',
+      text: "Caregivers liked the idea of a care circle, but only if they had fine control over who could see what. In simple words: privacy wasn't a nice-to-have. It was the condition for using the app at all.",
     },
     {
       label: 'What we changed',
-      text: 'Permissions became a shared responsibility: both the patient and the caregiver they designate can manage them, so control no longer depended on a single person getting the setup right. Validating this change wasn’t part of either phase, which were about validating the product and its features, and then the gamification system.',
+      text: "Permissions became a shared job. Both the patient and the caregiver they designate can manage them, so control doesn't depend on one person getting the setup right. I should say that we didn't validate this change. It wasn't part of either phase, which were about validating the product and its features, and then the gamification system.",
     },
   ]}
 />
 
-Because the main audience was older adults, I also removed everything that wasn't strictly necessary from each screen. Showing less lowers cognitive load, and it helped every user, including younger ones.
+Since the main audience was older adults, I also removed everything that wasn't strictly necessary from each screen. Showing less means less to process. It helped everyone, including the younger users.
 
 {/* Imagen pendiente: prototype.png — Semi-high-fidelity prototype (ancho completo) */}
 
 ## Gamification
 
-### A health app only works if people come back tomorrow.
+### Usable isn't the same as worth coming back to.
 
-Phase 1 proved CareNautica was usable. Phase 2 tackled a harder problem: usable isn't enough when medication adherence depends on daily return. For the NIH SBIR application, I designed an engagement system where each mechanic targets a specific driver of habit formation, based on four behavioral frameworks (SDT, FBM, SCT and IMB).
+Phase 1 showed that CareNautica was usable. Phase 2 was about a harder question: why would someone open it again tomorrow? When the goal is taking medication on time, that return visit is everything.
+
+For the NIH SBIR application, I designed an engagement system. Each piece targets one specific driver of habit formation, drawing on four behavioral frameworks (SDT, FBM, SCT and IMB). Here's how they connect:
 
 | Feature | What it does | Behavioral driver |
 |---|---|---|
@@ -141,11 +140,11 @@ Phase 1 proved CareNautica was usable. Phase 2 tackled a harder problem: usable 
 | **Mini Wellness Moments** | Short, easy actions that fit into the day | Ability and skill-building |
 | **Encouragement Cards** | Support from the people in the care circle | Relatedness and social support |
 
-### The most important decision was what we chose not to build.
+### What we chose not to build
 
-Gift cards, financial incentives and brand rewards are a common shortcut in health apps. They raise short-term engagement, but in a medication context they carry a real risk: users gaming their adherence data for the reward.
+Gift cards, financial incentives and brand rewards are the easy way to get people back into an app. They work in the short term. But in a medication app they come with a real risk: someone could log doses they didn't take to earn the reward.
 
-We chose intrinsic motivation instead: visible progress, support from the care circle, and charitable donation options. It builds habits that last, it's clinically defensible, and it fit what a federal grant reviewer looks for.
+So we went the other way, with intrinsic motivation: visible progress, support from the care circle, and the option to donate to charity. It builds habits that last, it's defensible clinically, and it's what a federal grant reviewer wants to see.
 
 <Metrics
   items={[
@@ -157,13 +156,13 @@ We chose intrinsic motivation instead: visible progress, support from the care c
 
 {/* Imagen pendiente: gamification.png — Journey Path and Goal Ring Progress (ancho completo) */}
 
-> Choosing intrinsic motivation was a product decision, and also the argument that positioned CareNautica as a serious clinical tool, not another engagement-chasing health app.
+> This was a product decision, and also the argument that positioned CareNautica as a serious clinical tool, rather than another health app chasing engagement.
 
 ## Outcomes
 
 ### Funding secured in Phase 1. NIH SBIR submitted, decision pending.
 
-Phase 1 produced the research and validated prototype the client needed to move forward. Phase 2 delivered the behavioral framework and usability results that went into the NIH SBIR application, which is awaiting a decision.
+Phase 1 gave the client the research and the tested prototype they needed to move forward. Phase 2 delivered the behavioral system and the usability results that went into the NIH SBIR application, which is still waiting on a decision.
 
 <StatusCards
   items={[
@@ -182,6 +181,11 @@ Phase 1 produced the research and validated prototype the client needed to move 
   ]}
 />
 
-What gives the second submission weight is the gap between phases. After Phase 1 ended in February 2024, the client spent over a year pursuing funding to keep the project alive, and succeeded. When the NIH opportunity came in October 2025, the Phase 1 work was still solid enough to anchor a federal application.
+What I find most interesting is the gap between the two phases. After Phase 1 ended in February 2024, the client spent over a year looking for funding to keep the project alive, and found it. When the NIH opportunity came up in October 2025, the Phase 1 research still held up well enough to build a federal application on.
 
-> The research didn't just support the design. It outlasted the timeline it was built for, and that is the most conservative way to say what it was worth.
+## What I took away
+
+- **Cutting scope was the most useful thing we did.** Less to test meant better evidence for what stayed.
+- **Privacy is a condition, not a feature.** Caregivers told us it directly, and it shaped how permissions work.
+- **A usable app and a habit-forming app are two different problems.** We solved the first in Phase 1 and the second in Phase 2.
+- **Not everything gets validated.** The permissions fix is a good example. Knowing what you tested, and what you didn't, is part of being honest about the work.

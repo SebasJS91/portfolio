@@ -13,12 +13,11 @@ import ListColumns from '../../../components/mdx/ListColumns.astro';
 import FeatureCards from '../../../components/mdx/FeatureCards.astro';
 import StatusCards from '../../../components/mdx/StatusCards.astro';
 
-## De un vistazo
+## ¿Qué es Atama?
 
-- **Rol:** Product designer, asignado al proyecto. Participé en decidir qué funciones valía la pena construir, definí cómo debía funcionar cada una en su versión mínima y construí el sistema de diseño que las sostiene.
-- **Alcance:** Una base de marca blanca para web y mobile: 13 funciones reutilizables y un sistema de diseño con más de 1.000 componentes.
-- **Decisión clave:** estandarizar solo las funciones que la mayoría de proyectos realmente necesita, construidas como módulos completos y reutilizables (diseñados, validados, programados y con QA).
-- **Resultado:** los MVP con funciones básicas pasaron de 2–3 meses a menos de uno. Atama es hoy el punto de partida de los cinco diseñadores de la empresa, con 29 proyectos de Figma construidos sobre él.
+Atama es el kit de arranque que usamos en la empresa para construir productos más rápido. Es una base de marca blanca para web y mobile: las funciones que casi todo producto necesita (registro, gestión de usuarios, encuestas, tareas) ya diseñadas, programadas y probadas, más un sistema de diseño desde el que cualquier diseñador puede empezar y adaptarlo a un cliente.
+
+Un cliente llega con una idea, revisamos si Atama ya cubre lo básico, y podemos probar un MVP real con usuarios reales mucho antes. Lo que queda por hacer es lo que hace diferente el producto de ese cliente.
 
 <Metrics
   items={[
@@ -31,21 +30,30 @@ import StatusCards from '../../../components/mdx/StatusCards.astro';
 
 {/* Imagen pendiente: hero.png — Pantallas web y mobile de Atama (ancho completo) */}
 
-## El problema
+## De un vistazo
 
-### Las mismas funciones, construidas una y otra vez.
+- **Mi rol:** Product designer. Me asignaron el proyecto, pero participé en cada decisión sobre qué funciones incluir. Definí cómo debía funcionar cada una en su versión mínima y construí el sistema de diseño que las sostiene.
+- **Alcance:** 13 funciones reutilizables entre web y mobile, y un sistema de diseño con más de 1.000 componentes.
+- **La decisión clave:** estandarizar solo lo que la mayoría de productos realmente necesita, y construir cada función como un módulo completo: diseñado, validado, programado y con QA.
+- **Resultado:** los MVP con funciones básicas pasaron de 2–3 meses a menos de uno. Los cinco diseñadores empiezan hoy desde Atama, que se ha usado en 29 proyectos de Figma.
 
-Cada producto nuevo de la empresa necesitaba lo mismo de base: registro, gestión de usuarios, encuestas, tareas. Cada vez las rehacíamos desde cero. Eso costaba tiempo de diseño, de desarrollo y de QA, y retrasaba el momento de poner algo frente a usuarios reales.
+## Contexto
 
-Para los clientes también era caro. Una parte importante del presupuesto se iba en reprocesos de funciones básicas, en lugar de lo que hacía diferente a su producto.
+### Seguíamos construyendo las mismas funciones, una y otra vez.
+
+Cada producto nuevo necesitaba lo mismo de base: registro, gestión de usuarios, encuestas, tareas. Y cada vez las construíamos desde cero. Eso significaba tiempo de diseño, de desarrollo y de QA. También retrasaba el momento de poner algo frente a usuarios reales.
+
+No era solo nuestro problema. Los clientes también lo pagaban. Una parte grande de su presupuesto se iba en reprocesos de funciones básicas, en lugar de lo que hacía suyo a su producto.
+
+Así que en algún punto la pregunta fue simple: ¿por qué estábamos rehaciendo lo mismo?
 
 ## Qué estandarizamos
 
 ### No todo. Solo lo que la mayoría de productos necesita.
 
-El primer paso fue decidir qué merecía estar en una base reutilizable. Revisamos todos los proyectos que habíamos hecho, los que estaban en marcha y las peticiones de clientes, e identificamos las funciones que se repetían. Para cada una investigué lo que habíamos hecho antes y cómo sería la versión ideal, y definí el mínimo que necesitaba para funcionar dentro de cualquier producto.
+El primer paso fue decidir qué merecía un lugar en una base reutilizable. Revisamos todos los proyectos que habíamos hecho, los que estaban en marcha y lo que pedían los clientes, y buscamos lo que se repetía. Para cada función miré lo que habíamos construido antes y cómo sería la versión ideal, y definí el mínimo que necesitaba para funcionar dentro de cualquier producto.
 
-El proyecto me lo asignaron, pero participé en cada decisión sobre qué funciones incluir, para que la base reflejara lo que de verdad necesitábamos.
+Me asignaron este proyecto, pero quise participar en las decisiones sobre qué entraba. La base tenía que reflejar lo que de verdad necesitábamos.
 
 <ListColumns
   columns={[
@@ -75,7 +83,7 @@ El proyecto me lo asignaron, pero participé en cada decisión sobre qué funcio
   ]}
 />
 
-Cada función se diseñó, validó, programó y pasó por QA como un módulo. Podía entrar a cualquier proyecto sin retrabajo. Estuve en contacto constante con los desarrolladores para que lo definido en diseño fuera lo que se construía.
+Cada función se diseñó, validó, programó y pasó por QA como un módulo, para poder entrar a cualquier proyecto sin retrabajo. Estuve en contacto constante con los desarrolladores durante todo el proceso, para que lo definido en diseño fuera lo que ellos construían.
 
 {/* Imagen pendiente: features.png — Mapa de funciones en web y mobile (ancho completo) */}
 
@@ -89,13 +97,11 @@ Antes de diseñar cualquier función, construí el sistema que las sostendría t
 2. **Componentes:** botones, inputs y el resto de los bloques básicos.
 3. **Patrones:** headers, modales, tablas, cards y otros elementos hechos con esos componentes.
 
-El resultado son más de 1.000 componentes (contando variantes), 108 estilos y 452 variables.
+Terminó con más de 1.000 componentes (contando variantes), 108 estilos y 452 variables.
 
-Personalizarlo para un cliente no implica rediseñar nada. Los tokens de color y tipografía viven en los fundamentos, así que ajustarlos actualiza todo el sistema. La marca de un cliente nuevo es un solo cambio, no cientos.
+Personalizarlo para un cliente no implica rediseñar nada. Los tokens de color y tipografía viven en los fundamentos, así que cambiarlos actualiza todo el sistema. En palabras simples: la marca de un cliente nuevo es un solo cambio, no cientos.
 
 {/* Imagen pendiente: design-system.png — Fundamentos, componentes y patrones (ancho completo) */}
-
-> Los tokens hacen el trabajo. La marca de un cliente es un cambio en los fundamentos, y todo lo construido encima lo sigue.
 
 ## En producción
 
@@ -118,12 +124,12 @@ Atama se ha usado en 29 proyectos de Figma. Estos son tres en los que trabajé d
     {
       title: 'Cenextra — Sky Therapeutics',
       tag: 'Web · Mobile',
-      text: 'Tratamiento para niños con TDAH. Sigue el progreso en juegos de otra aplicación, para que padres y terapeutas vean el avance y la evolución.',
+      text: 'Una app para el tratamiento de niños con TDAH. Sigue el progreso en juegos de otra aplicación, para que padres y terapeutas vean cómo van las cosas y cómo evoluciona el niño.',
     },
   ]}
 />
 
-En cada uno, la base nos dio un producto funcional para probar con usuarios reales antes, y lo que veíamos nos decía qué personalizar para ese cliente.
+En cada uno, la base nos dio un producto funcional para probar con usuarios reales antes. Lo que veíamos ahí nos decía qué personalizar para ese cliente.
 
 {/* Imagen pendiente: projects.png — Tres productos construidos sobre Atama (ancho completo) */}
 
@@ -131,7 +137,7 @@ En cada uno, la base nos dio un producto funcional para probar con usuarios real
 
 ### MVPs en menos de un mes, y una base que todo el equipo usa.
 
-A finales de 2024 la mayoría de las funciones estaban listas para usar en Figma, front end y back end. En los proyectos que empezaron en 2025 se notó la diferencia: los MVP con funciones básicas que tomaban 2–3 meses salieron en menos de uno. Como lo básico ya estaba resuelto, pudimos poner un producto funcional frente a usuarios reales antes y dedicar el tiempo a lo que cada cliente realmente necesitaba.
+A finales de 2024 la mayoría de las funciones estaban listas para usar en Figma, front end y back end. En los proyectos que empezaron en 2025 se notó la diferencia. Los MVP con funciones básicas tomaban 2–3 meses. Ahora salían en menos de uno. Con lo básico ya resuelto, pudimos poner un producto funcional frente a usuarios reales antes y dedicar el tiempo a lo que cada cliente de verdad necesitaba.
 
 <StatusCards
   items={[
@@ -150,4 +156,8 @@ A finales de 2024 la mayoría de las funciones estaban listas para usar en Figma
   ]}
 />
 
-> El valor de Atama no está en ninguna función en particular. Está en que ningún proyecto empieza ya desde un archivo en blanco.
+## Lo que me llevo
+
+- **Una función reutilizable no lo es hasta que está terminada.** Diseñarla no bastaba. Tenía que estar construida y probada también, o el retrabajo solo se mudaba a otro lado.
+- **Personalizar tiene que ser barato, o nadie lo hace.** Por eso los cambios de marca viven en los tokens.
+- **Que te asignen un proyecto no significa que no puedas darle forma.** Lo más útil fue tener voz en lo que entraba.

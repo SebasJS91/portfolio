@@ -25,6 +25,24 @@ El nombre de la carpeta será la URL publicada:
 
 Copia `_template.md` para empezar cada caso.
 
+## Estructura y voz
+
+Referencias: el caso de Cineo (estructura) y la entrevista a Jenny Wen (tono).
+
+**Orden recomendado**
+1. **¿Qué es X?**: qué es el producto, para quién y qué hace, en 2–3 frases.
+2. **De un vistazo**: rol, alcance, decisiones clave y resultado, en 4 viñetas.
+3. **Contexto**: de dónde salió el proyecto y cuál era el problema.
+4. Las secciones del trabajo (decisiones, investigación, solución). Cada una explica el *por qué*.
+5. **Resultados**: con estado (confirmado, pendiente) y sin superlativos.
+6. **Lo que me llevo**: aprendizajes honestos, incluido lo que no se validó.
+
+**Voz**
+- Primera persona ("yo"), palabras sencillas, sin jerga corporativa.
+- Mezcla frases cortas con otras más largas. Una pregunta o un "en palabras simples" está bien.
+- Cuenta lo que no salió perfecto. Eso es lo que lo hace humano.
+- No inventes sentimientos ni anécdotas: usa solo lo que realmente pasó.
+
 ## Qué necesita cada caso para publicarse
 
 Los datos de arriba (entre `---`) alimentan la sección del caso en el home
