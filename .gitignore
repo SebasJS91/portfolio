@@ -25,3 +25,9 @@ pnpm-debug.log*
 
 # wrangler (Cloudflare) local state
 .wrangler/
+
+# Borradores de casos de estudio: privados (el repo es público).
+# Solo se suben la guía y la plantilla.
+drafts/*
+!drafts/README.md
+!drafts/_template.md

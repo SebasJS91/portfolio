@@ -1,0 +1,50 @@
+---
+// Bloques etiquetados en secuencia (ej. lo que mostró cada prueba y qué cambió).
+// Uso en MDX:
+//   <Findings items={[{ label: 'What Maze showed', text: '...' }]} />
+interface Props {
+  items: { label: string; text: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<dl class="findings">
+  {
+    items.map((item, i) => (
+      <div class="finding" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+        <dt>{item.label}</dt>
+        <dd>{item.text}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .findings {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin: var(--space-lg) 0;
+  }
+
+  .finding {
+    padding-left: var(--space-md);
+    border-left: 2px solid var(--color-border);
+  }
+
+  .finding:last-child {
+    border-left-color: var(--color-accent);
+  }
+
+  dt {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    color: var(--color-title);
+  }
+
+  dd {
+    margin: 4px 0 0;
+    color: var(--color-text-body);
+  }
+</style>

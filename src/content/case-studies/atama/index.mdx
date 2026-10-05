@@ -1,0 +1,160 @@
+---
+title: Atama
+summary: Designed the design system and feature blueprints behind a white-label product that cut MVP development from 2–3 months to under one, and became the starting point for every new project at the company.
+tags: [Design Systems, Product Strategy, Web, Mobile, White-label]
+role: Product Designer
+year: 2024
+duration: Started May 2024 · core modules ready by end of 2024
+team: 1 designer, front-end, mobile and back-end developers, QA, 1 PM
+# Imagen provisional (heredada del placeholder). Cuando estén hero-1..3 de
+# Atama, cambiar a galleryLayout: devices con las tres imágenes.
+gallery:
+  - ./cover.png
+galleryLayout: bleed
+galleryAlt: Web and mobile app screens
+order: 2
+---
+
+import Metrics from '../../../components/mdx/Metrics.astro';
+import ListColumns from '../../../components/mdx/ListColumns.astro';
+import FeatureCards from '../../../components/mdx/FeatureCards.astro';
+import StatusCards from '../../../components/mdx/StatusCards.astro';
+
+## At a glance
+
+- **Role:** Product designer, assigned to the project. I helped decide which features were worth building, defined how each should work at its minimum, and built the design system under all of them.
+- **Scope:** A white-label base for web and mobile: 13 reusable features and a design system with 1,000+ components.
+- **Decision that mattered:** standardizing only the features most projects actually need, built to be reused as complete modules (designed, validated, coded and QA'd).
+- **Outcome:** MVPs with basic features went from 2–3 months to under one. Atama is now the starting point for all five designers at the company, with 29 Figma projects built on it.
+
+<Metrics
+  items={[
+    { value: '<1 month', label: 'to an MVP, down from 2–3 months' },
+    { value: '29', label: 'Figma projects built on Atama' },
+    { value: '5', label: 'designers start from it' },
+    { value: '1,000+', label: 'components' },
+  ]}
+/>
+
+{/* Imagen pendiente: hero.png — Atama web and mobile screens (ancho completo) */}
+
+## The problem
+
+### The same features, built again and again.
+
+Every new product at the company needed the same basics: sign up, user management, surveys, tasks. Each time, we rebuilt them from scratch. That cost design time, development time and QA time, and it delayed the moment we could put something in front of real users.
+
+For clients it was costly too. A lot of the budget went to rework on basic features, instead of the parts that made their product different.
+
+## What we standardized
+
+### Not everything. Only what most products need.
+
+The first step was deciding what belonged in a reusable base. We reviewed every project we had built, the ones still in progress and what clients were asking for, and identified the features that kept coming back. For each, I researched what we'd done before and what the ideal version looked like, then defined the minimum it needed to work inside any product.
+
+I was assigned the project, but I took part in every decision about which features to include, so the base reflected what we actually needed.
+
+<ListColumns
+  columns={[
+    {
+      label: 'Web',
+      items: [
+        'Institution management',
+        'User management (admins, members, clients/patients)',
+        'Survey management (builder, responses and results)',
+        'Projects and tasks',
+        'Resources',
+        'Sign up and log in',
+        'Settings',
+      ],
+    },
+    {
+      label: 'Mobile',
+      items: [
+        'Sign up and log in',
+        'Settings',
+        'Client/patient profile',
+        'User management',
+        'Task viewer',
+        'Survey viewer',
+      ],
+    },
+  ]}
+/>
+
+Each feature was designed, validated, built and QA'd as a module. It could drop into any project with no rework. I stayed in constant contact with the developers so that what we defined in design was what they built.
+
+{/* Imagen pendiente: features.png — Feature map across web and mobile (ancho completo) */}
+
+## The design system
+
+### A foundation that other designers can start from, and change without breaking.
+
+Before designing any feature, I built the system that would hold them all. It follows atomic design, in three layers:
+
+1. **Foundations:** tokens for color, typography, spacing and more, for both web and mobile.
+2. **Components:** buttons, inputs and the rest of the building blocks.
+3. **Patterns:** headers, modals, tables, cards and other elements made of those components.
+
+The result is more than 1,000 components (including variants), 108 styles and 452 variables.
+
+Customizing it for a client doesn't mean redesigning anything. Color and typography tokens live in the foundations, so adjusting them updates the whole system. A new client's brand is one change, not hundreds.
+
+{/* Imagen pendiente: design-system.png — Foundations, components and patterns (ancho completo) */}
+
+> The tokens do the work. A client's brand is a change in the foundations, and everything built on top follows.
+
+## In production
+
+### The same base, three very different products.
+
+Atama has been used in 29 Figma projects. These are three I worked on directly:
+
+<FeatureCards
+  items={[
+    {
+      title: 'WrapApp',
+      tag: 'Web · Mobile',
+      text: 'Connects case workers with people who have experienced violence. It covers five types of user.',
+    },
+    {
+      title: 'LifeSpan',
+      tag: 'Web · Mobile',
+      text: 'Tracks mental health and stress levels of medical residents.',
+    },
+    {
+      title: 'Cenextra — Sky Therapeutics',
+      tag: 'Web · Mobile',
+      text: 'Treatment for children with ADHD. It tracks progress in games played in another app, so parents and therapists can follow progress and evolution.',
+    },
+  ]}
+/>
+
+In each one, the base gave us a working product to test with real users sooner, and what we saw told us what to customize for that client.
+
+{/* Imagen pendiente: projects.png — Three products built on Atama (ancho completo) */}
+
+## Outcomes
+
+### MVPs in under a month, and a base the whole team now uses.
+
+By the end of 2024 most of the features were ready to use in Figma, front end and back end. In the projects that started in 2025, the difference showed: MVPs with basic features that used to take 2–3 months came in under one. Because the basics were already solved, we could put a working product in front of real users earlier and spend our time on what each client actually needed.
+
+<StatusCards
+  items={[
+    {
+      title: 'Team adoption',
+      status: 'confirmed',
+      statusLabel: 'Confirmed',
+      text: 'All five designers use the design system as the starting point for any project.',
+    },
+    {
+      title: 'Reach',
+      status: 'confirmed',
+      statusLabel: 'Confirmed',
+      text: '29 Figma projects have been built on Atama.',
+    },
+  ]}
+/>
+
+> The value of Atama isn't any single feature. It's that no project starts from a blank file anymore.

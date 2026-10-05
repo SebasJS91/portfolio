@@ -1,0 +1,82 @@
+---
+// Tarjetas de resultado con estado (confirmado / pendiente).
+// Uso en MDX:
+//   <StatusCards items={[{ title: 'Phase 1', status: 'confirmed', statusLabel: 'Confirmed', text: '...' }]} />
+interface Props {
+  items: { title: string; status: 'confirmed' | 'pending'; statusLabel: string; text: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="status-cards">
+  {
+    items.map((item, i) => (
+      <li class="status-card" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+        <div class="status-card__header">
+          <h4 class="status-card__title">{item.title}</h4>
+          <span class:list={['status-card__badge', `is-${item.status}`]}>{item.statusLabel}</span>
+        </div>
+        <p class="status-card__text">{item.text}</p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .status-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-sm);
+    margin: var(--space-lg) 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .status-card {
+    padding: var(--space-md);
+    border-radius: var(--radius);
+    background: var(--color-panel);
+  }
+
+  .status-card__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xs);
+  }
+
+  .status-card__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--text-lg);
+    line-height: 1.2;
+    color: var(--color-title);
+  }
+
+  .status-card__badge {
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .status-card__badge.is-confirmed {
+    background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+    color: var(--color-accent);
+  }
+
+  .status-card__badge.is-pending {
+    background: var(--color-tag);
+    color: var(--color-tag-text);
+  }
+
+  .status-card__text {
+    margin: var(--space-xs) 0 0;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--color-text-body);
+  }
+</style>

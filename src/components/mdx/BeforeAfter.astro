@@ -1,0 +1,81 @@
+---
+// Comparación antes / después. Los elementos con removed: true se tachan.
+// Uso en MDX:
+//   <BeforeAfter
+//     before={{ label: 'Before — 5 features', items: [{ text: 'Reward shop', removed: true }] }}
+//     after={{ label: 'After — 3 features', items: [{ text: 'Medication tracker' }] }}
+//   />
+interface Column {
+  label: string;
+  items: { text: string; removed?: boolean }[];
+}
+
+interface Props {
+  before: Column;
+  after: Column;
+}
+
+const { before, after } = Astro.props;
+---
+
+<div class="before-after" data-reveal>
+  {
+    [before, after].map((column, i) => (
+      <div class:list={['before-after__column', { 'is-after': i === 1 }]}>
+        <p class="before-after__label">{column.label}</p>
+        <ul>
+          {column.items.map((item) => (
+            <li class:list={{ 'is-removed': item.removed }}>
+              {item.removed ? <del>{item.text}</del> : item.text}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .before-after {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-sm);
+    margin: var(--space-lg) 0;
+  }
+
+  .before-after__column {
+    padding: var(--space-md);
+    border-radius: var(--radius);
+    border: 1px solid var(--color-border);
+  }
+
+  .before-after__column.is-after {
+    background: var(--color-panel);
+    border-color: transparent;
+  }
+
+  .before-after__label {
+    margin: 0 0 var(--space-xs);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    color: var(--color-title);
+  }
+
+  .is-after .before-after__label {
+    color: var(--color-accent);
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 1.1em;
+    color: var(--color-text-body);
+  }
+
+  li + li {
+    margin-top: 4px;
+  }
+
+  .is-removed {
+    opacity: 0.55;
+  }
+</style>
