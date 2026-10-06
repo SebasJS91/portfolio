@@ -3,7 +3,9 @@
 // y empuja la página actual hacia la izquierda, dejando una franja visible y
 // oscurecida. Se cierra con la X, con Escape o haciendo clic en esa franja.
 // Estado en <body data-about="open|closed">, controlado por src/scripts/interactions.ts.
+import { Image } from 'astro:assets';
 import CopyEmail from './CopyEmail.astro';
+import photo from '../assets/about/sebastian-jaramillo.jpg';
 import closeIcon from '../assets/icons/close.svg';
 import { site } from '../data/site';
 import { getLang, useTranslations } from '../i18n/ui';
@@ -30,7 +32,19 @@ const paragraphs = [t('about.p1'), t('about.p2'), t('about.p3'), t('about.p4')];
     </header>
 
     <div class="about-panel__body">
-      {paragraphs.map((text, i) => <p style={`--i: ${i}`}>{text}</p>)}
+      <div class="about-panel__text">
+        {paragraphs.map((text, i) => <p style={`--i: ${i}`}>{text}</p>)}
+      </div>
+      <div class="about-panel__photo-wrap">
+        <Image
+          class="about-panel__photo"
+          src={photo}
+          alt={site.name}
+          widths={[300, 600, 900]}
+          sizes="300px"
+          style={`--i: ${paragraphs.length}`}
+        />
+      </div>
     </div>
 
     <section class="about-panel__contact" aria-labelledby="about-contact-title" data-about-contact>
@@ -61,6 +75,7 @@ const paragraphs = [t('about.p1'), t('about.p2'), t('about.p3'), t('about.p4')];
     overscroll-behavior: contain;
     background: var(--color-panel);
     color: var(--color-title);
+    container: about / inline-size;
     transform: translateX(100%);
     transition: transform var(--about-duration) var(--about-ease);
   }
@@ -122,10 +137,51 @@ const paragraphs = [t('about.p1'), t('about.p2'), t('about.p3'), t('about.p4')];
     transform: scale(0.94);
   }
 
+  /* Figma: texto de 638px a la izquierda y foto circular de 300px centrada en
+     el espacio que queda a la derecha. Si el panel se angosta, la foto pasa
+     debajo del texto. */
   .about-panel__body {
-    max-width: calc(638px + 80px);
+    display: flex;
+    align-items: center;
+    gap: 40px;
     font-size: var(--text-base);
     line-height: normal;
+  }
+
+  .about-panel__text {
+    flex: 0 1 638px;
+  }
+
+  .about-panel__photo-wrap {
+    display: flex;
+    flex: 1 0 300px;
+    justify-content: center;
+  }
+
+  .about-panel__photo {
+    width: 300px;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  @container about (max-width: 1020px) {
+    .about-panel__body {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .about-panel__text {
+      flex: none;
+      max-width: 638px;
+    }
+
+    .about-panel__photo-wrap {
+      flex: none;
+      justify-content: flex-start;
+    }
   }
 
   .about-panel__body p {
@@ -147,6 +203,7 @@ const paragraphs = [t('about.p1'), t('about.p2'), t('about.p3'), t('about.p4')];
   /* El contenido entra escalonado cuando el panel ya va llegando */
   .about-panel__header,
   .about-panel__body p,
+  .about-panel__photo,
   .about-panel__contact {
     opacity: 0;
     transform: translateX(32px);
@@ -157,6 +214,7 @@ const paragraphs = [t('about.p1'), t('about.p2'), t('about.p3'), t('about.p4')];
 
   :global(body[data-about='open']) .about-panel__header,
   :global(body[data-about='open']) .about-panel__body p,
+  :global(body[data-about='open']) .about-panel__photo,
   :global(body[data-about='open']) .about-panel__contact {
     opacity: 1;
     transform: none;
@@ -168,7 +226,7 @@ const paragraphs = [t('about.p1'), t('about.p2'), t('about.p3'), t('about.p4')];
   }
 
   :global(body[data-about='open']) .about-panel__contact {
-    --i: 4;
+    --i: 5;
   }
 
   @media (max-width: 700px) {
