@@ -30,7 +30,7 @@ const caseStudies = defineCollection({
       //  - devices: varias pantallas en fila, centradas (ej. 3 celulares)
       //  - centered: una imagen centrada con aire alrededor
       //  - bleed: una imagen alineada a la izquierda que se corta por la derecha
-      galleryLayout: z.enum(['devices', 'centered', 'bleed']).optional(),
+      galleryLayout: z.enum(['devices', 'centered', 'bleed', 'laptop']).optional(),
       // Portada de la página del caso (por defecto, la primera de la galería)
       cover: image().optional(),
       company: z.string().optional(),

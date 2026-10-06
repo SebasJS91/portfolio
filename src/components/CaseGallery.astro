@@ -16,22 +16,42 @@ const widths = {
   devices: [200, 300, 400, 600, 800],
   centered: [480, 720, 1000, 1400],
   bleed: [720, 1000, 1400, 2000],
+  laptop: [800, 1200, 1600, 2200],
 }[galleryLayout];
+
+// laptop: la 1.ª imagen es el portátil y la 2.ª el teléfono que va encima
+const sizes = { devices: '24vw', laptop: '90vw' }[galleryLayout] ?? '65vw';
 ---
 
 <div class:list={['gallery', `gallery--${galleryLayout}`]}>
   {
-    gallery.map((src, i) => (
-      <Image
-        src={src}
-        alt={i === 0 ? galleryAlt : ''}
-        widths={widths}
-        sizes={galleryLayout === 'devices' ? '24vw' : '65vw'}
-        loading={eager ? 'eager' : 'lazy'}
-        data-reveal
-        style={`--reveal-delay: ${i * 90}ms`}
-      />
-    ))
+    galleryLayout === 'laptop' ? (
+      <div class="gallery__stage">
+        {gallery.map((src, i) => (
+          <Image
+            src={src}
+            alt={i === 0 ? galleryAlt : ''}
+            widths={i === 0 ? widths : [240, 360, 480, 720]}
+            sizes={i === 0 ? sizes : '22vw'}
+            loading={eager ? 'eager' : 'lazy'}
+            data-reveal
+            style={`--reveal-delay: ${i * 90}ms`}
+          />
+        ))}
+      </div>
+    ) : (
+      gallery.map((src, i) => (
+        <Image
+          src={src}
+          alt={i === 0 ? galleryAlt : ''}
+          widths={widths}
+          sizes={sizes}
+          loading={eager ? 'eager' : 'lazy'}
+          data-reveal
+          style={`--reveal-delay: ${i * 90}ms`}
+        />
+      ))
+    )
   }
 </div>
 
@@ -95,5 +115,48 @@ const widths = {
 
   .gallery--bleed :global(img) {
     transform-origin: left center;
+  }
+
+  /* Portátil con un teléfono encima. El portátil se corta por abajo; si el
+     panel es lo bastante ancho se centra entero, y si no, se queda a la
+     izquierda (con el margen del teléfono) y se corta por la derecha.
+     Medidas en alto del panel (cqh), tomadas de la composición original. */
+  .gallery--laptop {
+    container-type: size;
+    display: block;
+  }
+
+  .gallery__stage {
+    position: absolute;
+    top: 7.87cqh;
+    left: max(6.6cqh, (100cqw - 221.8cqh) / 2);
+    height: 134.4cqh;
+    aspect-ratio: 3660 / 2218;
+  }
+
+  .gallery--laptop :global(img) {
+    position: absolute;
+    max-width: none;
+    height: auto;
+  }
+
+  .gallery--laptop :global(img:first-child) {
+    inset: 0;
+    width: 100%;
+  }
+
+  .gallery--laptop :global(img:nth-child(2)) {
+    left: 0.21%;
+    top: 17.96%;
+    width: 17.01%;
+  }
+
+  :global(.case__panel:hover) .gallery--laptop :global(img.is-visible) {
+    transform: translateY(-8px);
+  }
+
+  :global(.case__panel:hover) .gallery--laptop :global(img.is-visible:nth-child(2)) {
+    transform: translateY(-14px);
+    transition-delay: 40ms;
   }
 </style>
