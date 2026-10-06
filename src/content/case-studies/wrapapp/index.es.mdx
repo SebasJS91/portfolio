@@ -1,14 +1,13 @@
 ---
 title: WrapApp
 summary: Diseñé una app web y mobile que ayuda a profesionales de prevención de violencia a acompañar a personas que se recuperan de ella. La mayor parte salió de nuestra base de marca blanca, así que el trabajo a medida se fue al chat y a los recursos dinámicos.
-tags: [Salud, mHealth, Web, Mobile, Chat]
+tags: [Diseño de producto, Chat y mensajería, Salud, Liderazgo de equipo]
 role: Lead Product Designer
 team: Equipo de desarrollo, equipo del cliente
 galleryAlt: "WrapApp en un MacBook y un iPhone: inicio de sesión y recursos en web, y el inicio de la app mobile con agenda, medallas y profesionales a cargo"
 ---
 
 import FeatureCards from '../../../components/mdx/FeatureCards.astro';
-import StatusCards from '../../../components/mdx/StatusCards.astro';
 
 ## ¿Qué es WrapApp?
 
@@ -21,8 +20,8 @@ Tiene dos lados. En web, los VPPs y los admins gestionan tareas, usuarios, docum
 ## De un vistazo
 
 - **Mi rol:** Lead product designer en web y mobile. Trabajé directamente con el cliente y con los VPPs que usarían la app, y con el equipo de desarrollo.
-- **Alcance:** Asignación de tareas, creación de usuarios, documentos, recursos dinámicos, chat y un sistema de medallas para reconocer el progreso.
-- **El detalle:** La mayor parte salió de Atama, nuestra base de marca blanca. Dos piezas fueron totalmente a medida: los recursos dinámicos y el chat. En el chat se fue el esfuerzo de validación.
+- **Alcance:** Asignación de tareas, creación de usuarios, documentos, recursos dinámicos, chat y badges.
+- **El detalle:** La mayor parte salió de Atama, nuestra base de marca blanca. Tres piezas fueron totalmente a medida: los recursos dinámicos, el chat y los badges. En el chat se fue el esfuerzo de validación.
 - **Resultado:** Una app web y mobile que le dio al cliente lo que necesitaba para llevar a cabo su piloto.
 
 ## Contexto
@@ -56,7 +55,7 @@ No copiamos y pegamos: cada función se ajustó a la marca y las necesidades de 
 
 ## Lo que fue a medida
 
-Construimos dos piezas desde cero: los recursos dinámicos y el chat.
+Construimos tres piezas desde cero: los recursos dinámicos, el chat y los badges.
 
 ### Recursos dinámicos
 
@@ -72,9 +71,11 @@ Lo construimos de la mano con los VPPs. La parte dinámica salió de lo que desc
 
 Atama no incluía chat, así que fue un módulo totalmente a medida, y necesitaba validación. Un chat entre un VPP y alguien que ha vivido violencia no es un chat cualquiera: lo que se dice, quién lo ve y cómo se siente usarlo importan más de lo habitual.
 
-{/* Imagen pendiente: custom.png — Recursos dinámicos y chat (ancho completo) */}
+### Badges
 
-También agregamos un sistema de medallas que reconoce el progreso tanto de VPPs como de clientes, una forma pequeña de hacer visible el esfuerzo.
+Tanto los VPPs como los clientes pueden enviar badges. Eligen uno de un banco, y luego le ponen un título y una descripción. Algunos badges tienen una descripción fija, y otros se pueden personalizar. Cada badge que se envía queda registrado: cuándo se envió y quién lo envió. Así los admins también pueden vigilar cómo se está usando la función.
+
+{/* Imagen pendiente: custom.png — Recursos dinámicos, chat y badges (ancho completo) */}
 
 ## Diseñar para personas con las que no pude hablar
 
@@ -92,20 +93,11 @@ También fue un proyecto sencillo de llevar, y lo digo como algo bueno. Todos lo
 
 La app le dio al cliente lo que necesitaba para llevar a cabo su piloto, construida en 2025 para web y mobile, con tres tipos de usuario.
 
-<StatusCards
-  items={[
-    {
-      title: 'Entrega',
-      status: 'confirmed',
-      statusLabel: 'Confirmado',
-      text: 'Apps web y mobile con asignación de tareas, creación de usuarios, documentos, recursos dinámicos, chat y medallas.',
-    },
-  ]}
-/>
+Entregamos apps web y mobile con asignación de tareas, creación de usuarios, documentos, recursos dinámicos, chat y badges.
 
 ## Lo que me llevo
 
-- **Una buena base te libera para enfocarte en lo diferente.** Casi todo este producto ya estaba resuelto. El chat y los recursos recibieron la atención que merecían.
+- **Una buena base te libera para enfocarte en lo diferente.** Casi todo este producto ya estaba resuelto. El chat, los recursos y los badges recibieron la atención que merecían.
 - **A veces no puedes hablar con el usuario final.** Cuando eso pasa, las personas más cercanas a él se vuelven tu mejor fuente, y hay que ser honesto sobre lo que eso puede y no puede decirte.
 - **Probar con quienes lo van a usar cambia el producto.** La capa dinámica de los recursos salió de lo que encontramos en las pruebas con los VPPs.
 - **Acordar los requerimientos temprano hace todo más tranquilo.** Nada de este proyecto fue dramático, y ese era el punto.

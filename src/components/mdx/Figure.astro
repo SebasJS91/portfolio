@@ -17,7 +17,7 @@ interface Props {
 const { src, alt, caption, wide = false } = Astro.props;
 ---
 
-<figure class:list={['figure', { 'figure--wide': wide }]} data-reveal>
+<figure class:list={['figure', { 'mdx-wide': wide }]} data-reveal>
   <div class="figure__frame">
     <Image src={src} alt={alt} widths={[640, 1024, 1600]} sizes="(min-width: 1200px) 1200px, 100vw" />
   </div>
@@ -26,22 +26,12 @@ const { src, alt, caption, wide = false } = Astro.props;
 
 <style>
   .figure {
-    margin: var(--space-lg) 0;
-  }
-
-  .figure--wide {
-    width: min(100vw - 2 * var(--gutter), var(--container));
-    margin-left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .figure--wide[data-reveal]:not(.is-visible) {
-    transform: translate(-50%, 24px);
+    margin-block: var(--space-lg);
   }
 
   .figure__frame {
     overflow: hidden;
-    border-radius: var(--radius);
+    border-radius: 16px;
     border: 1px solid var(--color-border);
     background: var(--color-panel);
   }

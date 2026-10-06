@@ -9,7 +9,7 @@ interface Props {
 const { items } = Astro.props;
 ---
 
-<dl class="findings">
+<dl class="findings mdx-wide">
   {
     items.map((item, i) => (
       <div class="finding" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
@@ -21,30 +21,36 @@ const { items } = Astro.props;
 </dl>
 
 <style>
+  /* Tarjetas en fila; la última (lo que cambió) lleva el borde de acento */
   .findings {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
     gap: var(--space-sm);
-    margin: var(--space-lg) 0;
+    margin-block: var(--space-lg);
   }
 
   .finding {
-    padding-left: var(--space-md);
-    border-left: 2px solid var(--color-border);
+    padding: 32px;
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    background: var(--color-panel);
   }
 
   .finding:last-child {
-    border-left-color: var(--color-accent);
+    border: 2px solid var(--color-accent);
   }
 
   dt {
-    font-family: var(--font-display);
-    font-size: var(--text-sm);
-    color: var(--color-title);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
   }
 
   dd {
-    margin: 4px 0 0;
+    margin: var(--space-sm) 0 0;
+    font-size: var(--text-base);
+    line-height: 1.6;
     color: var(--color-text-body);
   }
 </style>

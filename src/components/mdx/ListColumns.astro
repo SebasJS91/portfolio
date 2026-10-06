@@ -9,7 +9,7 @@ interface Props {
 const { columns } = Astro.props;
 ---
 
-<div class="list-columns">
+<div class="list-columns mdx-wide">
   {
     columns.map((column, i) => (
       <div class="list-columns__column" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
@@ -30,14 +30,15 @@ const { columns } = Astro.props;
 <style>
   .list-columns {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
     gap: var(--space-sm);
-    margin: var(--space-lg) 0;
+    margin-block: var(--space-lg);
   }
 
   .list-columns__column {
-    padding: var(--space-md);
-    border-radius: var(--radius);
+    padding: 32px;
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
     background: var(--color-panel);
   }
 
@@ -45,9 +46,9 @@ const { columns } = Astro.props;
     display: flex;
     align-items: center;
     gap: var(--space-xs);
-    margin: 0 0 var(--space-xs);
+    margin: 0 0 var(--space-sm);
     font-family: var(--font-display);
-    font-size: var(--text-lg);
+    font-size: var(--text-xl);
     color: var(--color-title);
   }
 
@@ -67,6 +68,6 @@ const { columns } = Astro.props;
   }
 
   li + li {
-    margin-top: 4px;
+    margin-top: 8px;
   }
 </style>

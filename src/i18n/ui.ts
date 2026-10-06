@@ -47,8 +47,8 @@ export const ui = {
     'case.company': 'Company',
     'case.role': 'Role',
     'case.year': 'Year',
-    'case.duration': 'Duration',
     'case.team': 'Team',
+    'case.toc': 'On this page',
 
     'about.title': 'About',
     'about.p1': 'There’s a version of design that looks great, tests well, and never gets built. I’m not interested in that version.',
@@ -97,17 +97,17 @@ export const ui = {
     'case.company': 'Empresa',
     'case.role': 'Rol',
     'case.year': 'Año',
-    'case.duration': 'Duración',
     'case.team': 'Equipo',
+    'case.toc': 'En esta página',
 
     'about.title': 'Sobre mí',
     'about.p1': 'Hay una versión del diseño que se ve increíble, sale bien en las pruebas y nunca se construye. Esa versión no me interesa.',
     'about.p2':
-      'Trabajo con equipos de producto para convertir ideas y problemas complejos en productos que funcionan para usuarios reales, resisten el desarrollo y hacen avanzar el negocio. Esas tres cosas solo pasan cuando todos los que lo construyen sienten verdadera pertenencia sobre el trabajo, no solo responsabilidad por una tarea. Ese es el ambiente que busco crear.',
+      'Trabajo con equipos de producto para convertir ideas y problemas complejos en productos que funcionan para usuarios reales, sobreviven al desarrollo y hacen avanzar el negocio. Para lograr las tres cosas, quienes lo construyen tienen que sentir el trabajo como suyo, y no solo cumplir con una tarea. Ese es el ambiente que busco crear.',
     'about.p3':
-      'En los proyectos que he liderado, desde el primer concepto hasta el producto lanzado, algunos consiguieron financiación por convocatoria, atrajeron inversión temprana y ganaron una segunda fase con clientes que confiaron lo suficiente en el trabajo para continuar. Ese recorrido también incluye un producto white-label y un design system creados desde cero que hoy ayudan a mi empresa a avanzar más rápido con cada nuevo cliente.',
+      'He liderado proyectos desde el primer concepto hasta el producto lanzado. Algunos consiguieron financiación en convocatorias, otros atrajeron inversión temprana, y otros ganaron una segunda fase con clientes que confiaron en el trabajo y quisieron seguir. También creé desde cero un producto white-label y un design system que hoy le ayudan a mi empresa a avanzar más rápido con cada nuevo cliente.',
     'about.p4':
-      'Empiezo por entender el proyecto antes de diseñar para el usuario. ¿Qué necesita realmente el cliente? ¿Por qué estamos construyendo esto? ¿Qué queremos lograr? Cuando esas preguntas están claras, todo lo demás, el diseño, los cambios de rumbo y las decisiones difíciles, se vuelve mucho más fácil de navegar. Y ahí es cuando sale el mejor trabajo.',
+      'Antes de diseñar empiezo por entender el proyecto: ¿qué necesita realmente el cliente?, ¿por qué estamos construyendo esto?, ¿qué queremos lograr? Cuando esas preguntas están claras, el diseño, los cambios de rumbo y las decisiones difíciles se resuelven con mucha más facilidad.',
     'about.contact': 'Contacto',
     'about.close': 'Cerrar Sobre mí',
     'copy.done': '¡Copiado!',
