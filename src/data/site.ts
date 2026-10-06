@@ -8,7 +8,7 @@ export const site = {
   name: 'Sebastian Jaramillo',
   email: 'jara.sjs@gmail.com',
   cv: '/cv/cv.pdf',
-  links: [{ label: 'Linkedin', href: 'https://www.linkedin.com/in/tu-usuario' }],
+  links: [{ label: 'Linkedin', href: 'https://www.linkedin.com/in/sebastian-jaramillo-0b7b46206/' }],
   // Opciones del menú. Las rutas internas se traducen al idioma de la página.
   menu: [
     // About y Contact abren el panel lateral (Contact baja directo a esa sección)

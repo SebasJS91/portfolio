@@ -51,6 +51,47 @@ function initReadingProgress(signal: AbortSignal) {
   window.addEventListener('scroll', update, { passive: true, signal });
 }
 
+// Índice lateral de los casos: marca la sección que se está leyendo
+function initToc(signal: AbortSignal) {
+  const nav = document.querySelector<HTMLElement>('[data-toc]');
+  const cover = document.querySelector<HTMLElement>('[data-case-cover]');
+  const footer = document.querySelector<HTMLElement>('[data-zone="footer"]');
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-toc] a')];
+  const targets = links
+    .map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1))))
+    .filter((el): el is HTMLElement => !!el);
+  if (!nav || !targets.length) return;
+
+  let frame = 0;
+  const update = () => {
+    // Visible entre la imagen del proyecto (ya pasada) y el footer
+    const vh = window.innerHeight;
+    const pastCover = !cover || cover.getBoundingClientRect().bottom <= 120;
+    const beforeFooter = !footer || footer.getBoundingClientRect().top > vh / 2;
+    nav.toggleAttribute('data-visible', pastCover && beforeFooter);
+
+    // La sección actual es la última cuyo título ya pasó el 30% superior de la pantalla
+    const line = window.innerHeight * 0.3;
+    let current = 0;
+    targets.forEach((el, i) => {
+      if (el.getBoundingClientRect().top <= line) current = i;
+    });
+    const atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 8;
+    if (atBottom) current = targets.length - 1;
+    links.forEach((link, i) => link.setAttribute('aria-current', String(i === current)));
+  };
+
+  update();
+  window.addEventListener(
+    'scroll',
+    () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(update);
+    },
+    { passive: true, signal },
+  );
+}
+
 /* --------------------------------------------------------------------------
    Dock (elemento flotante + menú)
    body[data-dock]  → hero | bar | top
@@ -450,4 +491,5 @@ document.addEventListener('astro:page-load', () => {
   initReveal();
   initCopyButtons();
   initReadingProgress(controller.signal);
+  initToc(controller.signal);
 });

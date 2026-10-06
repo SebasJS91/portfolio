@@ -18,7 +18,7 @@ interface Props {
 const { before, after } = Astro.props;
 ---
 
-<div class="before-after" data-reveal>
+<div class="before-after mdx-wide" data-reveal>
   {
     [before, after].map((column, i) => (
       <div class:list={['before-after__column', { 'is-after': i === 1 }]}>
@@ -36,29 +36,31 @@ const { before, after } = Astro.props;
 </div>
 
 <style>
+  /* Antes: borde punteado y viñetas huecas. Después: borde de acento y viñetas llenas */
   .before-after {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
     gap: var(--space-sm);
-    margin: var(--space-lg) 0;
+    margin-block: var(--space-lg);
   }
 
   .before-after__column {
-    padding: var(--space-md);
-    border-radius: var(--radius);
-    border: 1px solid var(--color-border);
+    padding: 32px;
+    border: 1px dashed color-mix(in srgb, var(--color-text-muted) 45%, transparent);
+    border-radius: 16px;
   }
 
   .before-after__column.is-after {
+    border: 2px solid var(--color-accent);
     background: var(--color-panel);
-    border-color: transparent;
   }
 
   .before-after__label {
-    margin: 0 0 var(--space-xs);
-    font-family: var(--font-display);
-    font-size: var(--text-sm);
-    color: var(--color-title);
+    margin: 0 0 var(--space-sm);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
   }
 
   .is-after .before-after__label {
@@ -67,15 +69,37 @@ const { before, after } = Astro.props;
 
   ul {
     margin: 0;
-    padding-left: 1.1em;
-    color: var(--color-text-body);
+    padding: 0;
+    list-style: none;
+    color: var(--color-title);
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  li::before {
+    content: '';
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--color-text-muted);
+    border-radius: 50%;
+  }
+
+  .is-after li::before {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
   }
 
   li + li {
-    margin-top: 4px;
+    margin-top: 10px;
   }
 
   .is-removed {
-    opacity: 0.55;
+    color: var(--color-text-muted);
+    opacity: 0.7;
   }
 </style>

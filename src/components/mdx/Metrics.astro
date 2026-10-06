@@ -1,5 +1,6 @@
 ---
-// Bloque de métricas de impacto.
+// Bloque de métricas de impacto: una franja ancha con cada número grande en su
+// celda, separadas por líneas.
 // Uso en MDX:
 //   <Metrics items={[{ value: '+32%', label: 'conversión' }]} />
 interface Props {
@@ -9,10 +10,10 @@ interface Props {
 const { items } = Astro.props;
 ---
 
-<dl class="metrics">
+<dl class="metrics mdx-wide" style={`--count: ${items.length}`} data-reveal>
   {
-    items.map((item, i) => (
-      <div class="metric" data-reveal style={`--reveal-delay: ${i * 100}ms`}>
+    items.map((item) => (
+      <div class="metric">
         <dt>{item.label}</dt>
         <dd>{item.value}</dd>
       </div>
@@ -23,10 +24,12 @@ const { items } = Astro.props;
 <style>
   .metrics {
     display: grid;
-    /* Hasta 4 métricas en una fila en el ancho del texto */
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
-    gap: var(--space-sm);
-    margin: var(--space-lg) 0;
+    grid-template-columns: repeat(var(--count), minmax(0, 1fr));
+    margin-block: var(--space-lg);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    background: var(--color-panel);
   }
 
   .metric {
@@ -34,24 +37,57 @@ const { items } = Astro.props;
     flex-direction: column-reverse;
     /* En column-reverse, flex-end alinea arriba: los números quedan a la misma altura */
     justify-content: flex-end;
-    gap: 4px;
-    padding: var(--space-md);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    background: var(--color-panel);
+    align-items: center;
+    gap: 10px;
+    padding: var(--space-lg) var(--space-md);
+    text-align: center;
+  }
+
+  .metric + .metric {
+    border-left: 1px solid var(--color-border);
   }
 
   dd {
     margin: 0;
-    font-size: var(--text-xl);
-    line-height: 1.15;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--case-accent, var(--color-accent));
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 1.5rem + 2.4vw, 3.5rem);
+    line-height: 1;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-title);
   }
 
   dt {
+    max-width: 16rem;
     font-size: var(--text-sm);
+    line-height: 1.45;
     color: var(--color-text-muted);
+  }
+
+  /* Pantallas angostas: dos por fila */
+  @media (max-width: 700px) {
+    .metrics {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .metric {
+      padding: var(--space-md) var(--space-sm);
+    }
+
+    .metric + .metric {
+      border-left: 0;
+    }
+
+    .metric:nth-child(even) {
+      border-left: 1px solid var(--color-border);
+    }
+
+    .metric:nth-child(n + 3) {
+      border-top: 1px solid var(--color-border);
+    }
+
+    /* Una sola en la última fila: ocupa todo el ancho */
+    .metric:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+    }
   }
 </style>
