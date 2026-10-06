@@ -1,6 +1,6 @@
 ---
 title: WrapApp
-summary: Designed a web and mobile app that helps violence prevention professionals support people recovering from violence. Built on our own white-label base, so the effort went into the one thing that was fully custom, chat.
+summary: Designed a web and mobile app that helps violence prevention professionals support people recovering from violence. Most of it came from our white-label base, so the custom work went into chat and dynamic resources.
 tags: [Health, mHealth, Web, Mobile, Chat]
 role: Lead Product Designer
 year: 2025
@@ -28,13 +28,11 @@ It has two sides. On web, VPPs and admins manage tasks, users, documents and res
 ## At a glance
 
 - **My role:** Lead product designer on web and mobile. I worked directly with the client and the VPPs who would use the app, and with the development team.
-- **Scope:** Task assignment, user creation, documents and resources, chat, and a badge system to recognize progress.
-- **The twist:** Most of it came from Atama, our white-label base. The part that was fully custom was chat, so that's where the validation effort went.
+- **Scope:** Task assignment, user creation, documents, dynamic resources, chat, and a badge system to recognize progress.
+- **The twist:** Most of it came from Atama, our white-label base. Two pieces were fully custom: dynamic resources and chat. Chat is where the validation effort went.
 - **Outcome:** A web and mobile app that gave the client what they needed to run their pilot.
 
 ## Context
-
-### A real program, a pilot to run, and a base that already fit.
 
 The client already ran a case management program. What they needed was a tool that would carry that work to a phone and a browser, so that VPPs and clients could stay connected between visits.
 
@@ -42,7 +40,7 @@ This was the first time I got to see Atama fully at work. We had just built a ba
 
 ## What Atama covered
 
-### Most of the product, before I started drawing.
+Atama covered most of the product before I started drawing:
 
 <FeatureCards
   items={[
@@ -55,43 +53,49 @@ This was the first time I got to see Atama fully at work. We had just built a ba
       text: 'Creating and managing clients, VPPs and admins.',
     },
     {
-      title: 'Documents and resources',
-      text: 'The information a VPP wants clients to have at hand.',
+      title: 'Documents',
+      text: "Atama's Resources module, with rich, Notion-style pages for the information clients need.",
     },
   ]}
 />
 
-I'm not saying we copied and pasted. Each feature was adjusted to this client's brand and needs. But we started from a working base, not from a blank file, and that's what made it possible to spend our time where it mattered. If you want to know more about how that base works, there's a full case on [Atama](/work/atama/).
+We didn't copy and paste: each feature was adjusted to this client's brand and needs. But we started from a working base, not from a blank file, and that's what made it possible to spend our time where it mattered. If you want to know more about how that base works, there's a full case on [Atama](/work/atama/).
 
 ## What was custom
 
-### Chat was the one piece we had to build from scratch.
+We built two pieces from scratch: dynamic resources and chat.
 
-Atama didn't include chat, so this was a fully custom module, and the one that needed validation. A chat between a VPP and a person who has been through violence isn't just any chat: what's said, who sees it and how it feels to use all matter more than usual.
+### Dynamic resources
 
-{/* Imagen pendiente: chat.png — Chat module between a VPP and a client (ancho completo) */}
+VPPs can offer clients many kinds of help: job offers, courses, events, medical services, legal support and more. Atama has its own "resources", but those are Notion-style documents. The name is the same only because the client chose it here, and the feature is different, so we built it from scratch.
+
+To create a resource, an admin or a VPP first picks a category. Each category has its own fields: a job offer needs different information than an event. Categories can also be combined, and when they are, the resource shows the fields of each one. That's what makes them dynamic: the form adapts to what the resource is.
+
+Clients have a Resources section in their app where they can browse everything available. VPPs can also link resources to the tasks they assign, so a client who gets a task also gets the information they need to do it.
+
+We built this together with the VPPs. The dynamic part came out of what we found in testing.
+
+### Chat
+
+Atama didn't include chat, so this was a fully custom module, and it needed validation. A chat between a VPP and a person who has been through violence isn't just any chat: what's said, who sees it and how it feels to use all matter more than usual.
+
+{/* Imagen pendiente: custom.png — Dynamic resources and chat (ancho completo) */}
 
 We also added a badge system that recognizes progress for both VPPs and clients, a small way to make the effort visible.
 
 ## Designing for people I couldn't talk to
 
-### I worked with VPPs and admins. The people on mobile were a different story.
-
-Here's the thing that made this project different. I spoke constantly with the VPPs and admins, the ones who would use the web and mobile app every day. But I never spoke with the clients, the people on mobile who had experienced violence. The client handled that contact themselves, because there are protocols around it, and rightly so.
+One thing made this project different. I spoke constantly with the VPPs and admins, the ones who would use the web and mobile app every day. But I never spoke with the clients, the people on mobile who had experienced violence. The client handled that contact themselves, because there are protocols around it, and rightly so.
 
 So I designed for those users through the people who work with them every day. It isn't the same as hearing from them directly, and I won't pretend it is. But the VPPs knew the clients' day-to-day reality well, and that's what we could work with.
 
 ## Working with developers
 
-### The part I enjoyed most: closing the gap between design and code.
-
-On this project I did more than hand over designs. I also turned the design requirements into development tasks, and I agreed on delivery times for the custom features together with the team. That meant the people building it and the person designing it were looking at the same list, which is a small thing that saves a lot of confusion later.
+The part I enjoyed most was closing the gap between design and code. On this project I did more than hand over designs. I also turned the design requirements into development tasks, and I agreed on delivery times for the custom features together with the team. That meant the people building it and the person designing it were looking at the same list, which is a small thing that saves a lot of confusion later.
 
 It was also a simple project to run, and I mean that as a good thing. All the requirements were agreed from the start.
 
 ## Outcomes
-
-### A web and mobile app, ready for the client's pilot.
 
 The app gave the client what they needed to run their pilot, built in 2025 across web and mobile for three types of users.
 
@@ -101,13 +105,14 @@ The app gave the client what they needed to run their pilot, built in 2025 acros
       title: 'Delivery',
       status: 'confirmed',
       statusLabel: 'Confirmed',
-      text: 'Web and mobile apps with task assignment, user creation, documents and resources, chat and badges.',
+      text: 'Web and mobile apps with task assignment, user creation, documents, dynamic resources, chat and badges.',
     },
   ]}
 />
 
 ## What I took away
 
-- **A good base frees you to focus on what's different.** Most of this product was solved. Chat got the attention it deserved.
+- **A good base frees you to focus on what's different.** Most of this product was solved. Chat and resources got the attention they deserved.
 - **Sometimes you can't talk to the end user.** When that happens, the people closest to them become your best source, and you have to be honest about what that can and can't tell you.
+- **Testing with the people who will use it changes the product.** The dynamic layer in resources came from what we found in testing with VPPs.
 - **Agreeing requirements early makes everything calmer.** Nothing about this project was dramatic, and that was the point.

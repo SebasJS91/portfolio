@@ -102,9 +102,16 @@ function initDock(signal: AbortSignal) {
     }
   };
 
+  // La barra se ensancha para que el label quepa entero (100px como mínimo, como en Figma)
+  const fitLabel = () => {
+    const width = Math.ceil(label.getBoundingClientRect().width) + 8;
+    dock.style.setProperty('--label-w', `${Math.max(100, width)}px`);
+  };
+
   const setLabel = (text: string) => {
     if (label.textContent === text) return;
     label.textContent = text;
+    fitLabel();
     label.classList.remove('is-rolling');
     void label.offsetWidth; // reinicia la animación
     label.classList.add('is-rolling');
@@ -162,6 +169,9 @@ function initDock(signal: AbortSignal) {
   setViewport();
   setMenu(false);
   update();
+  fitLabel();
+  // La fuente de display puede llegar después: se vuelve a medir al cargar
+  document.fonts.ready.then(fitLabel);
 
   window.addEventListener('scroll', onScroll, { passive: true, signal });
   window.addEventListener(

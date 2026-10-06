@@ -1,6 +1,6 @@
 ---
 title: CareNautica
-summary: Convertí un conjunto de funciones desconectadas en un producto de salud enfocado y respaldado por investigación para pacientes y cuidadores, y diseñé la capa de engagement para una aplicación a un grant del NIH SBIR.
+summary: Reduje una app de salud de cinco funciones a tres, la probé con pacientes y cuidadores, y diseñé el sistema de engagement que entró en una aplicación al NIH SBIR.
 tags: [UX Research, Salud, Mobile, Diseño conductual, Gamificación]
 role: Lead Product Designer
 duration: Fase 1 · nov 2023 – feb 2024 / Fase 2 · oct – dic 2025
@@ -48,9 +48,7 @@ Tres funciones lo hacen funcionar:
 
 ## Contexto
 
-### El cliente tenía una gran idea. Lo que no tenía era una razón para cada función.
-
-Llegaron a nuestro estudio con un concepto inicial y un prototipo de Figma cuyas pantallas no se conectaban entre sí. No había investigación detrás ni una lógica que uniera las funciones.
+El cliente llegó a nuestro estudio con una gran idea: un concepto inicial y un prototipo de Figma cuyas pantallas no se conectaban entre sí. No había investigación detrás ni una lógica que uniera las funciones.
 
 Es un mal punto de partida para construir, y peor todavía para pedir financiación. Un evaluador de grants va a preguntar por qué está cada función, y "porque se nos ocurrió" no es una respuesta. Así que el trabajo tenía dos partes: darle dirección al producto y hacer que cada decisión fuera defendible, ante los usuarios y ante quienes lo evaluaban.
 
@@ -58,9 +56,7 @@ Detrás del primer problema esperaba un segundo. Una app de salud puede estar pe
 
 ## Reenfoque
 
-### Cinco funciones eran demasiadas para probar. Tres se podían defender.
-
-Antes de tocar una pantalla, hicimos un análisis KPT (Keep, Problem, Try) sobre el prototipo existente. No dijo que las funciones fueran malas. Dijo que había demasiadas. Cinco funciones para dos tipos de usuario era demasiado para validar en una sola fase. Si probábamos todo a la vez, tendríamos evidencia delgada de todo y sólida de nada.
+Antes de tocar una pantalla, hicimos un análisis KPT (Keep, Problem, Try) sobre el prototipo existente. Encontró demasiadas funciones, no funciones malas. Cinco funciones para dos tipos de usuario era demasiado para validar en una sola fase. Si probábamos todo a la vez, tendríamos evidencia delgada de todo y sólida de nada.
 
 > El alcance en sí era el riesgo, para el producto y para el grant que dependía de él.
 
@@ -70,7 +66,7 @@ Al cliente no le encantó al principio. Eran partes de su visión original. Lo q
 
 <BeforeAfter
   before={{
-    label: 'Antes — 5 funciones',
+    label: 'Antes: 5 funciones',
     items: [
       { text: 'Información de cuidado', removed: true },
       { text: 'Tienda de recompensas', removed: true },
@@ -80,8 +76,12 @@ Al cliente no le encantó al principio. Eran partes de su visión original. Lo q
     ],
   }}
   after={{
-    label: 'Después — 3 funciones',
-    items: [{ text: 'Medication tracker' }, { text: 'Wellness survey' }, { text: 'Chats (círculos de cuidado de hasta 6)' }],
+    label: 'Después: 3 funciones',
+    items: [
+      { text: 'Medication tracker' },
+      { text: 'Wellness survey' },
+      { text: 'Chats (círculos de cuidado de hasta 6)' },
+    ],
   }}
 />
 
@@ -89,9 +89,7 @@ Al cliente no le encantó al principio. Eran partes de su visión original. Lo q
 
 ## Investigación y validación
 
-### Primero hablar con la gente, después probar con ella.
-
-Empecé con dos personas, una de paciente y una de cuidador. No como un entregable, sino como una forma de tener claro qué era lo que no sabíamos. Luego convertí esas preguntas en dos encuestas para pacientes y cuidadores en Estados Unidos. Las respuestas cambiaron lo que la gente esperaba del producto, y bastantes encuestados pidieron probar el prototipo. Fue nuestra primera señal de que la gente de verdad quería esto.
+Empecé con dos personas, una de paciente y una de cuidador. Las usé para tener claro qué era lo que no sabíamos. Luego convertí esas preguntas en dos encuestas para pacientes y cuidadores en Estados Unidos. Las respuestas cambiaron lo que la gente esperaba del producto, y bastantes encuestados pidieron probar el prototipo. Fue nuestra primera señal de que la gente de verdad quería esto.
 
 Después construí un prototipo de fidelidad semi-alta de las tres funciones. Lo dejé sin pulir a propósito. Tenía que ser lo bastante bueno para recibir feedback honesto, y no tan terminado como para tener que rehacerlo después del feedback. Lo probamos de dos maneras: un test de usabilidad en Maze (20 participantes, algo más de la mitad en el rango objetivo de 60 a 79 años) y dos focus groups (6 participantes).
 
@@ -103,7 +101,7 @@ Después construí un prototipo de fidelidad semi-alta de las tres funciones. Lo
     },
     {
       label: 'Lo que añadieron los focus groups',
-      text: 'A los cuidadores les gustó la idea del círculo de cuidado, pero solo si tenían control fino sobre quién podía ver qué. En palabras simples: la privacidad no era un extra, era la condición para usar la app.',
+      text: 'A los cuidadores les gustó la idea del círculo de cuidado, pero solo si tenían control fino sobre quién podía ver qué. En palabras simples: sin ese control, no usarían la app.',
     },
     {
       label: 'Lo que cambiamos',
@@ -117,8 +115,6 @@ Como el público principal eran adultos mayores, también quité de cada pantall
 {/* Imagen pendiente: prototype.png — Prototipo de fidelidad semi-alta (ancho completo) */}
 
 ## Gamificación
-
-### Que algo sea usable no significa que valga la pena volver a él.
 
 La Fase 1 mostró que CareNautica era usable. La Fase 2 trataba una pregunta más difícil: ¿por qué alguien la abriría otra vez mañana? Cuando el objetivo es tomar un medicamento a tiempo, esa visita de regreso lo es todo.
 
@@ -151,8 +147,6 @@ Así que fuimos en la otra dirección, con motivación intrínseca: progreso vis
 
 ## Resultados
 
-### Financiación conseguida en la Fase 1. NIH SBIR enviado, decisión pendiente.
-
 La Fase 1 le dio al cliente la investigación y el prototipo probado que necesitaba para avanzar. La Fase 2 entregó el sistema conductual y los resultados de usabilidad que se incluyeron en la aplicación al NIH SBIR, que sigue esperando una decisión.
 
 <StatusCards
@@ -177,6 +171,6 @@ Lo que más me interesa es el tiempo entre las dos fases. Tras terminar la Fase 
 ## Lo que me llevo
 
 - **Recortar el alcance fue lo más útil que hicimos.** Menos que probar significó mejor evidencia para lo que quedó.
-- **La privacidad es una condición, no una función.** Los cuidadores nos lo dijeron directamente, y moldeó cómo funcionan los permisos.
+- **La privacidad decide si la gente usa la app.** Los cuidadores nos lo dijeron directamente, y moldeó cómo funcionan los permisos.
 - **Una app usable y una app que crea hábito son dos problemas distintos.** Resolvimos el primero en la Fase 1 y el segundo en la Fase 2.
 - **No todo se valida.** El cambio de permisos es un buen ejemplo. Saber qué probaste y qué no es parte de ser honesto con tu trabajo.

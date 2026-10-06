@@ -1,6 +1,6 @@
 ---
 title: Atama
-summary: Diseñé el sistema de diseño y la definición de funciones de un producto de marca blanca que redujo el desarrollo de un MVP de 2–3 meses a menos de uno, y que hoy es el punto de partida de cada proyecto nuevo en la empresa.
+summary: Diseñé el sistema de diseño y las funciones reutilizables de una base de marca blanca. Los MVP pasaron de 2–3 meses a menos de uno, y hoy cada proyecto nuevo de la empresa parte de ella.
 tags: [Sistemas de diseño, Estrategia de producto, Web, Mobile, Marca blanca]
 role: Product Designer
 duration: Inicio en mayo de 2024 · módulos principales listos a fin de 2024
@@ -8,10 +8,10 @@ team: 1 diseñador, desarrolladores front-end, mobile y back-end, QA, 1 PM
 galleryAlt: "Atama en un MacBook y un iPhone: inicio de sesión y gestión de miembros en web, y la pantalla de pacientes y tareas en mobile"
 ---
 
-import Metrics from '../../../components/mdx/Metrics.astro';
-import ListColumns from '../../../components/mdx/ListColumns.astro';
 import FeatureCards from '../../../components/mdx/FeatureCards.astro';
+import Metrics from '../../../components/mdx/Metrics.astro';
 import StatusCards from '../../../components/mdx/StatusCards.astro';
+import ListColumns from '../../../components/mdx/ListColumns.astro';
 
 ## ¿Qué es Atama?
 
@@ -39,17 +39,13 @@ Un cliente llega con una idea, revisamos si Atama ya cubre lo básico, y podemos
 
 ## Contexto
 
-### Seguíamos construyendo las mismas funciones, una y otra vez.
-
 Cada producto nuevo necesitaba lo mismo de base: registro, gestión de usuarios, encuestas, tareas. Y cada vez las construíamos desde cero. Eso significaba tiempo de diseño, de desarrollo y de QA. También retrasaba el momento de poner algo frente a usuarios reales.
 
-No era solo nuestro problema. Los clientes también lo pagaban. Una parte grande de su presupuesto se iba en reprocesos de funciones básicas, en lugar de lo que hacía suyo a su producto.
+Los clientes también lo pagaban. Una parte grande de su presupuesto se iba en reprocesos de funciones básicas, en lugar de lo que hacía suyo a su producto.
 
 Así que en algún punto la pregunta fue simple: ¿por qué estábamos rehaciendo lo mismo?
 
 ## Qué estandarizamos
-
-### No todo. Solo lo que la mayoría de productos necesita.
 
 El primer paso fue decidir qué merecía un lugar en una base reutilizable. Revisamos todos los proyectos que habíamos hecho, los que estaban en marcha y lo que pedían los clientes, y buscamos lo que se repetía. Para cada función miré lo que habíamos construido antes y cómo sería la versión ideal, y definí el mínimo que necesitaba para funcionar dentro de cualquier producto.
 
@@ -64,7 +60,7 @@ Me asignaron este proyecto, pero quise participar en las decisiones sobre qué e
         'Administración de usuarios (administradores, miembros, clientes/pacientes)',
         'Gestión de encuestas (creador, respuestas y resultados)',
         'Proyectos y tareas',
-        'Recursos',
+        'Recursos (documentos que se crean, al estilo Notion)',
         'Registro e inicio de sesión',
         'Configuración',
       ],
@@ -89,8 +85,6 @@ Cada función se diseñó, validó, programó y pasó por QA como un módulo, pa
 
 ## El sistema de diseño
 
-### Una base desde la que otros diseñadores pueden empezar, y cambiarla sin romperla.
-
 Antes de diseñar cualquier función, construí el sistema que las sostendría todas. Sigue atomic design, en tres capas:
 
 1. **Fundamentos:** tokens de color, tipografía, espaciado y más, para web y mobile.
@@ -105,26 +99,21 @@ Personalizarlo para un cliente no implica rediseñar nada. Los tokens de color y
 
 ## En producción
 
-### La misma base, tres productos muy distintos.
-
 Atama se ha usado en 29 proyectos de Figma. Estos son tres en los que trabajé directamente:
 
 <FeatureCards
   items={[
     {
       title: 'WrapApp',
-      tag: 'Web · Mobile',
-      text: 'Conecta a case workers con personas que han vivido violencia. Abarca cinco tipos de usuario.',
+      text: 'Conecta a case workers con personas que han vivido violencia. Funciona en web y mobile y abarca tres tipos de usuario. Atama trae cinco roles base, y este proyecto necesitó menos.',
     },
     {
       title: 'LifeSpan',
-      tag: 'Web · Mobile',
-      text: 'Registra la salud mental y los niveles de estrés de residentes de medicina.',
+      text: 'Registra la salud mental y los niveles de estrés de residentes de medicina, en web y mobile.',
     },
     {
       title: 'Cenextra — Sky Therapeutics',
-      tag: 'Web · Mobile',
-      text: 'Una app para el tratamiento de niños con TDAH. Sigue el progreso en juegos de otra aplicación, para que padres y terapeutas vean cómo van las cosas y cómo evoluciona el niño.',
+      text: 'Una app web y mobile para el tratamiento de niños con TDAH. Sigue el progreso en juegos de otra aplicación, para que padres y terapeutas vean cómo van las cosas y cómo evoluciona el niño.',
     },
   ]}
 />
@@ -134,8 +123,6 @@ En cada uno, la base nos dio un producto funcional para probar con usuarios real
 {/* Imagen pendiente: projects.png — Tres productos construidos sobre Atama (ancho completo) */}
 
 ## Resultados
-
-### MVPs en menos de un mes, y una base que todo el equipo usa.
 
 A finales de 2024 la mayoría de las funciones estaban listas para usar en Figma, front end y back end. En los proyectos que empezaron en 2025 se notó la diferencia. Los MVP con funciones básicas tomaban 2–3 meses. Ahora salían en menos de uno. Con lo básico ya resuelto, pudimos poner un producto funcional frente a usuarios reales antes y dedicar el tiempo a lo que cada cliente de verdad necesitaba.
 

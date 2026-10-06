@@ -1,6 +1,6 @@
 ---
 title: CareNautica
-summary: Turned a set of disconnected health-app features into a focused, research-backed product for patients and caregivers, and designed the engagement layer behind an NIH SBIR application.
+summary: Cut a health app from five features to three, tested it with patients and caregivers, and designed the engagement system that went into an NIH SBIR application.
 tags: [UX Research, Health, Mobile, Behavioral Design, Gamification]
 role: Lead Product Designer
 year: 2025
@@ -57,9 +57,7 @@ Three features make it work:
 
 ## Context
 
-### The client had a big idea. What they didn't have was a reason for each feature.
-
-They came to our studio with a rough concept and a Figma prototype whose screens didn't really connect to each other. There was no research behind it and no logic tying the features together.
+The client came to our studio with a big idea: a rough concept and a Figma prototype whose screens didn't really connect to each other. There was no research behind it and no logic tying the features together.
 
 That's a hard place to build from, and an even harder one to ask for funding from. A grant reviewer will ask why each feature is there, and "because we thought of it" isn't an answer. So the job had two parts: give the product a direction, and make every decision something we could defend, to users and to the people evaluating it.
 
@@ -67,9 +65,7 @@ There was a second problem waiting behind the first one. A health app can be per
 
 ## Refocusing
 
-### Five features were too many to prove. Three could be defended.
-
-Before touching any screen, we ran a KPT analysis (Keep, Problem, Try) on the existing prototype. It didn't say the features were bad. It said there were too many of them. Five features across two types of users was too much to validate in one phase. If we tested everything at once, we'd end up with thin evidence for all of it and solid evidence for none.
+Before touching any screen, we ran a KPT analysis (Keep, Problem, Try) on the existing prototype. It found too many features, not bad ones. Five features across two types of users was too much to validate in one phase. If we tested everything at once, we'd end up with thin evidence for all of it and solid evidence for none.
 
 > The scope itself was the risk, for the product and for the grant that depended on it.
 
@@ -79,7 +75,7 @@ The client didn't love this at first. These were parts of their original vision.
 
 <BeforeAfter
   before={{
-    label: 'Before — 5 features',
+    label: 'Before: 5 features',
     items: [
       { text: 'Care information', removed: true },
       { text: 'Reward shop', removed: true },
@@ -89,8 +85,12 @@ The client didn't love this at first. These were parts of their original vision.
     ],
   }}
   after={{
-    label: 'After — 3 features',
-    items: [{ text: 'Medication tracker' }, { text: 'Wellness survey' }, { text: 'Chats (care circles of up to 6)' }],
+    label: 'After: 3 features',
+    items: [
+      { text: 'Medication tracker' },
+      { text: 'Wellness survey' },
+      { text: 'Chats (care circles of up to 6)' },
+    ],
   }}
 />
 
@@ -98,9 +98,7 @@ The client didn't love this at first. These were parts of their original vision.
 
 ## Research and validation
 
-### Talking to people first, then testing with them.
-
-I started with two personas, one for patients and one for caregivers. Not as a deliverable, but as a way to be clear about what we didn't know. Then I turned those questions into two surveys for patients and caregivers in the US. The answers shifted what people expected from the product, and quite a few respondents asked to try the prototype. That was our first sign that people actually wanted this.
+I started with two personas, one for patients and one for caregivers. I used them to get clear about what we didn't know. Then I turned those questions into two surveys for patients and caregivers in the US. The answers shifted what people expected from the product, and quite a few respondents asked to try the prototype. That was our first sign that people actually wanted this.
 
 Next I built a semi-high-fidelity prototype of the three features. I kept it unpolished on purpose. It needed to be good enough for honest feedback, and not so finished that it would need redoing after the feedback. We tested it in two ways: a Maze usability test (20 participants, just over half in the 60–79 target age group) and two focus groups (6 participants).
 
@@ -112,7 +110,7 @@ Next I built a semi-high-fidelity prototype of the three features. I kept it unp
     },
     {
       label: 'What the focus groups added',
-      text: "Caregivers liked the idea of a care circle, but only if they had fine control over who could see what. In simple words: privacy wasn't a nice-to-have. It was the condition for using the app at all.",
+      text: "Caregivers liked the idea of a care circle, but only if they had fine control over who could see what. In simple words: without that control, they wouldn't use the app at all.",
     },
     {
       label: 'What we changed',
@@ -126,8 +124,6 @@ Since the main audience was older adults, I also removed everything that wasn't 
 {/* Imagen pendiente: prototype.png — Semi-high-fidelity prototype (ancho completo) */}
 
 ## Gamification
-
-### Usable isn't the same as worth coming back to.
 
 Phase 1 showed that CareNautica was usable. Phase 2 was about a harder question: why would someone open it again tomorrow? When the goal is taking medication on time, that return visit is everything.
 
@@ -160,8 +156,6 @@ So we went the other way, with intrinsic motivation: visible progress, support f
 
 ## Outcomes
 
-### Funding secured in Phase 1. NIH SBIR submitted, decision pending.
-
 Phase 1 gave the client the research and the tested prototype they needed to move forward. Phase 2 delivered the behavioral system and the usability results that went into the NIH SBIR application, which is still waiting on a decision.
 
 <StatusCards
@@ -186,6 +180,6 @@ What I find most interesting is the gap between the two phases. After Phase 1 en
 ## What I took away
 
 - **Cutting scope was the most useful thing we did.** Less to test meant better evidence for what stayed.
-- **Privacy is a condition, not a feature.** Caregivers told us it directly, and it shaped how permissions work.
+- **Privacy decides whether people use the app.** Caregivers told us so directly, and it shaped how permissions work.
 - **A usable app and a habit-forming app are two different problems.** We solved the first in Phase 1 and the second in Phase 2.
 - **Not everything gets validated.** The permissions fix is a good example. Knowing what you tested, and what you didn't, is part of being honest about the work.
