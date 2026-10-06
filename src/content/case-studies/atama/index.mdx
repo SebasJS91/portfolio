@@ -1,6 +1,6 @@
 ---
 title: Atama
-summary: Designed the design system and feature blueprints behind a white-label product that cut MVP development from 2–3 months to under one, and became the starting point for every new project at the company.
+summary: Designed the design system and reusable features of a white-label base. MVPs went from 2–3 months to under one, and every new project at the company now starts from it.
 tags: [Design Systems, Product Strategy, Web, Mobile, White-label]
 role: Product Designer
 year: 2024
@@ -15,10 +15,10 @@ galleryAlt: "Atama on a MacBook and an iPhone: web sign-in and member management
 order: 2
 ---
 
-import Metrics from '../../../components/mdx/Metrics.astro';
-import ListColumns from '../../../components/mdx/ListColumns.astro';
 import FeatureCards from '../../../components/mdx/FeatureCards.astro';
+import Metrics from '../../../components/mdx/Metrics.astro';
 import StatusCards from '../../../components/mdx/StatusCards.astro';
+import ListColumns from '../../../components/mdx/ListColumns.astro';
 
 ## What is Atama?
 
@@ -46,17 +46,13 @@ A client comes to us with an idea, we check whether Atama already covers the bas
 
 ## Context
 
-### We kept building the same features, again and again.
-
 Every new product needed the same basics: sign-up, user management, surveys, tasks. And every time, we built them from scratch. That meant design time, development time and QA time. It also pushed back the moment we could put something in front of real users.
 
-It wasn't only our problem. Clients were paying for it too. A big part of their budget was going into rework on basic features, instead of the parts that made their product theirs.
+Clients were paying for it too. A big part of their budget was going into rework on basic features, instead of the parts that made their product theirs.
 
 So at some point the question was simple: why were we rebuilding the same things?
 
 ## What we standardized
-
-### Not everything. Only what most products need.
 
 The first step was deciding what deserved a place in a reusable base. We went through every project we'd done, the ones still in progress and what clients were asking for, and looked for what kept coming back. For each feature I looked at what we'd built before and what the ideal version should be, then defined the minimum it needed to work inside any product.
 
@@ -71,7 +67,7 @@ I was handed this project, but I wanted to be part of the decisions about what w
         'User management (admins, members, clients/patients)',
         'Survey management (builder, responses and results)',
         'Projects and tasks',
-        'Resources',
+        'Resources (documents you create, Notion-style)',
         'Sign up and log in',
         'Settings',
       ],
@@ -96,8 +92,6 @@ Each feature was designed, validated, built and QA'd as a module, so it could go
 
 ## The design system
 
-### A base other designers can start from, and change without breaking it.
-
 Before designing any feature, I built the system that would hold all of them. It follows atomic design, in three layers:
 
 1. **Foundations:** tokens for color, typography, spacing and more, for both web and mobile.
@@ -112,26 +106,21 @@ Customizing it for a client doesn't mean redesigning anything. Color and typogra
 
 ## In production
 
-### The same base, three very different products.
-
 Atama has been used in 29 Figma projects. These are three I worked on directly:
 
 <FeatureCards
   items={[
     {
       title: 'WrapApp',
-      tag: 'Web · Mobile',
-      text: 'Connects case workers with people who have experienced violence. It covers five types of user.',
+      text: 'Connects case workers with people who have experienced violence. It runs on web and mobile and covers three types of user. Atama ships with five base roles, and this project needed fewer.',
     },
     {
       title: 'LifeSpan',
-      tag: 'Web · Mobile',
-      text: 'Tracks mental health and stress levels of medical residents.',
+      text: 'Tracks mental health and stress levels of medical residents, on web and mobile.',
     },
     {
       title: 'Cenextra — Sky Therapeutics',
-      tag: 'Web · Mobile',
-      text: 'An app for treating children with ADHD. It follows progress in games played in another app, so parents and therapists can see how things are going and how the child is evolving.',
+      text: 'A web and mobile app for treating children with ADHD. It follows progress in games played in another app, so parents and therapists can see how things are going and how the child is evolving.',
     },
   ]}
 />
@@ -141,8 +130,6 @@ In each one, the base gave us a working product to test with real users sooner. 
 {/* Imagen pendiente: projects.png — Three products built on Atama (ancho completo) */}
 
 ## Outcomes
-
-### MVPs in under a month, and a base the whole team uses.
 
 By the end of 2024, most of the features were ready to use in Figma, front end and back end. In projects that started in 2025, the difference showed. MVPs with basic features used to take 2–3 months. They now came in under one. With the basics already solved, we could put a working product in front of real users earlier and spend our time on what each client actually needed.
 

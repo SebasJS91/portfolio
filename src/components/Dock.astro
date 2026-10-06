@@ -91,11 +91,14 @@ const { label = t('section.home'), alternates } = Astro.props;
      Geometría (Figma): barra de 276×48, a 45px del borde inferior.
      Slots: logo x8–56 · label x88–188 · menú x220–268.
      Centro de la barra = 138 → logo a -106px y menú a +106px del centro.
+     El label mide 100px como mínimo y crece con el texto (--label-w, desde
+     interactions.ts); la barra y los slots se recalculan a partir de él.
      ------------------------------------------------------------------ */
   .dock {
-    --w: 276px;
+    --label-w: 100px;
+    --w: calc(var(--label-w) + 176px);
     --h: 48px;
-    --slot-offset: 106px;
+    --slot-offset: calc(var(--w) / 2 - 32px);
     /* Hero: centro del botón de menú a 70px del borde derecho */
     --hero-menu-x: calc(var(--vw, 100vw) / 2 - 70px - var(--slot-offset));
     --morph: 600ms var(--ease-out);
@@ -108,7 +111,10 @@ const { label = t('section.home'), alternates } = Astro.props;
     height: var(--h);
     margin-left: calc(var(--w) / -2);
     pointer-events: none;
-    transition: transform var(--morph);
+    transition:
+      transform var(--morph),
+      width var(--morph),
+      margin-left var(--morph);
   }
 
   .dock__inner {
@@ -153,7 +159,8 @@ const { label = t('section.home'), alternates } = Astro.props;
     pointer-events: auto;
     transition:
       transform var(--morph),
-      opacity var(--morph);
+      opacity var(--morph),
+      left var(--morph);
   }
 
   .dock__logo {
@@ -161,7 +168,7 @@ const { label = t('section.home'), alternates } = Astro.props;
   }
 
   .dock__menu {
-    left: 220px;
+    left: calc(var(--w) - 56px);
     border-radius: var(--radius);
   }
 
@@ -184,7 +191,7 @@ const { label = t('section.home'), alternates } = Astro.props;
     position: absolute;
     left: 88px;
     top: 0;
-    width: 100px;
+    width: var(--label-w);
     height: 48px;
     display: grid;
     place-items: center;
@@ -195,7 +202,8 @@ const { label = t('section.home'), alternates } = Astro.props;
     white-space: nowrap;
     transition:
       opacity 350ms var(--ease-out),
-      transform var(--morph);
+      transform var(--morph),
+      width var(--morph);
   }
 
   /* Cambio de sección: el texto rueda hacia arriba */
