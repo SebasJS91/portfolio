@@ -154,6 +154,13 @@ body[data-about='open'] .page-dim {
   border-radius: var(--radius);
 }
 
+/* El layout laptop superpone dos PNG transparentes: multiply dejaría ver el
+   portátil a través del teléfono */
+:root .case__panel .gallery--laptop img {
+  mix-blend-mode: normal;
+  border-radius: 0;
+}
+
 /* Muestra un elemento solo en un tema (para assets con versión clara y oscura) */
 :root[data-theme='dark'] .theme-light-only,
 :root:not([data-theme='dark']) .theme-dark-only {
