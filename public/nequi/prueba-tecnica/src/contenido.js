@@ -6,7 +6,7 @@
 export const encabezado = {
   antetitulo: 'Caso práctico — Crédito Nequi',
   titulo: 'Crédito como medio de pago por QR y Bre-B',
-  intro: 'Prototipo navegable de la propuesta en tres momentos: pago, movimientos y abono. Cada paso lleva el teléfono a su pantalla, y cualquier clave de 4 dígitos entra.',
+  intro: 'Prototipo navegable de la propuesta en tres momentos: pago, movimientos y abono. Al navegar el prototipo, se abre el paso que explica cada pantalla. Cualquier clave de 4 dígitos entra.',
   autoria: 'Sebastián Jaramillo · Prueba técnica de diseño de producto · Octubre de 2026'
 };
 
