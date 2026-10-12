@@ -5,11 +5,11 @@
 export const secciones = [
   {
     etiqueta: 'Pago',
-    titulo: 'Pagar con crédito usa pasos que Nequi ya tiene, y pagar desde el contenedor es igual a pagar con "Disponible"',
+    titulo: 'Pagar con crédito usa pasos que Nequi ya tiene, y pagar desde el contenedor del crédito es igual a pagar con "Disponible"',
     lineas: [
       'El acceso a la cámara sigue en 3 taps desde "Inicio".',
       'Resumen, contrato y verificación de identidad son los pasos que Nequi ya usa al pedir un crédito; aquí aparecen en el momento del pago.',
-      'Con un crédito ya tomado, el pago sale del contenedor con los mismos pasos que "Disponible".'
+      'Con un crédito ya tomado, el pago sale del contenedor del crédito con los mismos pasos que "Disponible".'
     ],
     puntos: [
       {
@@ -53,28 +53,28 @@ export const secciones = [
       {
         titulo: 'Lo que sobra del crédito queda en "Préstamos"',
         pantalla: '"¡Desembolso exitoso!"',
-        porque: 'Con un crédito mayor que el pago, el sobrante va a un contenedor con la etiqueta "crédito", separado de "Disponible". El aviso dice cuánto se desembolsó y "Ir a Préstamos" lleva al contenedor.',
+        porque: 'Con un crédito mayor que el pago, el sobrante va al contenedor del crédito: un espacio dentro de "Préstamos", con la etiqueta "crédito" y separado de "Disponible". El aviso dice cuánto se desembolsó y "Ir a Préstamos" lleva al contenedor del crédito.',
         estado: { screen: 'inicio', overlay: 'desembolso', form: 'paga', amount: '250000', source: 'credito', showBal: true }
       },
       {
-        titulo: 'Los pagos siguientes salen del contenedor con los pasos de "Disponible"',
+        titulo: 'Los pagos siguientes salen del contenedor del crédito con los pasos de "Disponible"',
         pantalla: '¿De dónde saldrá la plata?',
-        porque: 'El contenedor aparece debajo de "Disponible" con su saldo. Elegirlo lleva directo a "Confirma el envío". Si el pago supera su saldo, la opción aparece deshabilitada.',
+        porque: 'El contenedor del crédito aparece debajo de "Disponible" con su saldo. Elegirlo lleva directo a "Confirma el envío". Si el pago supera su saldo, la opción aparece deshabilitada.',
         estado: { screen: 'origen', form: 'paga', origin: 'inicio', amount: '120000', source: 'contenedor' }
       }
     ]
   },
   {
     etiqueta: 'Movimientos',
-    titulo: 'El contenedor concentra el historial del crédito',
+    titulo: 'El contenedor del crédito concentra su historial',
     lineas: [
-      'El pago sale como un gasto del contenedor, con el negocio y su detalle.',
+      'El pago sale como un gasto del contenedor del crédito, con el negocio y su detalle.',
       '"Movimientos" suma la pestaña "Créditos".',
-      'El contenedor se puede renombrar y la etiqueta "crédito" se mantiene.'
+      'El contenedor del crédito se puede renombrar y la etiqueta "crédito" se mantiene.'
     ],
     puntos: [
       {
-        titulo: 'El contenedor muestra en qué se usó cada peso',
+        titulo: 'El contenedor del crédito muestra en qué se usó cada peso',
         pantalla: 'Contenedor del crédito',
         porque: 'Muestra el saldo, el nombre y los pagos hechos con él. La plata sale de él y no entra, y lo gastado no se repone. El lápiz de "Nombre del crédito" lo cambia y "Mover plata" pasa saldo a "Disponible".',
         estado: { screen: 'credito' },
@@ -83,7 +83,7 @@ export const secciones = [
       {
         titulo: '"Movimientos" agrupa los pagos con crédito',
         pantalla: '"Movimientos"',
-        porque: 'Cada pago con crédito lleva la etiqueta "crédito", y la pestaña "Créditos" los filtra. El mismo pago aparece también dentro del contenedor.',
+        porque: 'Cada pago con crédito lleva la etiqueta "crédito", y la pestaña "Créditos" los filtra. El mismo pago aparece también dentro del contenedor del crédito.',
         estado: { screen: 'movs', movTab: 'creditos' }
       }
     ]
@@ -92,7 +92,7 @@ export const secciones = [
     etiqueta: 'Abono',
     titulo: 'Abonar al crédito suma una cuarta opción a las que Nequi ya tiene',
     lineas: [
-      'Hay dos accesos: el favorito "Créditos" en "Inicio" y "Ir a este crédito" en el contenedor.',
+      'Hay dos accesos: el favorito "Créditos" en "Inicio" y "Ir a este crédito" en el contenedor del crédito.',
       'La pantalla del crédito muestra lo que se debe, las cuotas pagadas y un "Historial de pagos" solo con los pagos del crédito.',
       'Cada pago queda en ese historial y en "Movimientos".'
     ],
