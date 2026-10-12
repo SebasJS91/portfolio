@@ -12,7 +12,7 @@ const PROPORCION_TELEFONO = 0.8;
 const ALTO_ACCIONES = 54;
 const movil = window.matchMedia('(max-width: 899px)');
 
-const escenarioInicial = { saldo: 250000, preaprobado: true, cupo: 950000, negocioNequi: true, creditoDemo: true };
+const escenarioInicial = { saldo: 250000, preaprobado: true, cupo: 950000, negocioNequi: true, creditoDemo: false };
 
 // Bloque de texto: etiqueta, título que ya es la conclusión y líneas de apoyo.
 const bloque = b => html`
@@ -22,21 +22,23 @@ const bloque = b => html`
     <ul>${b.lineas.map(l => html`<li>${l}</li>`)}</ul>
   </section>`;
 
-// Punto que corresponde a lo que muestra el teléfono: misma pantalla y misma capa.
-// Un punto se activa en su `estado` y, si los define, en los estados de `activaEn`.
-const coincide = (e, s) => e.screen === s.screen && (e.overlay || null) === (s.overlay || null);
-const activaEn = (p, s) => [p.estado].concat(p.activaEn || []).some(e => coincide(e, s));
-// Si el punto ya resaltado sigue coincidiendo (dos puntos pueden compartir pantalla), se mantiene.
-function puntoActivo(s, actual) {
-  if (actual >= 0 && activaEn(puntos[actual], s)) return actual;
-  return puntos.findIndex(p => activaEn(p, s));
-}
+// ¿Hay un contenedor del crédito? Lo crea el flujo del prototipo o el crédito de ejemplo del escenario.
+const tieneContenedor = (s, escenario) =>
+  s.credit ? s.credit.container !== false : s.credit === null && escenario.creditoDemo;
+
+// Paso que corresponde a lo que muestra el teléfono: misma pantalla, misma capa y,
+// si el paso lo pide, con o sin contenedor del crédito.
+const coincide = (e, s, escenario) =>
+  e.screen === s.screen && (e.overlay || null) === (s.overlay || null) &&
+  (e.contenedor === undefined || e.contenedor === tieneContenedor(s, escenario));
+const puntoActivo = (s, escenario) => puntos.findIndex(p => p.activaEn.some(e => coincide(e, s, escenario)));
 
 class Pagina extends Component {
   constructor() {
     super();
     this.state = { escenario: escenarioInicial, borrador: escenarioInicial, modal: false, activo: -1, escala: 1, altoApp: ALTO, esMovil: movil.matches };
     this.ajustar = this.ajustar.bind(this);
+    this.pasos = [];
     this.teclas = this.teclas.bind(this);
   }
   componentDidMount() {
@@ -45,6 +47,13 @@ class Pagina extends Component {
     window.addEventListener('keydown', this.teclas);
   }
   componentDidUpdate(_, antes) {
+    // Al abrirse un paso, si quedó fuera de la vista, la columna de texto baja hasta él.
+    // En móvil no: el teléfono está arriba y la persona lo está usando.
+    if (this.state.activo !== antes.activo && this.state.activo >= 0 && !this.state.esMovil) {
+      const el = this.pasos[this.state.activo];
+      const r = el && el.getBoundingClientRect();
+      if (r && (r.top < 0 || r.bottom > window.innerHeight)) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
     // Al abrir el modal, el foco va al primer campo; al cerrarlo, vuelve al botón que lo abrió
     if (this.state.modal && !antes.modal && this.modalRef) this.modalRef.querySelector('input').focus();
     if (!this.state.modal && antes.modal && this.botonEscenario) this.botonEscenario.focus();
@@ -72,17 +81,15 @@ class Pagina extends Component {
       this.setState({ esMovil, escala, altoApp: ALTO });
     }
   }
+  // Abre el paso de la pantalla actual. En pantallas sin paso (login, cargador, ¡Listo!…)
+  // queda abierto el último, para que el texto no salte en cada transición.
   cambio(s) {
-    // Tras un salto, el punto elegido manda (setState de Preact es asíncrono)
-    const actual = this.elegido != null ? this.elegido : this.state.activo;
-    this.elegido = null;
-    const activo = puntoActivo(s, actual);
-    if (activo !== this.state.activo) this.setState({ activo });
+    const activo = puntoActivo(s, this.state.escenario);
+    if (activo >= 0 && activo !== this.state.activo) this.setState({ activo });
   }
-  ir(i) {
-    this.elegido = i;
-    this.proto.saltar(puntos[i].estado);
-    if (this.state.esMovil) window.scrollTo({ top: 0, behavior: 'smooth' });
+  reiniciar() {
+    this.proto.saltar({});
+    this.setState({ activo: -1 });
   }
   setEsc(k, v) {
     this.setState({ borrador: Object.assign({}, this.state.borrador, { [k]: v }) });
@@ -113,15 +120,16 @@ class Pagina extends Component {
               ${sec.puntos.map(p => {
                 const i = puntos.indexOf(p);
                 return html`
-                <li class=${i === activo ? 'punto activo' : 'punto'}>
-                  <button onClick=${() => this.ir(i)} aria-current=${i === activo ? 'step' : null}>
+                <li class=${i === activo ? 'punto activo' : 'punto'} ref=${r => { this.pasos[i] = r; }}
+                  aria-current=${i === activo ? 'step' : null}>
+                  <div class="paso">
                     <span class="num">${String(i + 1).padStart(2, '0')}</span>
                     <span class="texto">
                       <span class="titulo">${p.titulo}</span>
                       <span class="pantalla">${p.pantalla}</span>
                       <span class="porque">${p.porque}</span>
                     </span>
-                  </button>
+                  </div>
                 </li>`;
               })}
             </ol>`)}
@@ -140,7 +148,7 @@ class Pagina extends Component {
           </div>
           <div class="acciones-telefono">
             <button class="boton-contorno" ref=${r => { this.botonEscenario = r; }} onClick=${() => this.abrirModal()} aria-haspopup="dialog">Escenario del prototipo</button>
-            <button class="boton-contorno" onClick=${() => this.proto.saltar({})}>Reiniciar prototipo</button>
+            <button class="boton-contorno" onClick=${() => this.reiniciar()}>Reiniciar prototipo</button>
           </div>
         </section>
 

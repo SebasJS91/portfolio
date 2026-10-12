@@ -4,7 +4,7 @@ import { html, Component } from '../vendor/preact-htm.js';
 
 // Estado de arranque; la página lo usa para reiniciar y para saltar a un punto de la solución.
 export function estadoInicial() {
-  return { screen: 'login', overlay: null, pin: '', origin: 'inicio', form: 'paga', llave: '', amount: '', msg: '', showBal: false, tab: 'personal', result: 'ok', source: 'disponible', loanOpt: 'todo', otro: '', plazo: 24, accept: false, credit: null, extraDisp: 0, move: '', feed: [], movTab: 'hoy', movQuery: '', payOpt: 'minimo', payOtro: '', pagoFrom: 'inicio', detFrom: 'credito', llavesFrom: 'breb', nombre: '' };
+  return { screen: 'login', overlay: null, pin: '', origin: 'inicio', form: 'paga', llave: '', amount: '', msg: '', showBal: false, tab: 'personal', result: 'ok', source: 'disponible', loanOpt: 'todo', otro: '', plazo: 24, accept: false, credit: null, extraDisp: 0, move: '', feed: [], movTab: 'hoy', movQuery: '', payOpt: 'minimo', payOtro: '', pagoFrom: 'inicio', detFrom: 'credito', llavesFrom: 'breb', nombre: '', toast: '' };
 }
 
 export class Prototipo extends Component {
@@ -24,14 +24,23 @@ export class Prototipo extends Component {
     this.go('result', { result: 'ok' });
     this.doneTimer = setTimeout(function () { if (self.state.screen === 'result') { next(); } }, 1450);
   }
+  // Aviso breve arriba de la pantalla; se oculta solo
+  mostrarToast(texto) {
+    var self = this;
+    clearTimeout(this.toastTimer);
+    this.setState({ toast: texto });
+    this.toastTimer = setTimeout(function () { self.setState({ toast: '' }); }, 2600);
+  }
   componentWillUnmount() {
     clearTimeout(this.loaderTimer);
     clearTimeout(this.doneTimer);
+    clearTimeout(this.toastTimer);
   }
   // Lleva el prototipo a un estado limpio más los cambios del punto elegido.
   saltar(cambios) {
     clearTimeout(this.loaderTimer);
     clearTimeout(this.doneTimer);
+    clearTimeout(this.toastTimer);
     this.setState(Object.assign(estadoInicial(), cambios || {}));
   }
   componentDidUpdate() {
@@ -111,7 +120,7 @@ export class Prototipo extends Component {
       '\nRecuerda que pagar a tiempo te genera reportes positivos. Te enviamos al correo los documentos firmados electrónicamente.';
     // ---- Contenedor de crédito ----
     var demoPlan = calc(24, cupo);
-    var demoCredit = { name: 'Preaprobado', balance: Math.max(cupo - 250000, 0), plan: demoPlan, plazo: 24, movs: [{ title: 'Tienda Doña Luz', sub: 'Pago', amount: 250000 }],
+    var demoCredit = { name: 'Preaprobado', balance: Math.max(cupo - 250000, 0), plan: demoPlan, plazo: 24, movs: [{ title: 'Tienda Doña Luz', sub: 'Pago', amount: 250000 }, { title: 'Desembolso crédito preaprobado', sub: 'Desembolso', amount: cupo, entra: true }],
       feed: [{ title: 'Tienda Doña Luz', sub: 'Pago', cred: true, amount: -250000 }, { title: 'Crédito Preaprobado', sub: 'Desembolso', cred: true, amount: cupo }] };
     var mkLoan = function (p) { return { debe: p.cap, cuota: p.cuota, i: p.sin ? 0 : TASA, seguro: p.seguro, paid: 0, history: [] }; };
     demoCredit.loan = mkLoan(demoPlan);
@@ -188,7 +197,9 @@ export class Prototipo extends Component {
       creditName: credit ? credit.name : '',
       creditBalanceText: money(cBal),
       creditCardLabel: 'Crédito ' + (credit ? credit.name : '') + ', ' + money(cBal),
-      creditMovs: (credit ? credit.movs : []).map(function (m) { return { title: m.title, sub: m.sub, amount: '−' + money(m.amount) }; }),
+      creditMovs: (credit ? credit.movs : []).map(function (m) {
+        return { title: m.title, sub: m.sub, entra: !!m.entra, sale: !m.entra, color: m.entra ? '#12804A' : '#C4006F', amount: (m.entra ? '+' : '−') + money(m.amount) };
+      }),
       cCuota: credit ? money(credit.plan.cuota) : '',
       cSin: !!(credit && credit.plan.sin),
       cConInteres: !(credit && credit.plan.sin),
@@ -342,9 +353,13 @@ export class Prototipo extends Component {
       toggleAccept: function () { self.setState({ accept: !self.state.accept }); },
       simulateFacial: function () {
         self.runLoader(function () {
-          self.showListo(function () { self.go(self.state.form, { overlay: 'confirm' }); });
+          self.showListo(function () {
+            self.go(self.state.form, { overlay: 'confirm' });
+            self.mostrarToast('Ya tienes tu crédito disponible');
+          });
         });
       },
+      toast: s.toast,
       isLogin: s.screen === 'login',
       isClave: s.screen === 'clave',
       isInicio: s.screen === 'inicio',
@@ -420,7 +435,7 @@ export class Prototipo extends Component {
       toggleBal: function () { self.setState({ showBal: !self.state.showBal }); },
       enviar: function () {
         if (self.state.source === 'credito') {
-          var nuevo = { name: 'Preaprobado', balance: rest, plan: plan, plazo: self.state.plazo, movs: [{ title: payee, sub: 'Pago', amount: amt }],
+          var nuevo = { name: 'Preaprobado', balance: rest, plan: plan, plazo: self.state.plazo, movs: [{ title: payee, sub: 'Pago', amount: amt }, { title: 'Desembolso crédito preaprobado', sub: 'Desembolso', amount: loanAmt, entra: true }],
             feed: [{ title: payee, sub: 'Pago', cred: true, amount: -amt }, { title: 'Crédito Preaprobado', sub: 'Desembolso', cred: true, amount: loanAmt }],
             loan: mkLoan(plan), container: rest > 0 };
           self.setState({ credit: nuevo });
@@ -1186,9 +1201,10 @@ export class Prototipo extends Component {
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
       ${v.creditMovs.map((m) => html`
       <div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #E3DFE6;border-radius:4px;box-shadow:0 1px 3px rgba(32,0,32,0.08);padding:12px 14px">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DA0081" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 24px"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v9M8 12l4 4 4-4"></path></svg>
+      ${m.sale && html`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DA0081" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 24px"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v9M8 12l4 4 4-4"></path></svg>`}
+      ${m.entra && html`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#12804A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 24px"><circle cx="12" cy="12" r="9"></circle><path d="M12 17V8M8 12l4-4 4 4"></path></svg>`}
       <div style="flex:1;min-width:0"><div style="font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.title}</div><div style="font-size:13px;color:#6E6573">${m.sub}</div></div>
-      <div style="font-size:16px;font-weight:700;color:#C4006F">${m.amount}</div>
+      <div style="font-size:16px;font-weight:700;color:${m.color}">${m.amount}</div>
       </div>
       `)}
       </div>
@@ -1273,7 +1289,14 @@ export class Prototipo extends Component {
       </div>
       </div>
       `}
-      
+
+      <!-- ============ TOAST ============ -->
+      ${v.toast && html`
+      <div role="status" style="position:absolute;left:16px;right:16px;top:52px;z-index:60;display:flex;align-items:center;gap:12px;background:#200020;color:#fff;border-radius:8px;padding:14px 16px;box-shadow:0 8px 24px rgba(32,0,32,0.28);font-size:16px;animation:nqtoast 2.6s ease both">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#59D8EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 22px"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l2.5 2.5L16 9.5"></path></svg>
+      ${v.toast}
+      </div>
+      `}
       </div>
     `;
   }
