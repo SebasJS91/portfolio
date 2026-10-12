@@ -1,0 +1,217 @@
+:root {
+  --p-fondo: #fff;
+  --p-texto: #000;
+  --p-apoyo: #565656;
+  --p-tenue: #8a8a8a;
+  --p-acento: #E56C01;
+  --p-chip: #E9E9E9;
+  --p-panel: #F2F3F4;
+  --p-linea: #E9E9E9;
+  --p-boton: #5B5B5B;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--p-fondo);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Estilos que el prototipo traía del lienzo */
+button { font-family: inherit; cursor: pointer; }
+input { font-family: inherit; }
+.telefono input::placeholder { color: #3A2B40; }
+.nq-noscroll { scrollbar-width: none; }
+.nq-noscroll::-webkit-scrollbar { display: none; }
+@keyframes nqpop { 0% { transform: scale(0.15); opacity: 0 } 60% { opacity: 1 } 100% { transform: scale(1); opacity: 1 } }
+@keyframes nqturn { 0% { transform: rotate(0deg) } 100% { transform: rotate(180deg) } }
+@keyframes nqjoinA { 0%, 100% { transform: translate(-12px, 12px) } 50% { transform: translate(0, 0) } }
+@keyframes nqjoinB { 0%, 100% { transform: translate(12px, -12px) } 50% { transform: translate(0, 0) } }
+
+/* ---------- Diseño de la página (referente: Figma "Portfolio", nodo 82:2) ---------- */
+@font-face { font-family: 'Cal Sans UI'; src: url(fonts/CalSansUI-Regular.woff2) format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Cal Sans UI'; src: url(fonts/CalSansUI-SemiBold.woff2) format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Cal Sans'; src: url(fonts/CalSans-SemiBold.woff2) format('woff2'); font-weight: 600; font-display: swap; }
+
+.pagina {
+  display: grid;
+  grid-template-columns: minmax(0, 640px) minmax(0, 1fr);
+  max-width: 1440px;
+  margin: 0 auto;
+  background: var(--p-fondo);
+  font-family: 'Cal Sans UI', system-ui, sans-serif;
+  color: var(--p-texto);
+}
+
+.contenido { padding: 96px 60px 64px; }
+
+.encabezado { display: flex; flex-direction: column; gap: 6px; }
+.antetitulo { margin: 0; font-size: 12px; letter-spacing: -0.24px; color: var(--p-acento); }
+.encabezado h1 {
+  margin: 0;
+  font-family: 'Cal Sans', 'Cal Sans UI', sans-serif;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: normal;
+  color: #000;
+}
+.intro { margin: 0; font-size: 16px; line-height: normal; color: var(--p-apoyo); }
+
+
+.aviso { margin: 16px 0 0; font-size: 12px; letter-spacing: -0.24px; color: var(--p-apoyo); }
+
+/* Bloques de texto: etiqueta, título-conclusión y hasta 4 líneas */
+.bloque { margin-top: 64px; display: flex; flex-direction: column; gap: 6px; }
+.bloque h2 {
+  margin: 0;
+  font-family: 'Cal Sans', 'Cal Sans UI', sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.25;
+  color: #000;
+}
+.bloque ul { margin: 6px 0 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.bloque li { font-size: 16px; line-height: 1.4; color: var(--p-apoyo); }
+.bloque li::marker { color: var(--p-tenue); }
+
+/* Lista de puntos */
+.puntos { list-style: none; margin: 24px 0 0; padding: 0; border-top: 1px solid var(--p-linea); }
+.punto { border-bottom: 1px solid var(--p-linea); }
+.punto button {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  padding: 18px 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  text-align: left;
+}
+.punto button:focus-visible { outline: 2px solid var(--p-acento); outline-offset: 2px; border-radius: 4px; }
+.num { flex: 0 0 24px; padding-top: 3px; font-size: 12px; letter-spacing: -0.24px; color: var(--p-tenue); }
+.punto.activo .num, .punto button:hover .num { color: var(--p-acento); }
+.texto { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.titulo { font-family: 'Cal Sans', 'Cal Sans UI', sans-serif; font-weight: 600; font-size: 18px; color: #000; }
+.pantalla { font-size: 12px; letter-spacing: -0.24px; color: var(--p-tenue); }
+.porque { display: none; font-size: 16px; line-height: 1.4; color: var(--p-apoyo); }
+.punto.activo .porque { display: block; margin-top: 6px; }
+
+/* Modal de escenario */
+.fondo-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.32);
+}
+.modal {
+  width: 100%;
+  max-width: 440px;
+  padding: 24px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.25);
+  font-family: 'Cal Sans UI', system-ui, sans-serif;
+  color: var(--p-texto);
+}
+.modal-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.modal h2 { margin: 0; font-family: 'Cal Sans', 'Cal Sans UI', sans-serif; font-weight: 600; font-size: 20px; color: #000; }
+.cerrar-modal {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: var(--p-boton);
+}
+.cerrar-modal:hover { background: var(--p-panel); }
+.modal-intro { margin: 6px 0 0; font-size: 14px; color: var(--p-apoyo); }
+.modal-acciones { display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px; }
+
+.controles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; margin-top: 16px; font-size: 14px; }
+.controles label { display: flex; flex-direction: column; gap: 6px; color: var(--p-apoyo); }
+.controles label.check { flex-direction: row; align-items: center; gap: 8px; grid-column: 1 / -1; }
+.controles input[type=text] {
+  height: 36px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 8px;
+  background: var(--p-panel);
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--p-texto);
+}
+.controles input[type=checkbox] { width: 16px; height: 16px; margin: 0; accent-color: var(--p-acento); }
+
+.boton-contorno, .boton-lleno {
+  height: 30px;
+  padding: 4px 16px;
+  border: 1px solid var(--p-boton);
+  border-radius: 9999px;
+  background: #fff;
+  font-family: 'Cal Sans', 'Cal Sans UI', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--p-boton);
+}
+.boton-contorno:hover { background: var(--p-panel); }
+.boton-lleno { border-color: #000; background: #000; color: #fff; }
+.boton-lleno:hover { background: #333; }
+.boton-contorno:focus-visible, .boton-lleno:focus-visible, .cerrar-modal:focus-visible { outline: 2px solid var(--p-acento); outline-offset: 2px; }
+
+.contenido > footer { margin-top: 56px; font-size: 12px; letter-spacing: -0.24px; line-height: 1.5; color: var(--p-tenue); }
+.contenido > footer p { margin: 0 0 6px; }
+
+/* Panel del teléfono */
+.escenario-telefono {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+.escenario-telefono::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 12px;
+  background: var(--p-panel);
+}
+.caja-telefono { position: relative; flex: none; }
+.acciones-telefono { position: relative; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+
+.telefono {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  border: 5px solid rgba(190, 190, 190, 0.5);
+  border-radius: 40px;
+  background: rgba(217, 217, 217, 0.5);
+}
+.telefono > div { border-radius: 35px; }
+
+.telefono.sin-marco { border: none; border-radius: 0; background: none; }
+.telefono.sin-marco > div { border-radius: 0; }
+
+/* ---------- Móvil: prototipo a pantalla completa, texto debajo ---------- */
+@media (max-width: 899px) {
+  .pagina { display: flex; flex-direction: column; }
+  .escenario-telefono { order: -1; position: relative; height: auto; padding: 0; }
+  .escenario-telefono::before { display: none; }
+  .escenario-telefono { gap: 16px; padding-bottom: 8px; }
+  .contenido { padding: 40px 16px 48px; }
+  .controles { grid-template-columns: 1fr; }
+}
