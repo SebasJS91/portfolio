@@ -853,7 +853,7 @@ export class Prototipo extends Component {
       ${v.otroError && html`<div style="font-size:13px;color:#C4006F;margin-top:6px">El valor debe estar entre ${v.amountText} y ${v.cupoText}.</div>`}
       `}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:22px;font-size:15px">¿En cuánto tiempo la puedes pagar?<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#200020" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg></div>
-      <button onClick=${v.openPlazo} style="width:100%;display:flex;align-items:center;justify-content:space-between;background:#FBF5F9;border:none;border-radius:4px;height:56px;padding:0 18px;margin-top:10px;font-size:17px;color:#200020">${v.plazoLabel}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+      <button onClick=${v.openPlazo} style="width:100%;display:flex;align-items:center;justify-content:space-between;background:#FBF5F9;border:none;border-radius:4px;height:56px;padding:0 18px;margin-top:10px;font-size:17px;color:#200020"><span style="display:flex;align-items:center;gap:8px">${v.plazoLabel}${v.sinInteres && html`<span style="background:#E6FAFD;color:#136F7A;font-size:12px;font-weight:700;border-radius:12px;padding:3px 10px">Sin interés</span>`}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
       <div style="border:1px solid #E3DFE6;border-radius:8px;padding:16px;margin-top:18px">
       <div style="display:flex;justify-content:space-between;align-items:center;font-size:14px">Cuota mensual aproximada<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#200020" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg></div>
       <div style="display:flex;align-items:center;gap:10px;margin-top:4px"><span style="font-size:28px;font-weight:800;color:#C4006F">${v.cuotaText}</span>${v.sinInteres && html`<span style="background:#E6FAFD;color:#136F7A;font-size:12px;font-weight:700;border-radius:12px;padding:3px 10px">Sin interés</span>`}</div>
@@ -1009,7 +1009,7 @@ export class Prototipo extends Component {
       </div>
       `}
       <button onClick=${v.enviar} style="width:100%;height:50px;background:#DA0081;color:#fff;border:none;border-radius:4px;font-size:17px;margin-top:18px">Enviar</button>
-      <button onClick=${v.closeOverlay} style="width:100%;height:50px;background:#fff;color:#200020;border:1.5px solid #200020;border-radius:4px;font-size:17px;margin-top:12px">Corregir</button>
+      <div style="width:100%;height:50px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;background:#fff;color:#200020;border:1.5px solid #200020;border-radius:4px;font-size:17px;margin-top:12px;cursor:default">Corregir</div>
       </div>
       </div>
       `}

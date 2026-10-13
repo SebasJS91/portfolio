@@ -46,6 +46,8 @@ input { font-family: inherit; }
 }
 
 .contenido { padding: 96px 60px 64px; }
+/* Espacio al final para que los últimos pasos también puedan quedar centrados en la pantalla */
+@media (min-width: 900px) { .contenido { padding-bottom: 50vh; } }
 
 .encabezado { display: flex; flex-direction: column; gap: 6px; }
 .antetitulo { margin: 0; font-size: 12px; letter-spacing: -0.24px; color: var(--p-acento); }
@@ -58,9 +60,9 @@ input { font-family: inherit; }
   color: #000;
 }
 .intro { margin: 0; font-size: 16px; line-height: normal; color: var(--p-apoyo); }
+.intro + .intro { margin-top: 10px; }
 
 
-.aviso { margin: 16px 0 0; font-size: 12px; letter-spacing: -0.24px; color: var(--p-apoyo); }
 
 /* Bloques de texto: etiqueta, título-conclusión y hasta 4 líneas */
 .bloque { margin-top: 64px; display: flex; flex-direction: column; gap: 6px; }
@@ -72,18 +74,22 @@ input { font-family: inherit; }
   line-height: 1.25;
   color: #000;
 }
-.bloque ul { margin: 6px 0 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
-.bloque li { font-size: 16px; line-height: 1.4; color: var(--p-apoyo); }
-.bloque li::marker { color: var(--p-tenue); }
+.boton-flujo { align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; margin-top: 10px; padding: 4px 10px 4px 16px; cursor: pointer; }
 
 /* Lista de puntos */
 .puntos { list-style: none; margin: 24px 0 0; padding: 0; border-top: 1px solid var(--p-linea); }
 .punto { border-bottom: 1px solid var(--p-linea); }
+/* El margen negativo deja el texto alineado con el título de la sección aunque el paso tenga relleno */
 .paso {
   display: flex;
   gap: 16px;
-  padding: 18px 0;
+  margin: 0 -12px;
+  padding: 18px 12px;
+  border-radius: 8px;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
 }
+/* Paso de la pantalla que muestra el teléfono */
+.punto.activo .paso { background: var(--p-panel); box-shadow: inset 3px 0 0 var(--p-acento); }
 .num { flex: 0 0 24px; padding-top: 3px; font-size: 12px; letter-spacing: -0.24px; color: var(--p-tenue); }
 .punto.activo .num { color: var(--p-acento); }
 .texto { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
@@ -91,6 +97,9 @@ input { font-family: inherit; }
 .pantalla { font-size: 12px; letter-spacing: -0.24px; color: var(--p-tenue); }
 .porque { display: none; font-size: 16px; line-height: 1.4; color: var(--p-apoyo); }
 .punto.activo .porque { display: block; margin-top: 6px; }
+/* Nota al pie del paso (lo marcado con *) */
+.nota { display: none; font-size: 12px; letter-spacing: -0.24px; color: var(--p-tenue); }
+.punto.activo .nota { display: block; margin-top: 6px; }
 
 /* Modal de escenario */
 .fondo-modal {

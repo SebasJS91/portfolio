@@ -1,40 +1,31 @@
 // Recorrido del prototipo por momentos: Pago → Movimientos → Abono (Contexto/nequi-presentacion-texto.md).
-// Cada sección tiene un título que ya es la conclusión, hasta 4 líneas y sus pasos.
+// Cada sección tiene un título, un botón opcional para empezar su flujo (`inicio`) y sus pasos.
 // Los pasos no navegan: se abren solos cuando el teléfono muestra una de sus pantallas (`activaEn`:
 // pantalla y capa). `contenedor` distingue los dos pasos de "¿De dónde saldrá la plata?": sin y con
 // contenedor del crédito.
 export const secciones = [
   {
     etiqueta: 'Pago',
-    titulo: 'Pagar con crédito usa pasos que Nequi ya tiene, y pagar desde el contenedor del crédito es igual a pagar con "Disponible"',
-    lineas: [
-      'El acceso a la cámara sigue en 3 taps desde "Inicio".',
-      'Resumen, contrato y verificación de identidad son los pasos que Nequi ya usa al pedir un crédito; aquí aparecen en el momento del pago.',
-      'Con un crédito ya tomado, el pago sale del contenedor del crédito con los mismos pasos que "Disponible".'
-    ],
+    titulo: 'Pagar con un crédito nuevo',
+    // Botón que lleva el teléfono al inicio del flujo; sin crédito tomado, para que aparezca el preaprobado
+    inicio: { texto: 'Empezar flujo', estado: { screen: 'breb', origin: 'inicio', credit: false } },
     puntos: [
       {
-        titulo: 'El pago se abre en 3 taps, igual que hoy',
-        pantalla: '"Inicio" → "$"',
-        porque: '"Código QR" lleva a la cámara y "Envía" lleva a las llaves Bre-B. En el prototipo, "Toca para simular el escaneo" lee el QR de @tiendadonaluz.',
-        activaEn: [{ screen: 'inicio', overlay: 'fab' }, { screen: 'inicio', overlay: 'qr' }, { screen: 'inicio', overlay: 'enviar' }, { screen: 'scan' }, { screen: 'breb' }]
-      },
-      {
         titulo: '"A quién" y "¿Cuánto?" van antes de "¿De dónde saldrá la plata?"',
-        pantalla: '"Paga"',
+        pantalla: '"Paga" · "¿A quién le vas a enviar plata?"',
         porque: 'Nequi necesita el valor y el negocio para evaluar el crédito. La consulta corre mientras se ve el cargador de 3 segundos. Los tiempos reales están por validar con el equipo técnico.',
         activaEn: [{ screen: 'paga' }, { screen: 'llaves' }]
       },
       {
-        titulo: '"Disponible" va primero y el crédito aparece solo con preaprobado',
+        titulo: 'Alternativas para realizar pago en el negocio',
         pantalla: '"¿De dónde saldrá la plata?"',
-        porque: 'Con un preaprobado que cubre el pago, "Crédito preaprobado" aparece como segunda opción. Sin preaprobado, la persona ve solo "Disponible".',
+        porque: '"Disponible" siempre aparece como primera opción. La opción de crédito solo se muestra cuando el usuario tiene un crédito preaprobado. Personas sin preaprobado o con evaluación no favorable solo ven "Disponible".',
         activaEn: [{ screen: 'origen', contenedor: false }]
       },
       {
         titulo: 'La persona elige cuánto crédito toma',
         pantalla: '"Tienes un preaprobado"',
-        porque: '"Sí, quiero todo", "Solo lo que necesito" u "Otro valor", con plazo y cuota a la vista. "Sí, quiero todo" va por defecto y es la primera decisión que se prueba con usuarios.',
+        porque: 'Se presentan tres opciones: "Sí, quiero todo", "Solo lo que necesito" y "Otro valor". Además, la persona puede elegir el número de cuotas y consultar si el negocio ofrece pagos sin intereses para determinados plazos.',
         activaEn: [{ screen: 'credOpciones' }, { screen: 'credOpciones', overlay: 'plazo' }]
       },
       {
@@ -56,7 +47,7 @@ export const secciones = [
         activaEn: [{ screen: 'inicio', overlay: 'desembolso' }]
       },
       {
-        titulo: 'Los pagos siguientes salen del contenedor del crédito con los pasos de "Disponible"',
+        titulo: 'Al realizar un nuevo pago el contenedor del crédito sale como opción para hacer un pago',
         pantalla: '¿De dónde saldrá la plata?',
         porque: 'El contenedor del crédito aparece debajo de "Disponible" con su saldo. Elegirlo lleva directo a "Confirma el envío". Si el pago supera su saldo, la opción aparece deshabilitada.',
         activaEn: [{ screen: 'origen', contenedor: true }]
@@ -66,22 +57,17 @@ export const secciones = [
   {
     etiqueta: 'Movimientos',
     titulo: 'El contenedor del crédito concentra su historial',
-    lineas: [
-      'El pago sale como un gasto del contenedor del crédito, con el negocio y su detalle.',
-      '"Movimientos" suma la pestaña "Créditos".',
-      'El contenedor del crédito se puede renombrar y la etiqueta "crédito" se mantiene.'
-    ],
     puntos: [
       {
-        titulo: 'El contenedor del crédito muestra en qué se usó cada peso',
-        pantalla: 'Contenedor del crédito',
-        porque: 'Muestra el saldo, el nombre y los pagos hechos con él. La plata sale de él y no entra, y lo gastado no se repone. El lápiz de "Nombre del crédito" lo cambia y "Mover plata" pasa saldo a "Disponible".',
-        activaEn: [{ screen: 'credito' }, { screen: 'credito', overlay: 'mover' }, { screen: 'credito', overlay: 'nombre' }, { screen: 'creditos' }]
+        titulo: 'El contenedor del crédito aparece disponible en "Tus Préstamos" y muestra en qué se usó cada peso',
+        pantalla: '"Tus Préstamos" · Contenedor del crédito',
+        porque: 'Cada contenedor tiene un tag de "crédito". Al ingresar se muestra el saldo, el nombre y los pagos hechos con él. La plata sale de él, pero no entra, y lo gastado no se repone. Desde "Mover plata" pasa saldo a "Disponible".',
+        activaEn: [{ screen: 'creditos' }, { screen: 'credito' }, { screen: 'credito', overlay: 'mover' }, { screen: 'credito', overlay: 'nombre' }]
       },
       {
-        titulo: '"Movimientos" agrupa los pagos con crédito',
+        titulo: 'Ahora en la sección de "Movimientos" se agrupan los pagos con crédito',
         pantalla: '"Movimientos"',
-        porque: 'Cada pago con crédito lleva la etiqueta "crédito", y la pestaña "Créditos" los filtra. El mismo pago aparece también dentro del contenedor del crédito.',
+        porque: 'Cada pago con crédito lleva la etiqueta "crédito", y la tab de "Créditos" los filtra.',
         activaEn: [{ screen: 'movs' }]
       }
     ]
@@ -89,22 +75,18 @@ export const secciones = [
   {
     etiqueta: 'Abono',
     titulo: 'Abonar al crédito suma una cuarta opción a las que Nequi ya tiene',
-    lineas: [
-      'Hay dos accesos: el favorito "Créditos" en "Inicio" y "Ir a este crédito" en el contenedor del crédito.',
-      'La pantalla del crédito muestra lo que se debe, las cuotas pagadas y un "Historial de pagos" solo con los pagos del crédito.',
-      'Cada pago queda en ese historial y en "Movimientos".'
-    ],
     puntos: [
       {
         titulo: 'La pantalla del crédito muestra lo que se debe y cada pago',
         pantalla: '"Créditos"',
         porque: '"Cuota mensual", "Debes", "Cuotas pagadas" y "Próximo pago" en una sola pantalla. "Pagar crédito" abre las opciones de pago.',
-        activaEn: [{ screen: 'credPagos' }, { screen: 'credDetalles' }]
+        activaEn: [{ screen: 'credPagos' }]
       },
       {
         titulo: 'Quien no alcanza la cuota tiene una cuarta opción de pago',
         pantalla: '"¿Qué quieres pagar?"',
-        porque: '"Pago mínimo", "Pago total de la deuda" y "Otro valor" ya existen en Nequi. "Pago mínimo alternativo" alarga el plazo 12 meses y baja la cuota; aumenta el costo total y está por validar con otras áreas.',
+        porque: '"Pago mínimo", "Pago total de la deuda" y "Otro valor" ya existen en Nequi. "Pago mínimo alternativo" alarga el plazo 12 meses* y baja la cuota; aumenta el costo total.',
+        nota: '*Por validar con otras áreas.',
         activaEn: [{ screen: 'quePagar' }]
       }
     ]

@@ -15,11 +15,16 @@ const movil = window.matchMedia('(max-width: 899px)');
 const escenarioInicial = { saldo: 250000, preaprobado: true, cupo: 950000, negocioNequi: true, creditoDemo: false };
 
 // Bloque de texto: etiqueta, título que ya es la conclusión y líneas de apoyo.
-const bloque = b => html`
+// Encabezado de sección: etiqueta, título y, si la sección lo define, el botón que empieza su flujo.
+const bloque = (b, empezar) => html`
   <section class="bloque">
     <p class="antetitulo">${b.etiqueta}</p>
     <h2>${b.titulo}</h2>
-    <ul>${b.lineas.map(l => html`<li>${l}</li>`)}</ul>
+    ${b.inicio && html`
+      <button class="boton-contorno boton-flujo" onClick=${() => empezar(b.inicio.estado)}>
+        ${b.inicio.texto}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+      </button>`}
   </section>`;
 
 // ¿Hay un contenedor del crédito? Lo crea el flujo del prototipo o el crédito de ejemplo del escenario.
@@ -47,12 +52,11 @@ class Pagina extends Component {
     window.addEventListener('keydown', this.teclas);
   }
   componentDidUpdate(_, antes) {
-    // Al abrirse un paso, si quedó fuera de la vista, la columna de texto baja hasta él.
+    // Cada vez que se abre un paso, la columna de texto se desplaza hasta dejarlo centrado.
     // En móvil no: el teléfono está arriba y la persona lo está usando.
     if (this.state.activo !== antes.activo && this.state.activo >= 0 && !this.state.esMovil) {
       const el = this.pasos[this.state.activo];
-      const r = el && el.getBoundingClientRect();
-      if (r && (r.top < 0 || r.bottom > window.innerHeight)) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     // Al abrir el modal, el foco va al primer campo; al cerrarlo, vuelve al botón que lo abrió
     if (this.state.modal && !antes.modal && this.modalRef) this.modalRef.querySelector('input').focus();
@@ -81,15 +85,22 @@ class Pagina extends Component {
       this.setState({ esMovil, escala, altoApp: ALTO });
     }
   }
-  // Abre el paso de la pantalla actual. En pantallas sin paso (login, cargador, ¡Listo!…)
-  // queda abierto el último, para que el texto no salte en cada transición.
+  // Abre solo el paso de la pantalla que muestra el teléfono; en pantallas sin paso, todos quedan cerrados.
   cambio(s) {
     const activo = puntoActivo(s, this.state.escenario);
-    if (activo >= 0 && activo !== this.state.activo) this.setState({ activo });
+    if (activo !== this.state.activo) this.setState({ activo });
   }
+  // Lleva el teléfono al inicio de un flujo; en móvil sube hasta el teléfono
+  empezar(estado) {
+    this.proto.saltar(estado);
+    this.setState({ activo: -1 });
+    if (this.state.esMovil) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  // Reiniciar vuelve al login y apaga "Crédito de ejemplo ya tomado"; el resto del escenario se mantiene
   reiniciar() {
     this.proto.saltar({});
-    this.setState({ activo: -1 });
+    const escenario = Object.assign({}, this.state.escenario, { creditoDemo: false });
+    this.setState({ activo: -1, escenario, borrador: escenario });
   }
   setEsc(k, v) {
     this.setState({ borrador: Object.assign({}, this.state.borrador, { [k]: v }) });
@@ -110,12 +121,11 @@ class Pagina extends Component {
           <header class="encabezado">
             <p class="antetitulo">${encabezado.antetitulo}</p>
             <h1>${encabezado.titulo}</h1>
-            <p class="intro">${encabezado.intro}</p>
-            <p class="aviso">${encabezado.autoria}</p>
+            ${encabezado.intro.map(t => html`<p class="intro">${t}</p>`)}
           </header>
 
           ${secciones.map(sec => html`
-            ${bloque(sec)}
+            ${bloque(sec, e => this.empezar(e))}
             <ol class="puntos">
               ${sec.puntos.map(p => {
                 const i = puntos.indexOf(p);
@@ -128,6 +138,7 @@ class Pagina extends Component {
                       <span class="titulo">${p.titulo}</span>
                       <span class="pantalla">${p.pantalla}</span>
                       <span class="porque">${p.porque}</span>
+                      ${p.nota && html`<span class="nota">${p.nota}</span>`}
                     </span>
                   </div>
                 </li>`;
